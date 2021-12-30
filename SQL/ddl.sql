@@ -1,0 +1,84 @@
+DROP TABLE IF EXISTS regions;
+DROP TABLE IF EXISTS countries;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS follows;
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS post_details;
+DROP TABLE IF EXISTS favorites;
+
+CREATE TABLE regions (
+    `id` TINYINT(10) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(20) UNIQUE NOT NULL,
+    `name_alpha` VARCHAR(40) UNIQUE NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE countries (
+    `id` TINYINT(200) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `region_id` TINYINT(10) UNSIGNED NOT NULL REFERENCES regions(id),
+    `name` VARCHAR(70) UNIQUE NOT NULL,-- 193カ国の最大バイト数は60
+    `name_official` VARCHAR(80) UNIQUE NOT NULL,
+    `name_alpha` VARCHAR(40) UNIQUE NOT NULL, -- 193カ国の最大バイト数は37
+    `name_alpha_official` VARCHAR(60) UNIQUE NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE users (
+    `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `country_id` TINYINT(200) UNSIGNED NOT NULL REFERENCES countries(id),
+    `name` VARCHAR(60) NOT NULL,
+    `tel` VARCHAR(20),
+    `date_of_birth` DATE,
+    `profile_image_path` VARCHAR(60),
+    `introduction` VARCHAR(300),
+    `email` VARCHAR(50) UNIQUE NOT NULL,
+    `email_verify_token` VARCHAR(191),
+    `email_verify_token_created_at` DATETIME,
+    `email_verified_at` DATETIME,
+    `password` VARCHAR(191),
+    `api_token` VARCHAR(80),
+    `remember_token` VARCHAR(100),
+    `last_login_at` DATETIME,
+    `status_id` ENUM('publish', 'private', 'deleted') NOT NULL DEFAULT 'publish',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE follows (
+    `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `user_id` INT UNSIGNED NOT NULL REFERENCES users(id),
+    `follow_id` INT UNSIGNED NOT NULL REFERENCES users(id),
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE posts (
+    `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `user_id` INT UNSIGNED NOT NULL REFERENCES users(id),
+    `country_id` TINYINT(200) UNSIGNED NOT NULL REFERENCES regions(id),
+    `description` TEXT,
+    `status_id` ENUM('publish', 'private', 'deleted') NOT NULL DEFAULT 'publish',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE post_details (
+    `post_id` INT UNSIGNED NOT NULL REFERENCES posts(id),
+    `type` ENUM('photo', 'video') NOT NULL,
+    `path` VARCHAR(100) NOT NULL,
+    `sort_number` TINYINT UNSIGNED NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE favorites (
+    `user_id` INT UNSIGNED NOT NULL REFERENCES users(id),
+    `post_id` INT UNSIGNED NOT NULL REFERENCES posts(id),
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
