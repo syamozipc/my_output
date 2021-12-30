@@ -200,7 +200,7 @@ VALUES
 ("タンザニア", "United Republic of Tanzania", 2),
 ("アメリカ", "United States of America", 3),
 ("ウルグアイ", "Uruguay", 4),
-("ウズベキスタン", "Uzbekistan", 1),
+("ウズベキスタン", "Uzbekistan", 5),
 ("バヌアツ", "Vanuatu", 6),
 ("ベネズエラ", "Venezuela", 4),
 ("ベトナム", "Viet Nam", 1),
