@@ -1,6 +1,13 @@
 <?php
 class PostController extends Controller {
 
+    public $postModel;
+
+    public function __construct()
+    {
+        $this->postModel = $this->model('Post');
+    }
+
     public function index()
     {
         $description = "投稿一覧";
@@ -10,5 +17,10 @@ class PostController extends Controller {
         ];
 
         $this->view('post/index', $data);
+    }
+
+    public function create()
+    {
+
     }
 }
