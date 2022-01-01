@@ -27,7 +27,7 @@ class Controller {
      */
     public function view($view, $data = [])
     {
-        $viewFile = "../public/views/{$view}.php";
+        $viewFile = "../app/views/{$view}.php";
 
         if (!file_exists($viewFile)) die('View does not exist');
         

@@ -6,7 +6,7 @@ const DB_PASS = 'root';
 const DB_NAME = 'my_output';
 
 // app folderまでのpathを定義
-// define('APPROOT', dirname(dirname(__FILE__)));
+define('APPROOT', dirname(dirname(__FILE__)));
 
 // URL rootを定義
 const URLROOT = 'http://localhost:8888/my_output';
