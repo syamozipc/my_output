@@ -6,12 +6,12 @@ const DB_PASS = 'root';
 const DB_NAME = 'my_output';
 
 // URL rootを定義
-const URL_ROOT = 'http://localhost:8888/my_output/';
+const URL_PATH = 'http://localhost:8888/my_output/';
 
-const PUBLIC_ROOT = 'http://localhost:8888/my_output/public/';
+const PUBLIC_PATH = 'http://localhost:8888/my_output/public/';
 
 // app folderまでのpathを定義
-define('APP_ROOT', dirname(dirname(__FILE__)) . '/');
+define('APP_PATH', dirname(dirname(__FILE__)) . '/');
 
 
 // Site Name

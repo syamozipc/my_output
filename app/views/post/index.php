@@ -1,5 +1,5 @@
-<?php require APP_ROOT . 'views/template/header.php' ?>
+<?php require APP_PATH . 'views/template/header.php' ?>
 <div>
     <p><?= $data['description']; ?></p>
 </div>
-<?php require APP_ROOT . 'views/template/footer.php' ?>
+<?php require APP_PATH . 'views/template/footer.php' ?>

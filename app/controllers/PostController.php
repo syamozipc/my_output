@@ -32,4 +32,9 @@ class PostController extends Controller {
 
         $this->view(view:'post/create', data:$data);
     }
+
+    public function save()
+    {
+        echo '<pre>';var_dump($_POST);die;
+    }
 }
