@@ -38,3 +38,4 @@
 - [ ]CKEditor
 - [ ]TypeScript 実装
 - [ ]CSV ファイル読み込み・書き出し
+- [ ]HTML/CSS 勉強後、マークアップ部分を改善
