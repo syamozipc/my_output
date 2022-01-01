@@ -12,7 +12,7 @@ fi
 branch=$(git rev-parse --abbrev-ref HEAD)
 
 # gitにpush
-cd /Applications/MAMP/htdocs/ryota_framework
+cd /Applications/MAMP/htdocs/my_output
 git add .
 # ""で$messageを囲まないと、複数単語入っている場合、1つのcommit messageと認識されずerrorになる
 git commit -m "$message"
