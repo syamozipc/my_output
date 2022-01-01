@@ -25,13 +25,13 @@ class Database {
         }
     }
 
-    // prepare
     public function prepare($sql)
     {
         $this->stmt = $this->dbh->prepare($sql);
+
+        return $this;
     }
 
-    // bind values
     public function bind($param, $value, $type = null)
     {
         if (is_null($type)) {

@@ -2,10 +2,12 @@
 class PostController extends Controller {
 
     public $postModel;
+    public $countryModel;
 
     public function __construct()
     {
         $this->postModel = $this->model('Post');
+        $this->countryModel = $this->model('Country');
     }
 
     public function index()
@@ -16,11 +18,18 @@ class PostController extends Controller {
             'description' => $description
         ];
 
-        $this->view('post/index', $data);
+        $this->view(view:'post/index', data:$data);
     }
 
     public function create()
     {
+        // 国一覧を取得
+        $countriesList = $this->countryModel->fetchCountriesList();
 
+        $data = [
+            'countriesList' => $countriesList
+        ];
+
+        $this->view(view:'post/create', data:$data);
     }
 }
