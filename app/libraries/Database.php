@@ -46,12 +46,11 @@ class Database {
         $this->stmt->bindValue($param, $value, $type);
     }
 
-    public function execute()
+    private function execute()
     {
         return $this->stmt->execute();
     }
 
-    // objectのarray
     public function executeAndFetchAll()
     {
         $this->execute();
@@ -59,7 +58,6 @@ class Database {
         return $this->stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    // object
     public function executeAndFetch()
     {
         $this->execute();
