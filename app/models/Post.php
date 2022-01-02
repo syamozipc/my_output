@@ -46,7 +46,7 @@ class Post {
             $this->db->commit();
         } catch (Exception $e) {
             $this->db->rollBack();
-            echo $e->getMessage();
+             exit($e->getMessage());
         }
     }
 }
