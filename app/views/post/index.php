@@ -20,7 +20,7 @@
                     <td><?= $post->description ?></td>
                     <td>
                         <img 
-                            src="<?= 'file://' . PUBLIC_PATH . 'upload/' . $post->path ?>"
+                            src="<?= PUBLIC_PATH . 'upload/' . $post->path ?>"
                             alt="アップロードファイル"
                             width="400"
                             height="400"

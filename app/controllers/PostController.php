@@ -17,6 +17,7 @@ class PostController extends Controller {
         $postsList = $this->postModel->fetchPostsList();
 
         $data = [
+            'css' => PUBLIC_PATH . 'css/post/index.css',
             'description' => $description,
             'postsList' => $postsList
         ];
