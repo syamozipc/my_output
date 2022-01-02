@@ -44,6 +44,8 @@ class PostController extends Controller {
         move_uploaded_file($tempPath, $filePath);
 
         // path含めpost・post_detailsテーブルに保存
-        $this->postModel->save(post:$_POST, filePath:$filePath);        
+        $this->postModel->save(post:$_POST, filePath:$filePath); 
+        
+        header('Location: ' . URL_PATH . 'post/index');
     }
 }
