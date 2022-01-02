@@ -10,7 +10,21 @@ class Post {
 
     public function fetchPostsList()
     {
-        $sql = 'SELECT posts.id, posts.user_id, posts.country_id, posts.description, countries.name AS country_name, post_details.path, users.name AS user_name FROM posts JOIN post_details ON posts.id = post_details.post_id JOIN countries ON posts.country_id = countries.id JOIN users ON posts.user_id = users.id WHERE posts.status_id = "publish"';
+        $sql = '
+            SELECT 
+                posts.id,
+                posts.user_id,
+                posts.country_id,
+                posts.description,
+                countries.name AS country_name,
+                post_details.path,
+                users.name AS user_name
+            FROM posts
+            JOIN post_details ON posts.id = post_details.post_id
+            JOIN countries ON posts.country_id = countries.id
+            JOIN users ON posts.user_id = users.id
+            WHERE posts.status_id = "publish"
+        ';
         
         $postsList = $this->db->prepare($sql)->executeAndFetchAll();
 
