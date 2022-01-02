@@ -46,7 +46,7 @@ class Database {
         $this->stmt->bindValue($param, $value, $type);
     }
 
-    private function execute()
+    public function execute()
     {
         return $this->stmt->execute();
     }
@@ -68,5 +68,25 @@ class Database {
     public function rowCount()
     {
         return $this->stmt->rowCount();
+    }
+
+    public function lastInsertId()
+    {
+        return $this->dbh->lastInsertId();
+    }
+
+    public function beginTransaction()
+    {
+        return $this->dbh->beginTransaction();
+    }
+
+    public function commit()
+    {
+        return $this->dbh->commit();
+    }
+    
+    public function rollBack()
+    {
+        return $this->dbh->rollBack();
     }
 }
