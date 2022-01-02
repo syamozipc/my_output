@@ -66,6 +66,7 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE post_details (
+    `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `post_id` INT UNSIGNED NOT NULL REFERENCES posts(id),
     `type` ENUM('photo', 'video') NOT NULL,
     `path` VARCHAR(100) NOT NULL,
@@ -75,6 +76,7 @@ CREATE TABLE post_details (
 );
 
 CREATE TABLE favorites (
+    `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL REFERENCES users(id),
     `post_id` INT UNSIGNED NOT NULL REFERENCES posts(id),
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
