@@ -14,8 +14,11 @@ class PostController extends Controller {
     {
         $description = "投稿一覧";
 
+        $postsList = $this->postModel->fetchPostsList();
+
         $data = [
-            'description' => $description
+            'description' => $description,
+            'postsList' => $postsList
         ];
 
         $this->view(view:'post/index', data:$data);
