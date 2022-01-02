@@ -35,6 +35,15 @@ class PostController extends Controller {
 
     public function save()
     {
-        echo '<pre>';var_dump($_POST);die;
+        /**
+         * @todo ファイル保存用関数に切り出す
+         */
+        $tempPath = $_FILES['upload']['tmp_name'];
+        $filePath = PUBLIC_PATH . 'upload/' . $_FILES['upload']['name'];
+
+        move_uploaded_file($tempPath, $filePath);
+
+        // path含めpost・post_detailsテーブルに保存
+        $this->postModel->save(post:$_POST, filePath:$filePath);        
     }
 }
