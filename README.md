@@ -26,6 +26,8 @@
 - [ ]素の PHP で MVC フレームワーク風に POST の CRUD を実装
   - update
   - delete
+  - confrim
+  - validation
 - [ ]Laravel ライクにリファクタ
   - ヘルパ
   - ディレクトリ構成
