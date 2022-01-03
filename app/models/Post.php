@@ -37,30 +37,53 @@ class Post {
             $this->db->beginTransaction();
 
             $sql = 'INSERT INTO posts (user_id, country_id, description) VALUES (:user_id, :country_id, :description)';
-            $this->db->prepare($sql);
 
-            $this->db->bind(':user_id', 1);
-            $this->db->bind(':country_id', $post['country_id']);
-            $this->db->bind(':description', $post['description']);
-
-            $this->db->execute();
+            $this->db->prepare($sql)
+                ->bind(':user_id', 1)
+                ->bind(':country_id', $post['country_id'])
+                ->bind(':description', $post['description'])
+                ->execute();
 
             $id = $this->db->lastInsertId();
 
             $sql = 'INSERT INTO post_details (post_id, type, path, sort_number) VALUES (:post_id, :type, :path, :sort_number)';
-            $this->db->prepare($sql);
 
-            $this->db->bind(':post_id', $id);
-            $this->db->bind(':type', 1);
-            $this->db->bind(':path', basename($filePath));
-            $this->db->bind(':sort_number', 1);
-
-            $this->db->execute(':description', $post['description']);
+            $this->db->prepare($sql)
+                ->bind(':post_id', $id)
+                ->bind(':type', 1)
+                ->bind(':path', basename($filePath))
+                ->bind(':sort_number', 1)
+                ->execute();
 
             $this->db->commit();
         } catch (Exception $e) {
             $this->db->rollBack();
              exit($e->getMessage());
         }
+    }
+
+    public function getById(int $id)
+    {
+        $sql = '
+            SELECT 
+                posts.id,
+                posts.user_id,
+                posts.country_id,
+                posts.description,
+                countries.name AS country_name,
+                post_details.path,
+                users.name AS user_name
+            FROM posts
+            JOIN post_details ON posts.id = post_details.post_id
+            JOIN countries ON posts.country_id = countries.id
+            JOIN users ON posts.user_id = users.id
+            WHERE posts.id = :id
+        ';
+
+         $post = $this->db->prepare($sql)
+            ->bind(':id', $id)
+            ->executeAndFetch();
+
+            return $post;
     }
 }

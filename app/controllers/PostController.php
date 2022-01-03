@@ -10,7 +10,7 @@ class PostController extends Controller {
         $this->countryModel = $this->model('Country');
     }
 
-    public function index()
+    public function index(): void
     {
         $description = "投稿一覧";
 
@@ -25,7 +25,7 @@ class PostController extends Controller {
         $this->view(view:'post/index', data:$data);
     }
 
-    public function create()
+    public function create(): void
     {
         // 国一覧を取得
         $countriesList = $this->countryModel->fetchCountriesList();
@@ -37,7 +37,7 @@ class PostController extends Controller {
         $this->view(view:'post/create', data:$data);
     }
 
-    public function save()
+    public function save(): void
     {
         /**
          * @todo ファイル保存用関数に切り出す
@@ -51,5 +51,16 @@ class PostController extends Controller {
         $this->postModel->save(post:$_POST, filePath:$filePath); 
         
         header('Location: ' . URL_PATH . 'post/index');
+    }
+
+    public function show(int $id): void
+    {
+        $post = $this->postModel->getById($id);
+
+        $data = [
+            'post' => $post
+        ];
+
+        $this->view(view:'post/show', data:$data);
     }
 }

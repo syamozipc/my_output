@@ -44,6 +44,8 @@ class Database {
         }
 
         $this->stmt->bindValue($param, $value, $type);
+
+        return $this;
     }
 
     public function execute()
