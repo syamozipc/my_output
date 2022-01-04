@@ -26,4 +26,5 @@
         </tbody>
     </table>
 </div>
+<p><a href="<?= URL_PATH . 'post/index' ?>">一覧へ戻る</a></p>
 <?php require APP_PATH . 'views/template/footer.php' ?>
