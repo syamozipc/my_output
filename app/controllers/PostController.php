@@ -58,6 +58,7 @@ class PostController extends Controller {
         $post = $this->postModel->fetchPostById($id);
 
         $data = [
+            'css' => PUBLIC_PATH . 'css/post/show.css',
             'post' => $post
         ];
 
