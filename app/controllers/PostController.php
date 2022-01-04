@@ -55,7 +55,7 @@ class PostController extends Controller {
 
     public function show(int $id): void
     {
-        $post = $this->postModel->getById($id);
+        $post = $this->postModel->fetchPostById($id);
 
         $data = [
             'post' => $post

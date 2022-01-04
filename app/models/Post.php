@@ -62,7 +62,7 @@ class Post {
         }
     }
 
-    public function getById(int $id)
+    public function fetchPostById(int $id)
     {
         $sql = '
             SELECT 
