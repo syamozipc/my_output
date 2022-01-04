@@ -1,7 +1,7 @@
 <?php require APP_PATH . 'views/template/header.php' ?>
 <p>編集フォーム</p>
 <div>
-    <form action="<?= URL_PATH . 'post/update' ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?= URL_PATH . 'post/update/' . $data['post']->id ?>" method="POST" enctype="multipart/form-data">
 
         <select name="country_id" class="js-countriesSelect">
             <?php foreach ($data['countriesList'] as $country) : ?>

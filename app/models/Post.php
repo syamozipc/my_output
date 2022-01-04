@@ -8,7 +8,7 @@ class Post {
         $this->db = new Database;
     }
 
-    public function fetchPostsList()
+    public function fetchPostsList(): array
     {
         $sql = '
             SELECT 
@@ -31,7 +31,7 @@ class Post {
         return $postsList;
     }
 
-    public function save($post, $filePath)
+    public function save(array $post, string $filePath): void
     {
         try {
             $this->db->beginTransaction();
@@ -62,7 +62,7 @@ class Post {
         }
     }
 
-    public function fetchPostById(int $id)
+    public function fetchPostById(int $id): object
     {
         $sql = '
             SELECT 
@@ -85,5 +85,16 @@ class Post {
             ->executeAndFetch();
 
             return $post;
+    }
+
+    public function update(array $post, int $id): void
+    {
+            $sql = 'UPDATE posts SET country_id = :country_id, description = :description WHERE id = :id';
+
+            $this->db->prepare($sql)
+                ->bind(':country_id', $post['country_id'])
+                ->bind(':description', $post['description'])
+                ->bind(':id', $id)
+                ->execute();
     }
 }

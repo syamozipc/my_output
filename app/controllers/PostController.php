@@ -65,7 +65,7 @@ class PostController extends Controller {
         $this->view(view:'post/show', data:$data);
     }
 
-    public function edit(int $id)
+    public function edit(int $id): void
     {
         $countriesList = $this->countryModel->fetchCountriesList();
         $post = $this->postModel->fetchPostById($id);
@@ -77,5 +77,13 @@ class PostController extends Controller {
         ];
 
         $this->view(view:'post/edit', data:$data);
+    }
+
+    public function update(int $id): void
+    {
+        // path含めpost・post_detailsテーブルに保存
+        $this->postModel->update(post:$_POST, id:$id); 
+        
+        header('Location: ' . URL_PATH . 'post/index');
     }
 }
