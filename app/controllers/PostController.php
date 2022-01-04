@@ -64,4 +64,18 @@ class PostController extends Controller {
 
         $this->view(view:'post/show', data:$data);
     }
+
+    public function edit(int $id)
+    {
+        $countriesList = $this->countryModel->fetchCountriesList();
+        $post = $this->postModel->fetchPostById($id);
+
+        $data = [
+            'css' => PUBLIC_PATH . 'css/post/edit.css',
+            'countriesList' => $countriesList,
+            'post' => $post
+        ];
+
+        $this->view(view:'post/edit', data:$data);
+    }
 }

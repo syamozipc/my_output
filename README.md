@@ -26,7 +26,7 @@
 - [ ]素の PHP で MVC フレームワーク風に POST の CRUD を実装
   - [x]create/save
   - [x]index
-  - [ ]show
+  - [x]show
   - [ ]edit/update
   - [ ]delete
   - [ ]confrim

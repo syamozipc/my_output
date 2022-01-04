@@ -26,5 +26,10 @@
         </tbody>
     </table>
 </div>
+<p>
+    <a href="<?= URL_PATH . 'post/edit/' . $data['post']->id ?>">編集</a>
+    &nbsp;
+    <a href="<?= URL_PATH . 'post/delete/' . $data['post']->id ?>">削除</a>
+</p>
 <p><a href="<?= URL_PATH . 'post/index' ?>">一覧へ戻る</a></p>
 <?php require APP_PATH . 'views/template/footer.php' ?>

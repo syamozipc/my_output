@@ -17,12 +17,14 @@
             <?php foreach ($data['postsList'] as $post) : ?>
                 <tr>
                     <td>
-                        <img 
+                        <a href="<?= URL_PATH . 'post/show/' . $post->id ?>">
+                            <img 
                             src="<?= PUBLIC_PATH . 'upload/' . $post->path ?>"
                             alt="アップロードファイル"
                             width="400"
                             height="400"
-                        >
+                            >
+                        </a>
                     </td>
                     <td><?= $post->description ?></td>
                     <td><?= $post->country_name ?></td>
