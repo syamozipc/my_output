@@ -1,5 +1,7 @@
 # アウトプット用のポートフォリオ
 
+https://github.com/syamozipc/my_output
+
 # 概要
 
 旅行写真・動画を投稿する、インスタのパクリ
