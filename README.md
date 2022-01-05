@@ -27,8 +27,8 @@
   - [x]create/save
   - [x]index
   - [x]show
-  - [ ]edit/update
-  - [ ]delete
+  - [x]edit/update
+  - [x]delete
   - [ ]confrim
   - [ ]validation
 - [ ]Laravel ライクにリファクタ
