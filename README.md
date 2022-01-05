@@ -27,40 +27,40 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
-- [ ]素の PHP で MVC フレームワーク風に POST の CRUD を実装（まずは以前作成した独自 MVC フレームワーク「ryota_framework」の形式で）
-- [x] create/save
+- [ ] 素の PHP で MVC フレームワーク風に POST の CRUD を実装（まずは以前作成した独自 MVC フレームワーク「ryota_framework」の形式で）
+  - [x] create/save
   - [x] index
-  - [x]show
-  - [x]edit/update
-  - [x]delete
-  - [ ]confrim
-  - [ ]validation
-- [ ]Laravel ライクにリファクタ
-  - [ ]ヘルパ
-  - [ ]ディレクトリ構成
-  - [ ]namespace(User ディレクトリ作りたい)）
+  - [x] show
+  - [x] edit/update
+  - [x] delete
+  - [ ] confrim
+  - [ ] validation
+- [ ] Laravel ライクにリファクタ
+  - [ ] ヘルパ
+  - [ ] ディレクトリ構成
+  - [ ] namespace(User ディレクトリ作りたい)）
 - PHP 8 を使う
-  - [ ]名前付き引数
-  - [ ]constructor の省略形
-  - [ ]match 式
-  - [ ]null 安全オペレーター
-  - [ ]他にあれば
-- [ ]ログイン機能
-  - [ ]メール認証での新規登録
-  - [ ]パスワードリセット
-  - [ ]SNS ログイン
-  - [ ]user ページ
-- [ ]ページネーション実装
-- [ ]npm/webpack を使用してコンパイル
-- [ ]cron を利用したタスク作る
-- [ ]自己結合の多対多（フォロー機能）
-- [ ]統計機能（PV 数などを Chart.JS で表示）
-- [ ]AWS 実装
-  - [ ]画像・動画を S3 に cludfront 経由でアップロード
-  - [ ]EC2 動かす
-  - [ ]RDS 使う
-- [ ]通知機能
-- [ ]CKEditor 使う（ブログ的な機能）
-- [ ]TypeScript 実装
-- [ ]CSV ファイル読み込み・書き出し
-- [ ]HTML/CSS 勉強後、マークアップ部分を改善
+  - [ ] 名前付き引数
+  - [ ] constructor の省略形
+  - [ ] match 式
+  - [ ] null 安全オペレーター
+  - [ ] 他にあれば
+- [ ] ログイン機能
+  - [ ] メール認証での新規登録
+  - [ ] パスワードリセット
+  - [ ] SNS ログイン
+  - [ ] user ページ
+- [ ] ページネーション実装
+- [ ] npm/webpack を使用してコンパイル
+- [ ] cron を利用したタスク作る
+- [ ] 自己結合の多対多（フォロー機能）
+- [ ] 統計機能（PV 数などを Chart.JS で表示）
+- [ ] AWS 実装
+  - [ ] 画像・動画を S3 に cludfront 経由でアップロード
+  - [ ] EC2 動かす
+  - [ ] RDS 使う
+- [ ] 通知機能
+- [ ] CKEditor 使う（ブログ的な機能）
+- [ ] TypeScript 実装
+- [ ] CSV ファイル読み込み・書き出し
+- [ ] HTML/CSS 勉強後、マークアップ部分を改善
