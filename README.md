@@ -28,8 +28,8 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 - [ ]素の PHP で MVC フレームワーク風に POST の CRUD を実装（まずは以前作成した独自 MVC フレームワーク「ryota_framework」の形式で）
-- [x]create/save
-  - [x]index
+- [x] create/save
+  - [x] index
   - [x]show
   - [x]edit/update
   - [x]delete
