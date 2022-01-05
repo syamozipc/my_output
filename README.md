@@ -38,6 +38,7 @@ https://github.com/syamozipc/my_output
   - [ ] validation
 - [ ] Laravel ライクにリファクタ
   - [ ] ヘルパ
+  - [ ] 確認画面・バリデーションは session で
   - [ ] ディレクトリ構成
   - [ ] namespace(User ディレクトリ作りたい)）
 - PHP 8 を使う
