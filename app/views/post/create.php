@@ -1,7 +1,7 @@
 <?php require APP_PATH . 'views/template/header.php' ?>
 <p>新規投稿フォーム</p>
 <div>
-    <form action="<?= URL_PATH . 'post/save' ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?= URL_PATH . 'post/confirm' ?>" method="POST" enctype="multipart/form-data">
         <select name="country_id" class="js-countriesSelect">
             <?php foreach ($data['countriesList'] as $country) : ?>
                 <option value="<?= $country->id ?>"><?= $country->name ?></option>

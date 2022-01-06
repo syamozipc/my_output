@@ -37,18 +37,31 @@ class PostController extends Controller {
         $this->view(view:'post/create', data:$data);
     }
 
-    public function save(): void
+    public function confirm()
     {
         /**
          * @todo ファイル保存用関数に切り出す
          */
         $tempPath = $_FILES['upload']['tmp_name'];
-        $filePath = PUBLIC_PATH . 'upload/' . $_FILES['upload']['name'];
+        $filePath = UPLOAD_PATH . $_FILES['upload']['name'];
 
         move_uploaded_file($tempPath, $filePath);
+        
+        $data = [
+            'css' => PUBLIC_PATH . 'css/post/confirm.css',
+            'post' => $_POST,
+            'tempPath' => $tempPath,
+            'filePath' => $filePath,
+            'file' => $_FILES['upload']['name']
+        ];
 
+        $this->view(view:'post/confirm', data:$data);
+    }
+
+    public function save(): void
+    {
         // path含めpost・post_detailsテーブルに保存
-        $this->postModel->save(post:$_POST, filePath:$filePath); 
+        // $this->postModel->save(post:$_POST, filePath:$filePath); 
         
         header('Location: ' . URL_PATH . 'post/index');
     }

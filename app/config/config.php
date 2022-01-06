@@ -11,6 +11,7 @@ const URL_PATH = 'http://localhost:8888/my_output/';
 const PUBLIC_PATH = 'http://localhost:8888/my_output/public/';
 // app folderまでのpath
 define('APP_PATH', dirname(dirname(__FILE__)) . '/');
+define('UPLOAD_PATH', dirname(dirname(dirname(__FILE__))) . '/public/upload/');
 
 // Site Name
 const SITENAME = 'My Output';
