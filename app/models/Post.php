@@ -103,15 +103,24 @@ class Post {
         try {
             $this->db->beginTransaction();
 
-            $sqlPost = 'DELETE FROM posts WHERE id = :id';
-
-            $this->db->prepare($sqlPost)
+            // postを削除
+            $sqlDeletePost = 'DELETE FROM posts WHERE id = :id';
+            $this->db->prepare($sqlDeletePost)
                 ->bind(':id', $id)
                 ->execute();
 
-            $sqlPostDetail = 'DELETE FROM post_details WHERE post_id = :post_id';
+            // fileを削除
+            $sqlGetPostDetail = 'SELECT * FROM post_details WHERE post_id = :post_id';
+            $postDetail = $this->db->prepare($sqlGetPostDetail)
+                ->bind(':post_id', $id)
+                ->executeAndFetch();
+            
+            $filePath = $postDetail->path;
+            if (!unlink(UPLOAD_PATH . $filePath)) throw new Exception(('ファイルがありません'));
 
-            $this->db->prepare($sqlPostDetail)
+            // post_detailを削除
+            $sqlDeletePostDetail = 'DELETE FROM post_details WHERE post_id = :post_id';
+            $this->db->prepare($sqlDeletePostDetail)
                 ->bind(':post_id', $id)
                 ->execute();
 
