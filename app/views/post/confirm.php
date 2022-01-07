@@ -2,9 +2,9 @@
 <p>確認</p>
 <div>
     <form action="<?= URL_PATH . 'post/save' ?>" method="POST" enctype="multipart/form-data">
-        <p><?= $data['post']['country_id'] ?></p>
+        <p><?= $data['country']->name ?></p>
         <img
-            src="<?= PUBLIC_PATH . 'upload/' . $data['file'] ?>"
+            src="<?= PUBLIC_PATH . 'upload/' . basename($data['filePath']) ?>"
             alt="アップロードファイル"
             width="400"
             height="400"
@@ -14,8 +14,7 @@
 
         <input type="hidden" name="country_id" value="<?= $data['post']['country_id'] ?>">
         <input type="hidden" name="description" value="<?= $data['post']['description'] ?>">
-        <input type="hidden" name="file_tmp_name" value="<?= $data['tempPath'] ?>">
-        <input type="hidden" name="file_name" value="<?= $data['filePath'] ?>">
+        <input type="hidden" name="file_path" value="<?= $data['filePath'] ?>">
 
 
         <button type="submit">送信</button>

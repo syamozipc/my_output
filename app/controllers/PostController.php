@@ -46,13 +46,14 @@ class PostController extends Controller {
         $filePath = UPLOAD_PATH . $_FILES['upload']['name'];
 
         move_uploaded_file($tempPath, $filePath);
-        
+
+        $country = $this->countryModel->fetchCountryByID($_POST['country_id']);
+
         $data = [
             'css' => PUBLIC_PATH . 'css/post/confirm.css',
             'post' => $_POST,
-            'tempPath' => $tempPath,
-            'filePath' => $filePath,
-            'file' => $_FILES['upload']['name']
+            'country' => $country,
+            'filePath' => $filePath
         ];
 
         $this->view(view:'post/confirm', data:$data);
@@ -61,7 +62,7 @@ class PostController extends Controller {
     public function save(): void
     {
         // path含めpost・post_detailsテーブルに保存
-        // $this->postModel->save(post:$_POST, filePath:$filePath); 
+        $this->postModel->save(post:$_POST); 
         
         header('Location: ' . URL_PATH . 'post/index');
     }

@@ -31,7 +31,7 @@ class Post {
         return $postsList;
     }
 
-    public function save(array $post, string $filePath): void
+    public function save(array $post): void
     {
         try {
             $this->db->beginTransaction();
@@ -51,7 +51,7 @@ class Post {
             $this->db->prepare($sql)
                 ->bind(':post_id', $id)
                 ->bind(':type', 1)
-                ->bind(':path', basename($filePath))
+                ->bind(':path', basename($post['file_path']))
                 ->bind(':sort_number', 1)
                 ->execute();
 

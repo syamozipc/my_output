@@ -16,4 +16,15 @@ class Country {
 
         return $countriesList;
     }
+
+    public function fetchCountryByID()
+    {
+        $sql = 'SELECT * FROM countries WHERE id = :id';
+        
+        $countriesList = $this->db->prepare($sql)
+            ->bind(':id', 1)
+            ->executeAndFetch();
+
+        return $countriesList;
+    }
 }
