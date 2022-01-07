@@ -43,7 +43,8 @@ class PostController extends Controller {
          * @todo ファイル保存用関数に切り出す
          */
         $tempPath = $_FILES['upload']['tmp_name'];
-        $filePath = UPLOAD_PATH . $_FILES['upload']['name'];
+        $randomFileName = md5(uniqid());
+        $filePath = UPLOAD_PATH . $randomFileName . '.' . basename($_FILES['upload']['type']);
 
         move_uploaded_file($tempPath, $filePath);
 
