@@ -100,10 +100,25 @@ class Post {
 
     public function delete(int $id): void
     {
-        $sql = 'DELETE FROM posts WHERE id = :id';
+        try {
+            $this->db->beginTransaction();
 
-        $this->db->prepare($sql)
-            ->bind(':id', $id)
-            ->execute();
+            $sqlPost = 'DELETE FROM posts WHERE id = :id';
+
+            $this->db->prepare($sqlPost)
+                ->bind(':id', $id)
+                ->execute();
+
+            $sqlPostDetail = 'DELETE FROM post_details WHERE post_id = :post_id';
+
+            $this->db->prepare($sqlPostDetail)
+                ->bind(':post_id', $id)
+                ->execute();
+
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+             exit($e->getMessage());
+        }
     }
 }
