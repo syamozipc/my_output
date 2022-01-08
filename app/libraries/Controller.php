@@ -1,5 +1,5 @@
 <?php
-
+namespace app\libraries;
 /**
  * base controller
  * modelとviewをloadする

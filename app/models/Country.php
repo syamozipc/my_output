@@ -1,4 +1,5 @@
 <?php
+use app\libraries\Database;
 
 class Country {
     private $db;

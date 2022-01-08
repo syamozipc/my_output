@@ -1,4 +1,7 @@
 <?php
+use app\libraries\Controller;
+
+
 class PostController extends Controller {
 
     public $postModel;

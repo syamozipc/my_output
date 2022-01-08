@@ -1,4 +1,6 @@
 <?php
+namespace app\libraries;
+
 class Database {
     private $host = DB_HOST;
     private $user = DB_USER;
@@ -13,13 +15,13 @@ class Database {
     {
         $dsn = "mysql:host={$this->host};dbname={$this->dbname}";
         $options = [
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_PERSISTENT => true,
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
         ];
 
         try {
-            $this->pdo = new PDO($dsn, $this->user, $this->pass, $options);
-        } catch (PDOException $e) {
+            $this->pdo = new \PDO($dsn, $this->user, $this->pass, $options);
+        } catch (\PDOException $e) {
             $this->error = $e->getMessage();
             echo $this->error;
         }
@@ -36,10 +38,10 @@ class Database {
     {
         if (is_null($type)) {
             $type = match(true) {
-                is_int($value) => PDO::PARAM_INT,
-                is_bool($value) => PDO::PARAM_BOOL,
-                is_null($value) => PDO::PARAM_NULL,
-                default => PDO::PARAM_STR
+                is_int($value) => \PDO::PARAM_INT,
+                is_bool($value) => \PDO::PARAM_BOOL,
+                is_null($value) => \PDO::PARAM_NULL,
+                default => \PDO::PARAM_STR
             };
         }
 
@@ -57,14 +59,14 @@ class Database {
     {
         $this->execute();
 
-        return $this->pdoStatement->fetchAll(PDO::FETCH_OBJ);
+        return $this->pdoStatement->fetchAll(\PDO::FETCH_OBJ);
     }
 
     public function executeAndFetch()
     {
         $this->execute();
 
-        return $this->pdoStatement->fetch(PDO::FETCH_OBJ);
+        return $this->pdoStatement->fetch(\PDO::FETCH_OBJ);
     }
 
     public function rowCount()
