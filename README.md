@@ -1,6 +1,5 @@
 # アウトプット用のポートフォリオ
 
-test
 https://github.com/syamozipc/my_output
 
 # 概要
