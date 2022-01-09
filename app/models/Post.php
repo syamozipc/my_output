@@ -109,7 +109,7 @@ class Post {
             $this->db->beginTransaction();
 
             // postを削除
-            $sqlDeletePost = 'DELETE FROM posts WHERE id = :id';
+            $sqlDeletePost = 'UPDATE posts SET status_id = "deleted" WHERE id = :id';
             $this->db->prepare($sqlDeletePost)
                 ->bind(':id', $id)
                 ->execute();

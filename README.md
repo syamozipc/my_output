@@ -34,7 +34,7 @@ https://github.com/syamozipc/my_output
   - [x] show
   - [x] edit/update
   - [x] delete
-  - [ ] confrim
+  - [x] confrim
   - [ ] validation
 - [ ] Laravel ライクにリファクタ
   - [ ] ヘルパ
