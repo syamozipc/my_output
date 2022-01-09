@@ -27,7 +27,7 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
-- [ ] 素の PHP で MVC フレームワーク風に POST の CRUD を実装
+- [x] 素の PHP で MVC フレームワーク風に POST の CRUD を実装
       （まずは以前作成した独自 MVC フレームワーク「ryota_framework」の形式で）
   - [x] create/save
   - [x] index
@@ -35,12 +35,11 @@ https://github.com/syamozipc/my_output
   - [x] edit/update
   - [x] delete
   - [x] confrim
-  - [ ] validation
 - [ ] Laravel ライクにリファクタ
   - [ ] ヘルパ
-  - [ ] 確認画面・バリデーションは session かつ object 形式
   - [ ] ディレクトリ構成
   - [ ] namespace(User ディレクトリ作りたい)）
+  - [ ] validation（session 使う）
 - PHP 8 を使う
   - [ ] 名前付き引数
   - [ ] constructor の省略形
