@@ -1,7 +1,7 @@
 <?php
-namespace app\controllers;
+namespace App\Controllers;
 
-use app\libraries\Controller;
+use App\Libraries\Controller;
 use App\Services\PostService;
 class PostController extends Controller {
 

@@ -1,7 +1,7 @@
 <?php
-namespace app\controllers;
+namespace App\Controllers;
 
-use app\libraries\Controller;
+use App\Libraries\Controller;
 class HomeController extends Controller {
 
     public function index()

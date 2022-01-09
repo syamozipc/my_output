@@ -1,5 +1,5 @@
 <?php
-namespace app\libraries;
+namespace App\Libraries;
 
 class Database {
     private $host = DB_HOST;
@@ -88,7 +88,7 @@ class Database {
     {
         return $this->pdo->commit();
     }
-    
+
     public function rollBack()
     {
         return $this->pdo->rollBack();

@@ -1,7 +1,7 @@
 <?php
-namespace app\models;
+namespace App\Models;
 
-use app\libraries\Database;
+use App\Libraries\Database;
 
 class Country {
     private $db;

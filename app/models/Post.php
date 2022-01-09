@@ -1,8 +1,8 @@
 <?php
-namespace app\models;
+namespace App\Models;
 
 use App\Services\PostService;
-use app\libraries\Database;
+use App\Libraries\Database;
 class Post {
     private $db;
     private $postService;
