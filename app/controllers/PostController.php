@@ -37,7 +37,8 @@ class PostController extends Controller {
 
         $data = [
             'css' => PUBLIC_PATH . 'css/post/create.css',
-            'countriesList' => $countriesList
+            'countriesList' => $countriesList,
+            'post' => $_POST
         ];
 
         $this->view(view:'post/create', data:$data);

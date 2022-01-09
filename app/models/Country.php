@@ -20,12 +20,12 @@ class Country {
         return $countriesList;
     }
 
-    public function fetchCountryByID()
+    public function fetchCountryByID($id)
     {
         $sql = 'SELECT * FROM countries WHERE id = :id';
 
         $countriesList = $this->db->prepare($sql)
-            ->bind(':id', 1)
+            ->bind(':id', $id)
             ->executeAndFetch();
 
         return $countriesList;

@@ -4,7 +4,19 @@
     <form action="<?= URL_PATH . 'post/confirm' ?>" method="POST" enctype="multipart/form-data">
         <select name="country_id" class="js-countriesSelect">
             <?php foreach ($data['countriesList'] as $country) : ?>
-                <option value="<?= $country->id ?>"><?= $country->name ?></option>
+                <option
+                    value="<?= $country->id ?>"
+                    <?php
+                        if (
+                            isset($data['post']['country_id'])
+                            && $data['post']['country_id'] === $country->id
+                        ) {
+                            echo 'selected';
+                        }
+                     ?>
+                >
+                    <?= $country->name ?>
+                </option>
             <?php endforeach; ?>
         </select>
 
@@ -32,7 +44,7 @@
         <br>
         <br>
 
-        <textarea name="description" cols="70" rows="10"></textarea>
+        <textarea name="description" cols="70" rows="10"><?= $data['post']['description'] ?? '' ?></textarea>
 
         <br>
         <br>
