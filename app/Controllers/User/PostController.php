@@ -1,9 +1,10 @@
 <?php
-namespace App\Controllers;
+namespace App\Controllers\User;
 
 use App\Libraries\Controller;
 use App\Services\PostService;
 use App\models\{Post, Country};
+
 class PostController extends Controller {
 
     public $postModel;

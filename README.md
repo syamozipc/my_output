@@ -34,11 +34,11 @@ https://github.com/syamozipc/my_output
   - [x] show
   - [x] edit/update
   - [x] delete
-  - [x] confrim
+  - [x] createConfrim/editConfirm
 - [ ] Laravel ライクにリファクタ
+  - [x] namespace(User ディレクトリ作りたい)）
   - [ ] ヘルパ
   - [ ] ディレクトリ構成
-  - [ ] namespace(User ディレクトリ作りたい)）
   - [ ] validation（session 使う）
 - PHP 8 を使う
   - [ ] 名前付き引数
