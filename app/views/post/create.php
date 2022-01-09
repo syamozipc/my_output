@@ -25,7 +25,9 @@
         <br>
 
         <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
-        <input type="file" name="upload">
+        <input type="file" name="upload" class="js-inputImg">
+
+        <img width="400" height="400" class="is-hidden js-displayImg">
 
         <br>
         <br>

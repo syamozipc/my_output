@@ -1,5 +1,7 @@
 reflectInput();
 
+displayInputImg();
+
 /**
  * 1.inputに文字を入力すると発火
  * 2.入力した文字をvalueに持つoptionがdatalist内にあるかcheck
@@ -27,4 +29,21 @@ function reflectInput() {
 			}
 		}
 	});
+}
+
+function displayInputImg() {
+	document
+		.querySelector('.js-inputImg')
+		.addEventListener('change', function (e) {
+			const file = e.target.files[0];
+
+			if (!file) return;
+
+			blobUrl = window.URL.createObjectURL(file);
+
+			const img = document.querySelector('.js-displayImg');
+			img.src = blobUrl;
+
+			img.addEventListener('load', () => img.classList.remove('is-hidden'));
+		});
 }

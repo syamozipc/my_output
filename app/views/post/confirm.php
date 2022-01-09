@@ -21,5 +21,5 @@
     </form>
 </div>
 
-<script src="<?= PUBLIC_PATH . 'js/post/create.js' ?>"></script>
+<script src="<?= PUBLIC_PATH . 'js/post/confirm.js' ?>"></script>
 <?php require APP_PATH . 'views/template/footer.php' ?>

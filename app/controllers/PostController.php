@@ -36,6 +36,7 @@ class PostController extends Controller {
         $countriesList = $this->countryModel->fetchCountriesList();
 
         $data = [
+            'css' => PUBLIC_PATH . 'css/post/create.css',
             'countriesList' => $countriesList
         ];
 
