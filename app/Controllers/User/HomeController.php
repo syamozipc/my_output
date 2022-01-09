@@ -10,10 +10,10 @@ class HomeController extends Controller {
         $description = "My Outputへようこそ\n好きなように練習してね";
 
         $data = [
-            'css' => 'home/top.css',
+            'css' => 'home/index.css',
             'description' => $description
         ];
 
-        $this->view('home/index', $data);
+        $this->view(view:'user/home/index', data:$data);
     }
 }

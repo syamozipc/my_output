@@ -1,4 +1,3 @@
-<?php require APP_PATH . 'views/template/header.php' ?>
 <p>新規投稿フォーム</p>
 <div>
     <form action="<?= URL_PATH . 'post/confirm' ?>" method="POST" enctype="multipart/form-data">
@@ -55,4 +54,3 @@
 </div>
 
 <script src="<?= PUBLIC_PATH . 'js/post/create.js' ?>"></script>
-<?php require APP_PATH . 'views/template/footer.php' ?>

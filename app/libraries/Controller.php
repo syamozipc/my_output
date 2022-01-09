@@ -17,11 +17,11 @@ class Controller {
      */
     public function view($view, $data = [])
     {
-        $viewFile = "../app/views/{$view}.php";
+        $viewFile = "../App/Views/{$view}.php";
 
         if (!file_exists($viewFile)) die('View does not exist');
-
-        require_once $viewFile;
+        
+        require_once '../App/Views/user/template.php';
     }
 
 }

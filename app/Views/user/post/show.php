@@ -1,4 +1,3 @@
-<?php require APP_PATH . 'views/template/header.php' ?>
 <div>
     <table>
         <thead>
@@ -32,4 +31,3 @@
     <a href="<?= URL_PATH . 'post/delete/' . $data['post']->id ?>">削除</a>
 </p>
 <p><a href="<?= URL_PATH . 'post/index' ?>">一覧へ戻る</a></p>
-<?php require APP_PATH . 'views/template/footer.php' ?>

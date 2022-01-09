@@ -30,7 +30,7 @@ class PostController extends Controller {
             'postsList' => $postsList
         ];
 
-        $this->view(view:'post/index', data:$data);
+        $this->view(view:'user/post/index', data:$data);
     }
 
     public function create(): void
@@ -44,7 +44,7 @@ class PostController extends Controller {
             'post' => $_POST
         ];
 
-        $this->view(view:'post/create', data:$data);
+        $this->view(view:'user/post/create', data:$data);
     }
 
     public function confirm()
@@ -60,7 +60,7 @@ class PostController extends Controller {
             'filePath' => $filePath
         ];
 
-        $this->view(view:'post/confirm', data:$data);
+        $this->view(view:'user/post/confirm', data:$data);
     }
 
     public function save(): void
@@ -80,7 +80,7 @@ class PostController extends Controller {
             'post' => $post
         ];
 
-        $this->view(view:'post/show', data:$data);
+        $this->view(view:'user/post/show', data:$data);
     }
 
     public function edit(int $id): void
@@ -100,7 +100,7 @@ class PostController extends Controller {
             'post' => $post
         ];
 
-        $this->view(view:'post/edit', data:$data);
+        $this->view(view:'user/post/edit', data:$data);
     }
 
     public function editConfirm($id)
@@ -118,7 +118,7 @@ class PostController extends Controller {
             'post' => $post,
         ];
 
-        $this->view(view:'post/edit_confirm', data:$data);
+        $this->view(view:'user/post/edit_confirm', data:$data);
     }
 
     public function update(int $id): void

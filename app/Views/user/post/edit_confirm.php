@@ -1,4 +1,3 @@
-<?php require APP_PATH . 'views/template/header.php' ?>
 <p>確認</p>
 <div>
     <form action="<?= URL_PATH . 'post/update/' . $data['post']->id ?>" method="POST" enctype="multipart/form-data">
@@ -29,4 +28,3 @@
 </div>
 
 <script src="<?= PUBLIC_PATH . 'js/post/confirm.js' ?>"></script>
-<?php require APP_PATH . 'views/template/footer.php' ?>

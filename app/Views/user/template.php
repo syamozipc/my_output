@@ -8,3 +8,8 @@
     <link rel="stylesheet" href="<?= PUBLIC_PATH . $data['css'] ?? '' ?>">
 </head>
 <body>
+    header
+    <?php require_once($viewFile) ?>
+    footer
+</body>
+</html>

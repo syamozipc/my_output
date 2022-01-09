@@ -1,4 +1,3 @@
-<?php require APP_PATH . 'views/template/header.php' ?>
 <div>
     <p><?= $data['description']; ?></p>
     <a href='<?= URL_PATH . 'post/create'; ?>'>新規投稿はこちら</a>
@@ -35,4 +34,3 @@
         </tbody>
     </table>
 </div>
-<?php require APP_PATH . 'views/template/footer.php' ?>
