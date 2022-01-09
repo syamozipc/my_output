@@ -37,15 +37,14 @@ https://github.com/syamozipc/my_output
   - [x] createConfrim/editConfirm
 - [ ] Laravel ライクにリファクタ
   - [x] namespace(User ディレクトリ作りたい)）
-  - [ ] ヘルパ
+  - [ ] ヘルパ（リダイレクト）
   - [ ] ディレクトリ構成
   - [ ] validation（session 使う）
 - PHP 8 を使う
-  - [ ] 名前付き引数
+  - [x] 名前付き引数
   - [ ] constructor の省略形
-  - [ ] match 式
+  - [x] match 式
   - [ ] null 安全オペレーター
-  - [ ] 他にあれば
 - [ ] ログイン機能
   - [ ] メール認証での新規登録
   - [ ] パスワードリセット

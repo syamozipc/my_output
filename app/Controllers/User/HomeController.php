@@ -10,6 +10,7 @@ class HomeController extends Controller {
         $description = "My Outputへようこそ\n好きなように練習してね";
 
         $data = [
+            'css' => 'home/top.css',
             'description' => $description
         ];
 

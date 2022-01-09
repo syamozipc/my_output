@@ -25,7 +25,7 @@ class PostController extends Controller {
         $postsList = $this->postModel->fetchPostsList();
 
         $data = [
-            'css' => PUBLIC_PATH . 'css/post/index.css',
+            'css' => 'css/post/index.css',
             'description' => $description,
             'postsList' => $postsList
         ];
@@ -39,7 +39,7 @@ class PostController extends Controller {
         $countriesList = $this->countryModel->fetchCountriesList();
 
         $data = [
-            'css' => PUBLIC_PATH . 'css/post/create.css',
+            'css' => 'css/post/create.css',
             'countriesList' => $countriesList,
             'post' => $_POST
         ];
@@ -54,7 +54,7 @@ class PostController extends Controller {
         $country = $this->countryModel->fetchCountryByID($_POST['country_id']);
 
         $data = [
-            'css' => PUBLIC_PATH . 'css/post/confirm.css',
+            'css' => 'css/post/confirm.css',
             'post' => $_POST,
             'country' => $country,
             'filePath' => $filePath
@@ -76,7 +76,7 @@ class PostController extends Controller {
         $post = $this->postModel->fetchPostById($id);
 
         $data = [
-            'css' => PUBLIC_PATH . 'css/post/show.css',
+            'css' => 'css/post/show.css',
             'post' => $post
         ];
 
@@ -95,7 +95,7 @@ class PostController extends Controller {
         $countriesList = $this->countryModel->fetchCountriesList();
 
         $data = [
-            'css' => PUBLIC_PATH . 'css/post/edit.css',
+            'css' => 'css/post/edit.css',
             'countriesList' => $countriesList,
             'post' => $post
         ];
@@ -114,7 +114,7 @@ class PostController extends Controller {
         $post->country_name = $country->name;
 
         $data = [
-            'css' => PUBLIC_PATH . 'css/post/editConfirm.css',
+            'css' => 'css/post/editConfirm.css',
             'post' => $post,
         ];
 
