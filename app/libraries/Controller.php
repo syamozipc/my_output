@@ -9,19 +9,6 @@ namespace App\Libraries;
  */
 class Controller {
     /**
-     * modelを読み込み、return
-     *
-     * @param string $model
-     * @return object
-     */
-    public function model($model)
-    {
-        require_once "../app/models/{$model}.php";
-
-        return new ('app\\models\\' . $model)();
-    }
-
-    /**
      * viewを読み込む
      *
      * @param string $view

@@ -3,15 +3,17 @@ namespace App\Controllers;
 
 use App\Libraries\Controller;
 use App\Services\PostService;
+use App\models\{Post, Country};
 class PostController extends Controller {
 
     public $postModel;
     public $countryModel;
+    public $postService;
 
     public function __construct()
     {
-        $this->postModel = $this->model('Post');
-        $this->countryModel = $this->model('Country');
+        $this->postModel = new Post();
+        $this->countryModel = new Country();
         $this->postService = new PostService();
     }
 
