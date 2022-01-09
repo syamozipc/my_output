@@ -84,8 +84,14 @@ class PostController extends Controller {
 
     public function edit(int $id): void
     {
-        $countriesList = $this->countryModel->fetchCountriesList();
         $post = $this->postModel->fetchPostById($id);
+
+        if ($_POST) {
+            $post->country_id = $_POST['country_id'];
+            $post->description = $_POST['description'];
+        }
+
+        $countriesList = $this->countryModel->fetchCountriesList();
 
         $data = [
             'css' => PUBLIC_PATH . 'css/post/edit.css',
@@ -94,6 +100,24 @@ class PostController extends Controller {
         ];
 
         $this->view(view:'post/edit', data:$data);
+    }
+
+    public function editConfirm($id)
+    {
+        $post = $this->postModel->fetchPostById($id);
+
+        $post->country_id = $_POST['country_id'];
+        $post->description = $_POST['description'];
+
+        $country = $this->countryModel->fetchCountryByID($_POST['country_id']);
+        $post->country_name = $country->name;
+
+        $data = [
+            'css' => PUBLIC_PATH . 'css/post/editConfirm.css',
+            'post' => $post,
+        ];
+
+        $this->view(view:'post/edit_confirm', data:$data);
     }
 
     public function update(int $id): void
