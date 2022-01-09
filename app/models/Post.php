@@ -61,7 +61,7 @@ class Post {
                 ->execute();
 
             $this->db->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->db->rollBack();
              exit($e->getMessage());
         }
@@ -121,7 +121,7 @@ class Post {
                 ->executeAndFetch();
 
             $filePath = $postDetail->path;
-            if (!unlink(UPLOAD_PATH . $filePath)) throw new Exception(('ファイルがありません'));
+            if (!unlink(UPLOAD_PATH . $filePath)) throw new \Exception(('ファイルがありません'));
 
             // post_detailを削除
             $sqlDeletePostDetail = 'DELETE FROM post_details WHERE post_id = :post_id';
@@ -130,7 +130,7 @@ class Post {
                 ->execute();
 
             $this->db->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->db->rollBack();
              exit($e->getMessage());
         }
