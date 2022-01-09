@@ -1,5 +1,8 @@
 <?php
 namespace app\libraries;
+
+// use app\models\{Post, Country};
+
 /**
  * base controller
  * modelとviewをloadする
@@ -15,7 +18,7 @@ class Controller {
     {
         require_once "../app/models/{$model}.php";
 
-        return new $model();
+        return new ('app\\models\\' . $model)();
     }
 
     /**
@@ -30,7 +33,7 @@ class Controller {
         $viewFile = "../app/views/{$view}.php";
 
         if (!file_exists($viewFile)) die('View does not exist');
-        
+
         require_once $viewFile;
     }
 

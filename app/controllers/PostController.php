@@ -1,6 +1,7 @@
 <?php
-use app\libraries\Controller;
+namespace app\controllers;
 
+use app\libraries\Controller;
 
 class PostController extends Controller {
 
@@ -66,8 +67,8 @@ class PostController extends Controller {
     public function save(): void
     {
         // path含めpost・post_detailsテーブルに保存
-        $this->postModel->save(post:$_POST); 
-        
+        $this->postModel->save(post:$_POST);
+
         header('Location: ' . URL_PATH . 'post/index');
     }
 
@@ -100,8 +101,8 @@ class PostController extends Controller {
     public function update(int $id): void
     {
         // path含めpost・post_detailsテーブルに保存
-        $this->postModel->update(post:$_POST, id:$id); 
-        
+        $this->postModel->update(post:$_POST, id:$id);
+
         header('Location: ' . URL_PATH . 'post/show/' . $id);
     }
 

@@ -16,11 +16,11 @@ class Core {
      */
     public function __construct()
     {
-        $url = isset($_GET['url']) 
-            ? $this->formatAndSanitizeUrl($_GET['url']) 
+        $url = isset($_GET['url'])
+            ? $this->formatAndSanitizeUrl($_GET['url'])
             : NULL;
 
-        // fileがあれば、それをcontrollerとしてセット
+            // fileがあれば、それをcontrollerとしてセット
         if (
             isset($url[0])
             && file_exists('../app/controllers/' . ucwords($url[0]) . 'Controller.php')
@@ -28,11 +28,11 @@ class Core {
             $this->currentController = ucwords($url[0]) . 'Controller';
             unset($url[0]);
         }
-        
+
         // 該当のcontroller classを読み込む
         require_once '../app/controllers/' . $this->currentController . '.php';
 
-        $this->currentController = new $this->currentController;
+        $this->currentController = new ('app\\controllers\\' . $this->currentController);
 
         // methodが存在すれば、それに更新
         if (

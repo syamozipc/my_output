@@ -1,4 +1,4 @@
-<?php 
+<?php
 // DB params
 const DB_HOST = 'localhost';
 const DB_USER = 'root';

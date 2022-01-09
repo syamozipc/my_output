@@ -1,4 +1,6 @@
 <?php
+namespace app\models;
+
 use app\libraries\Database;
 
 class Country {
@@ -12,7 +14,7 @@ class Country {
     public function fetchCountriesList()
     {
         $sql = 'SELECT * FROM countries';
-        
+
         $countriesList = $this->db->prepare($sql)->executeAndFetchAll();
 
         return $countriesList;
@@ -21,7 +23,7 @@ class Country {
     public function fetchCountryByID()
     {
         $sql = 'SELECT * FROM countries WHERE id = :id';
-        
+
         $countriesList = $this->db->prepare($sql)
             ->bind(':id', 1)
             ->executeAndFetch();

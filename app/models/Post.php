@@ -1,4 +1,6 @@
 <?php
+namespace app\models;
+
 use App\Services\PostService;
 use app\libraries\Database;
 class Post {
@@ -14,7 +16,7 @@ class Post {
     public function fetchPostsList(): array
     {
         $sql = '
-            SELECT 
+            SELECT
                 posts.id,
                 posts.user_id,
                 posts.country_id,
@@ -28,7 +30,7 @@ class Post {
             JOIN users ON posts.user_id = users.id
             WHERE posts.status_id = "publish"
         ';
-        
+
         $postsList = $this->db->prepare($sql)->executeAndFetchAll();
 
         return $postsList;
@@ -68,7 +70,7 @@ class Post {
     public function fetchPostById(int $id): object
     {
         $sql = '
-            SELECT 
+            SELECT
                 posts.id,
                 posts.user_id,
                 posts.country_id,
@@ -117,7 +119,7 @@ class Post {
             $postDetail = $this->db->prepare($sqlGetPostDetail)
                 ->bind(':post_id', $id)
                 ->executeAndFetch();
-            
+
             $filePath = $postDetail->path;
             if (!unlink(UPLOAD_PATH . $filePath)) throw new Exception(('ファイルがありません'));
 
