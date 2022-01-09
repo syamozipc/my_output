@@ -52,5 +52,3 @@
         <button type="submit">送信</button>
     </form>
 </div>
-
-<script src="<?= PUBLIC_PATH . 'js/post/create.js' ?>"></script>

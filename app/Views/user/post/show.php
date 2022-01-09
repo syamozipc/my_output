@@ -28,6 +28,8 @@
 <p>
     <a href="<?= URL_PATH . 'post/edit/' . $data['post']->id ?>">編集</a>
     &nbsp;
-    <a href="<?= URL_PATH . 'post/delete/' . $data['post']->id ?>">削除</a>
+    <form action="<?= URL_PATH . 'post/delete/' . $data['post']->id ?>" method="POST">
+        <input type="submit" value="削除" class="js-deleteConfirm">
+    </form>
 </p>
 <p><a href="<?= URL_PATH . 'post/index' ?>">一覧へ戻る</a></p>

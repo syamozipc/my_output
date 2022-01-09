@@ -26,6 +26,7 @@ class PostController extends Controller {
 
         $data = [
             'css' => 'css/post/index.css',
+            'js' => 'js/post/index.js',
             'description' => $description,
             'postsList' => $postsList
         ];
@@ -40,6 +41,7 @@ class PostController extends Controller {
 
         $data = [
             'css' => 'css/post/create.css',
+            'js' => 'js/post/create.js',
             'countriesList' => $countriesList,
             'post' => $_POST
         ];
@@ -55,6 +57,7 @@ class PostController extends Controller {
 
         $data = [
             'css' => 'css/post/confirm.css',
+            'js' => 'js/post/confirm.js',
             'post' => $_POST,
             'country' => $country,
             'filePath' => $filePath
@@ -77,6 +80,7 @@ class PostController extends Controller {
 
         $data = [
             'css' => 'css/post/show.css',
+            'js' => 'js/post/show.js',
             'post' => $post
         ];
 
@@ -96,6 +100,7 @@ class PostController extends Controller {
 
         $data = [
             'css' => 'css/post/edit.css',
+            'js' => 'js/post/edit.js',
             'countriesList' => $countriesList,
             'post' => $post
         ];
@@ -115,6 +120,7 @@ class PostController extends Controller {
 
         $data = [
             'css' => 'css/post/editConfirm.css',
+            'js' => 'js/post/editConfirm.js',
             'post' => $post,
         ];
 

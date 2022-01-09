@@ -31,6 +31,11 @@ function reflectInput() {
 	});
 }
 
+/**
+ * 1.画像を選択時に発火
+ * 2.input[file]から該当のfile情報を取得してblobUrlを生成
+ * それをimgタグのsrcに設定し、is-hiddenクラスを取り除いて画面に表示する
+ */
 function displayInputImg() {
 	document
 		.querySelector('.js-inputImg')

@@ -26,5 +26,3 @@
         <button type="submit">修正する</button>
     </form>
 </div>
-
-<script src="<?= PUBLIC_PATH . 'js/post/confirm.js' ?>"></script>
