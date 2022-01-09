@@ -2,7 +2,7 @@
 namespace app\controllers;
 
 use app\libraries\Controller;
-
+use App\Services\PostService;
 class PostController extends Controller {
 
     public $postModel;
@@ -12,6 +12,7 @@ class PostController extends Controller {
     {
         $this->postModel = $this->model('Post');
         $this->countryModel = $this->model('Country');
+        $this->postService = new PostService();
     }
 
     public function index(): void
@@ -43,14 +44,7 @@ class PostController extends Controller {
 
     public function confirm()
     {
-        /**
-         * @todo ファイル保存用関数に切り出す
-         */
-        $tempPath = $_FILES['upload']['tmp_name'];
-        $randomFileName = md5(uniqid());
-        $filePath = UPLOAD_PATH . $randomFileName . '.' . basename($_FILES['upload']['type']);
-
-        move_uploaded_file($tempPath, $filePath);
+        $filePath = $this->postService->uploadFileToPublic($_FILES);
 
         $country = $this->countryModel->fetchCountryByID($_POST['country_id']);
 
