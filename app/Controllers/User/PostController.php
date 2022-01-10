@@ -71,7 +71,7 @@ class PostController extends Controller {
         // path含めpost・post_detailsテーブルに保存
         $this->postModel->save(post:$_POST);
 
-        header('Location: ' . URL_PATH . 'post/index');
+        redirect('post/index');
     }
 
     public function show(int $id): void
@@ -132,13 +132,13 @@ class PostController extends Controller {
         // path含めpost・post_detailsテーブルに保存
         $this->postModel->update(post:$_POST, id:$id);
 
-        header('Location: ' . URL_PATH . 'post/show/' . $id);
+        redirect("post/show/{$id}");
     }
 
     public function delete(int $id): void
     {
         $this->postModel->delete(id:$id);
 
-        header('Location: ' . URL_PATH . 'post/index');
+        redirect('post/index');
     }
 }

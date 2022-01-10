@@ -37,7 +37,7 @@ https://github.com/syamozipc/my_output
   - [x] createConfrim/editConfirm
 - [ ] Laravel ライクにリファクタ
   - [x] namespace(User ディレクトリ作りたい)）
-  - [ ] ヘルパ（リダイレクト）
+  - [x] ヘルパ（リダイレクト）
   - [ ] ディレクトリ構成
   - [ ] validation（session 使う）
 - PHP 8 を使う
