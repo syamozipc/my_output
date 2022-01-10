@@ -15,3 +15,12 @@ define('UPLOAD_PATH', dirname(dirname(dirname(__FILE__))) . '/public/upload/');
 
 // Site Name
 const SITENAME = 'My Output';
+
+const CHAR_LENGTH = [
+    'post_description' => 1000
+];
+
+const Counrty = [
+    'min_id' => 1,
+    'max_id' => 195
+];

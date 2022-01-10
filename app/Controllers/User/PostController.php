@@ -4,15 +4,17 @@ namespace App\Controllers\User;
 use App\Libraries\Controller;
 use App\Services\PostService;
 use App\models\{Post, Country};
+use App\Validations\User\PostCreate;
 
 class PostController extends Controller {
-
     public $postModel;
     public $countryModel;
     public $postService;
 
     public function __construct()
     {
+        session_start();
+
         $this->postModel = new Post();
         $this->countryModel = new Country();
         $this->postService = new PostService();
@@ -43,7 +45,7 @@ class PostController extends Controller {
             'css' => 'css/post/create.css',
             'js' => 'js/post/create.js',
             'countriesList' => $countriesList,
-            'post' => $_POST
+            'post' => $_SESSION['old_post'] ?? $_POST
         ];
 
         $this->view(view:'user/post/create', data:$data);
@@ -51,6 +53,16 @@ class PostController extends Controller {
 
     public function confirm()
     {
+        unset($_SESSION['old_post'], $_SESSION['error_country_id'], $_SESSION['error_description']);
+
+        $validation = new PostCreate();
+        $isValidated = $validation->validate($_POST);
+
+        if (!$isValidated) {
+            $_SESSION['old_post'] = $_POST;
+            redirect('post/create');
+        }
+
         $filePath = $this->postService->uploadFileToPublic($_FILES);
 
         $country = $this->countryModel->fetchCountryByID($_POST['country_id']);

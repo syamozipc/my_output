@@ -19,6 +19,9 @@
                 </option>
             <?php endforeach; ?>
         </select>
+        <?php if (isset($_SESSION['error_country_id'])) : ?>
+            <p class="error__message">※<?= $_SESSION['error_country_id'] ?></p>
+        <?php endif; ?>
 
         <input
             type="search"
@@ -45,6 +48,9 @@
         <br>
 
         <textarea name="description" cols="70" rows="10"><?= $data['post']['description'] ?? '' ?></textarea>
+        <?php if (isset($_SESSION['error_description'])) : ?>
+            <p class="error__message">※<?= $_SESSION['error_description'] ?></p>
+        <?php endif; ?>
 
         <br>
         <br>
