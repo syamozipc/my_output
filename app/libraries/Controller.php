@@ -1,23 +1,13 @@
 <?php
+namespace App\Libraries;
+
+// use app\models\{Post, Country};
 
 /**
  * base controller
  * modelとviewをloadする
  */
 class Controller {
-    /**
-     * modelを読み込み、return
-     *
-     * @param string $model
-     * @return object
-     */
-    public function model($model)
-    {
-        require_once "../app/models/{$model}.php";
-
-        return new $model();
-    }
-
     /**
      * viewを読み込む
      *
@@ -27,11 +17,11 @@ class Controller {
      */
     public function view($view, $data = [])
     {
-        $viewFile = "../app/views/{$view}.php";
+        $viewFile = "../App/Views/{$view}.php";
 
         if (!file_exists($viewFile)) die('View does not exist');
         
-        require_once $viewFile;
+        require_once '../App/Views/user/template.php';
     }
 
 }

@@ -1,4 +1,6 @@
 <?php
+namespace App\Libraries;
+
 /**
  * App Core Class
  * Creates URL & loads core controller
@@ -14,23 +16,23 @@ class Core {
      */
     public function __construct()
     {
-        $url = isset($_GET['url']) 
-            ? $this->formatAndSanitizeUrl($_GET['url']) 
+        $url = isset($_GET['url'])
+            ? $this->formatAndSanitizeUrl($_GET['url'])
             : NULL;
 
-        // fileがあれば、それをcontrollerとしてセット
+            // fileがあれば、それをcontrollerとしてセット
         if (
             isset($url[0])
-            && file_exists('../app/controllers/' . ucwords($url[0]) . 'Controller.php')
+            && file_exists('../App/Controllers/User/' . ucwords($url[0]) . 'Controller.php')
         ) {
             $this->currentController = ucwords($url[0]) . 'Controller';
             unset($url[0]);
         }
-        
-        // 該当のcontroller classを読み込む
-        require_once '../app/controllers/' . $this->currentController . '.php';
 
-        $this->currentController = new $this->currentController;
+        // 該当のcontroller classを読み込む
+        require_once '../App/Controllers/User/' . $this->currentController . '.php';
+
+        $this->currentController = new ('App\\Controllers\\User\\' . $this->currentController);
 
         // methodが存在すれば、それに更新
         if (
