@@ -42,7 +42,8 @@ https://github.com/syamozipc/my_output
   - [x] ヘルパ（リダイレクト）
   - [ ] ディレクトリ構成
   - [ ] validation（session 使う）
-- PHP 8 を使う
+- [ ] npm/webpack 実装
+- [ ] PHP 8 を使う
   - [x] 名前付き引数
   - [ ] constructor の省略形
   - [x] match 式
