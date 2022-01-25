@@ -52,6 +52,8 @@ https://github.com/syamozipc/my_output
   - [ ] user ページ
 - [ ] ページネーション実装
 - [ ] npm/webpack を使用してコンパイル
+  - [ ] prod（圧縮あり）と dev（圧縮なし）を使い分ける
+  - [ ] watch を使いこなす
 - [ ] cron を利用したタスク作る
 - [ ] 自己結合の多対多（フォロー機能）
 - [ ] 統計機能（PV 数などを Chart.JS で表示）
