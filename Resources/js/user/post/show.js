@@ -1,3 +1,5 @@
+import '../../../scss/user/post/show.scss';
+
 deleteConfirm();
 
 function deleteConfirm() {

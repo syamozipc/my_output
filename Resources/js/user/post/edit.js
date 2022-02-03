@@ -1,3 +1,5 @@
+import '../../../scss/user/post/edit.scss';
+
 reflectInput();
 
 /**
