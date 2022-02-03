@@ -3,7 +3,7 @@ namespace App\Controllers\User;
 
 use App\Libraries\Controller;
 use App\Services\PostService;
-use App\models\{Post, Country};
+use App\Models\{Post, Country};
 
 class PostController extends Controller {
 
