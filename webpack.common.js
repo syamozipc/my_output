@@ -32,7 +32,7 @@ module.exports = {
 			},
 			{
 				test: /\.scss$/,
-				include: path.resolve(__dirname, 'resources/scss/user/home'),
+				include: path.resolve(__dirname, 'resources/scss'),
 				use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
 			},
 		],

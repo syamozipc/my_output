@@ -9,3 +9,4 @@ console.log(answer * 2);
 // const obs = new IntersectionObserver(() => {});
 // console.log(obs);
 import '../../../scss/user/home/index.scss';
+import '../../../scss/user/post/index.scss';
