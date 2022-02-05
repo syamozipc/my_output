@@ -13,10 +13,12 @@ const entry = {
 	'user/post/edit': './resources/js/user/post/edit.js',
 	'user/post/editConfirm': './resources/js/user/post/editConfirm.js',
 	'user/post/show': './resources/js/user/post/show.js',
-}
+};
 
 // modeは各環境用webpack config fileに記述しているので、ここでは共通処理のみ
 module.exports = {
+	mode: 'development',
+	devtool: 'eval-cheap-module-source-map',
 	// entry: entry の省略
 	entry,
 	output: {
