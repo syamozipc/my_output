@@ -6,7 +6,6 @@
     "rules": {
         "indent": [2, 4],
         "no-alert": 0, // confirmは使いたい
-        "comma-dangle": 0, // 末尾のカンマはいらない派
-        "no-restricted-syntax": 0
+        "comma-dangle": 0 // 末尾のカンマはいらない派
     }
 }

@@ -3,6 +3,7 @@ const path = require('path');
 
 // scssのcompileに使用
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 // compile対象の全JS file
 const entry = {
@@ -30,17 +31,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 include: path.resolve(__dirname, 'resources/js'),
-                use: [
-                    // babelをeslintより後に書く（先に実行する）と、const/letながvarに変換されeslintがerrorを出してしまう
-                    'babel-loader',
-                    {
-                        loader: 'eslint-loader',
-                        options: {
-                            fix: false,
-                            failOnError: true,
-                        },
-                    },
-                ],
+                use: ['babel-loader'],
             },
             {
                 test: /\.scss$/,
@@ -52,6 +43,12 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'css/[name].css',
+        }),
+        // eslint-loaderが非推奨になる & failOnErrorが機能しないので、こちらを使用
+        // https://github.com/webpack-contrib/eslint-loader/issues/334
+        new EslintWebpackPlugin({
+            fix: false,
+            failOnError: false, // 必要に応じて切り替え
         }),
     ],
 };
