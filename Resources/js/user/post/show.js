@@ -1,11 +1,11 @@
 import '../../../scss/user/post/show.scss';
 
-deleteConfirm();
-
-function deleteConfirm() {
+const deleteConfirm = () => {
     document
         .querySelector('.js-deleteConfirm')
-        .addEventListener('click', function (e) {
-            if (!confirm('本当に削除しますか？')) e.preventDefault();
+        .addEventListener('click', (e) => {
+            if (!window.confirm('本当に削除しますか？')) e.preventDefault();
         });
-}
+};
+
+deleteConfirm();

@@ -1,1 +1,1 @@
-(()=>{"use strict";document.querySelector(".js-deleteConfirm").addEventListener("click",(function(e){confirm("本当に削除しますか？")||e.preventDefault()}))})();
+(()=>{"use strict";document.querySelector(".js-deleteConfirm").addEventListener("click",(function(e){window.confirm("本当に削除しますか？")||e.preventDefault()}))})();
