@@ -12,13 +12,16 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 const glob = require('glob');
 
 // globを使用して配下の任意のJS fileを取得し、compileする処理
-const srcDir = './resources';
+const srcDir = './resources/js';
 const entries = {};
 
 glob.sync('**/*.js', {
     ignore: '**/_share/*.js',
     cwd: srcDir,
-}).forEach((file) => (entries[file] = path.resolve(srcDir, file)));
+}).forEach((jsFileName) => {
+    const fileNameExceptExt = jsFileName.replace(/\.js/, '');
+    entries[fileNameExceptExt] = path.resolve(srcDir, jsFileName);
+});
 
 module.exports = {
     mode: 'development',
@@ -26,8 +29,7 @@ module.exports = {
     entry: entries,
     output: {
         path: path.resolve(__dirname, 'public'),
-        // filename: 'js/[name].js',
-        filename: '[name].js',
+        filename: 'js/[name].js',
     },
     module: {
         rules: [
