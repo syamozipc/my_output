@@ -1,0 +1,1 @@
+(()=>{"use strict";var e,t;e=document.querySelector(".js-suggestionInput"),t=document.querySelector(".js-countriesSelect"),e.addEventListener("change",(function(n){var r,o=null===(r=e.list.querySelector("[value=".concat(n.target.value,"]")))||void 0===r?void 0:r.dataset.countryId;void 0!==o&&(Array.from(t.options).find((function(e){return e.value===o})).selected=!0)}))})();

@@ -3,7 +3,7 @@ namespace App\Controllers\User;
 
 use App\Libraries\Controller;
 use App\Services\PostService;
-use App\models\{Post, Country};
+use App\Models\{Post, Country};
 
 class PostController extends Controller {
 
@@ -25,8 +25,8 @@ class PostController extends Controller {
         $postsList = $this->postModel->fetchPostsList();
 
         $data = [
-            'css' => 'css/post/index.css',
-            'js' => 'js/post/index.js',
+            'css' => 'css/user/post/index.css',
+            'js' => 'js/user/post/index.js',
             'description' => $description,
             'postsList' => $postsList
         ];
@@ -40,8 +40,8 @@ class PostController extends Controller {
         $countriesList = $this->countryModel->fetchCountriesList();
 
         $data = [
-            'css' => 'css/post/create.css',
-            'js' => 'js/post/create.js',
+            'css' => 'css/user/post/create.css',
+            'js' => 'js/user/post/create.js',
             'countriesList' => $countriesList,
             'post' => $_POST
         ];
@@ -56,8 +56,8 @@ class PostController extends Controller {
         $country = $this->countryModel->fetchCountryByID($_POST['country_id']);
 
         $data = [
-            'css' => 'css/post/confirm.css',
-            'js' => 'js/post/confirm.js',
+            'css' => 'css/user/post/confirm.css',
+            'js' => 'js/user/post/confirm.js',
             'post' => $_POST,
             'country' => $country,
             'filePath' => $filePath
@@ -79,8 +79,8 @@ class PostController extends Controller {
         $post = $this->postModel->fetchPostById($id);
 
         $data = [
-            'css' => 'css/post/show.css',
-            'js' => 'js/post/show.js',
+            'css' => 'css/user/post/show.css',
+            'js' => 'js/user/post/show.js',
             'post' => $post
         ];
 
@@ -99,8 +99,8 @@ class PostController extends Controller {
         $countriesList = $this->countryModel->fetchCountriesList();
 
         $data = [
-            'css' => 'css/post/edit.css',
-            'js' => 'js/post/edit.js',
+            'css' => 'css/user/post/edit.css',
+            'js' => 'js/user/post/edit.js',
             'countriesList' => $countriesList,
             'post' => $post
         ];
@@ -119,8 +119,8 @@ class PostController extends Controller {
         $post->country_name = $country->name;
 
         $data = [
-            'css' => 'css/post/editConfirm.css',
-            'js' => 'js/post/editConfirm.js',
+            'css' => 'css/user/post/editConfirm.css',
+            'js' => 'js/user/post/editConfirm.js',
             'post' => $post,
         ];
 
