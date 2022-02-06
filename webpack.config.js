@@ -1,32 +1,33 @@
 // Node.jsに組み込まれているモジュール。出力先などの指定をするために利用する。
 const path = require('path');
 
-// scssのcompileに使用
+// scssのcompileに使用。個別のcssファイルへの出力を可能にする。
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // eslint-loaderが非推奨になる & failOnErrorが機能しないので、こちらを使用
 // https://github.com/webpack-contrib/eslint-loader/issues/334
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
-// compile対象の全JS file
-const entry = {
-    'user/home/index': './resources/js/user/home/index.js',
-    'user/post/index': './resources/js/user/post/index.js',
-    'user/post/confirm': './resources/js/user/post/confirm.js',
-    'user/post/create': './resources/js/user/post/create.js',
-    'user/post/edit': './resources/js/user/post/edit.js',
-    'user/post/editConfirm': './resources/js/user/post/editConfirm.js',
-    'user/post/show': './resources/js/user/post/show.js',
-};
+// glob
+const glob = require('glob');
+
+// globを使用して配下の任意のJS fileを取得し、compileする処理
+const srcDir = './resources';
+const entries = {};
+
+glob.sync('**/*.js', {
+    ignore: '**/_share/*.js',
+    cwd: srcDir,
+}).forEach((file) => (entries[file] = path.resolve(srcDir, file)));
 
 module.exports = {
     mode: 'development',
-    devtool: 'eval-cheap-module-source-map',
-    // entry: entry の省略
-    entry,
+    devtool: 'eval-cheap-mひとつnodule-source-map',
+    entry: entries,
     output: {
         path: path.resolve(__dirname, 'public'),
-        filename: 'js/[name].js',
+        // filename: 'js/[name].js',
+        filename: '[name].js',
     },
     module: {
         rules: [
