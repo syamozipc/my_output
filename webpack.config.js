@@ -31,6 +31,7 @@ module.exports = {
 				test: /\.js$/,
 				include: path.resolve(__dirname, 'resources/js'),
 				use: [
+					// babelをeslintより後に書く（先に実行する）と、const/letながvarに変換されeslintがerrorを出してしまう
 					'babel-loader',
 					{
 						loader: 'eslint-loader',
