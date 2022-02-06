@@ -1,0 +1,11 @@
+{
+    "extends": "airbnb",
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "indent": [2, 4],
+        "no-alert": 0, // confirmは使いたい
+        "comma-dangle": 0 // 末尾のカンマはいらない派
+    }
+}

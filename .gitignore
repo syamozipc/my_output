@@ -1,2 +1,3 @@
 .env
 public/upload
+node_modules
