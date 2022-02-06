@@ -3,6 +3,9 @@ const path = require('path');
 
 // scssのcompileに使用
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+// eslint-loaderが非推奨になる & failOnErrorが機能しないので、こちらを使用
+// https://github.com/webpack-contrib/eslint-loader/issues/334
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 // compile対象の全JS file
@@ -16,7 +19,6 @@ const entry = {
     'user/post/show': './resources/js/user/post/show.js',
 };
 
-// modeは各環境用webpack config fileに記述しているので、ここでは共通処理のみ
 module.exports = {
     mode: 'development',
     devtool: 'eval-cheap-module-source-map',
@@ -44,8 +46,6 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'css/[name].css',
         }),
-        // eslint-loaderが非推奨になる & failOnErrorが機能しないので、こちらを使用
-        // https://github.com/webpack-contrib/eslint-loader/issues/334
         new EslintWebpackPlugin({
             fix: false,
             failOnError: false, // 必要に応じて切り替え
