@@ -14,18 +14,21 @@ const reflectInput = () => {
         // inputに紐づくdatalist tagは、.listでアクセスできる
         const placeId = suggestionInput.list.querySelector(
             `[value=${ev.target.value}]`
-        ).dataset.countryId;
+        )?.dataset.countryId;
 
         // 入力と一致する値が無ければ、undefinedになる
         if (placeId === undefined) return;
 
-        // select tagのoptionが順に入る
-        for (const option of placeSelect) {
-            if (option.value === placeId) {
-                option.selected = true;
-                break;
-            }
-        }
+        /**
+         * for of は babelで変換したコードが処理性能が悪いらしく、eslintで引っ掛かるため、findで対応
+         * ref：
+         *  https://qiita.com/putan/items/0c0037ce00d21854a8d0
+         *  https://qiita.com/putan/items/0c0037ce00d21854a8d0#comment-f54f6b228c89da0ebf63
+         */
+        const matchedOption = Array.from(placeSelect.options).find(
+            (option) => option.value === placeId
+        );
+        matchedOption.selected = true;
     });
 };
 
