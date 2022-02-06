@@ -11,7 +11,7 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin');
 // glob
 const glob = require('glob');
 
-// globを使用して配下の任意のJS fileを取得し、compileする処理
+// globを使用して任意のJS fileを取得し、multi entry point用のobjectを生成
 const srcDir = './resources/js';
 const entries = {};
 
@@ -25,7 +25,7 @@ glob.sync('**/*.js', {
 
 module.exports = {
     mode: 'development',
-    devtool: 'eval-cheap-mひとつnodule-source-map',
+    devtool: 'eval-cheap-module-source-map',
     entry: entries,
     output: {
         path: path.resolve(__dirname, 'public'),
