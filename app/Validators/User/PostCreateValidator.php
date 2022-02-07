@@ -1,9 +1,9 @@
 <?php
-namespace App\Validations\User;
+namespace App\Validators\User;
 
 use App\Libraries\Validator;
 
-class PostCreate extends Validator{
+class PostCreateValidator extends Validator{
     public bool $hasError = false;
 
     public function validate($post)

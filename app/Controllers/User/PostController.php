@@ -4,7 +4,7 @@ namespace App\Controllers\User;
 use App\Libraries\Controller;
 use App\Services\PostService;
 use App\models\{Post, Country};
-use App\Validations\User\PostCreate;
+use App\Validators\User\PostCreateValidator;
 
 class PostController extends Controller {
     public $postModel;
@@ -55,8 +55,8 @@ class PostController extends Controller {
     {
         unset($_SESSION['old_post'], $_SESSION['error_country_id'], $_SESSION['error_description']);
 
-        $validation = new PostCreate();
-        $isValidated = $validation->validate($_POST);
+        $validator = new PostCreateValidator();
+        $isValidated = $validator->validate($_POST);
 
         if (!$isValidated) {
             $_SESSION['old_post'] = $_POST;
