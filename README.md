@@ -29,37 +29,23 @@ https://github.com/syamozipc/my_output
 
 次やること：post/create の file upload の validation（session trait 作る）
 
--   [x] 素の PHP で MVC フレームワーク風に POST の CRUD を実装
-        （まずは以前作成した独自 MVC フレームワーク「ryota_framework」の形式で）
-    -   [x] create/save
-    -   [x] index
-    -   [x] show
-    -   [x] edit/update
-    -   [x] delete
-    -   [x] createConfrim/editConfirm
--   [ ] Laravel ライクにリファクタ
-    -   [x] namespace(User ディレクトリ作りたい)）
-    -   [x] ヘルパ（リダイレクト）
-    -   [ ] ディレクトリ構成
 -   [ ] validation
     -   [x] flash session 実装
     -   [ ] post/create
     -   [ ] post/edit
     -   [ ] post/delete（confrim window ではなく popup 出す）
--   [x] npm/webpack を使用してコンパイル
-    -   [x] prod/dev/watch を分ける
-    -   [x] ESLint 使いこなす
-    -   [x] glob 使いこなす
--   [ ] PHP 8 を使う
-    -   [x] 名前付き引数
-    -   [ ] constructor の省略形
-    -   [x] match 式
-    -   [ ] null 安全オペレーター
+-   [ ] ディレクトリ構成を Laravel like に
 -   [ ] ログイン機能
     -   [ ] メール認証での新規登録
     -   [ ] パスワードリセット
     -   [ ] SNS ログイン
     -   [ ] user ページ
+-   [ ] PHP 8 を使う
+    -   [x] 名前付き引数
+    -   [ ] constructor の省略形
+    -   [x] match 式
+    -   [ ] null 安全オペレーター
+    -   [ ] str_contains
 -   [ ] ページネーション実装
 -   [ ] cron を利用したタスク作る
 -   [ ] 自己結合の多対多（フォロー機能）
@@ -73,3 +59,8 @@ https://github.com/syamozipc/my_output
 -   [ ] TypeScript 実装
 -   [ ] CSV ファイル読み込み・書き出し
 -   [ ] HTML/CSS 勉強後、マークアップ部分を改善
+
+<!-- 実行機能
+・CRUD
+・npm/webpackとESLint
+-->
