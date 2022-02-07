@@ -41,7 +41,11 @@ https://github.com/syamozipc/my_output
     -   [x] namespace(User ディレクトリ作りたい)）
     -   [x] ヘルパ（リダイレクト）
     -   [ ] ディレクトリ構成
-    -   [ ] validation（session 使う）
+-   [ ] validation
+    -   [x] flash session 実装
+    -   [ ] post/create
+    -   [ ] post/edit
+    -   [ ] post/delete（confrim window ではなく popup 出す）
 -   [x] npm/webpack を使用してコンパイル
     -   [x] prod/dev/watch を分ける
     -   [x] ESLint 使いこなす
