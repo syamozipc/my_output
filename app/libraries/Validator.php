@@ -2,6 +2,7 @@
 namespace App\Libraries;
 
 class Validator {
+    use \App\Traits\SessionTrait;
 
     public function isfilled($param)
     {

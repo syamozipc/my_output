@@ -6,21 +6,14 @@
             <?php foreach ($data['countriesList'] as $country) : ?>
                 <option
                     value="<?= $country->id ?>"
-                    <?php
-                        if (
-                            isset($data['post']['country_id'])
-                            && $data['post']['country_id'] === $country->id
-                        ) {
-                            echo 'selected';
-                        }
-                     ?>
+                    <?php if (($data['post']['country_id'] ?? null) === $country->id) echo 'selected'; ?>
                 >
                     <?= $country->name ?>
                 </option>
             <?php endforeach; ?>
         </select>
-        <?php if (isset($_SESSION['error_country_id'])) : ?>
-            <p class="error__message">※<?= $_SESSION['error_country_id'] ?></p>
+        <?php if (old('error_country_id')) : ?>
+            <p class="error__message">※<?= old('error_country_id') ?></p>
         <?php endif; ?>
 
         <input
@@ -47,9 +40,9 @@
         <br>
         <br>
 
-        <textarea name="description" cols="70" rows="10"><?= $data['post']['description'] ?? '' ?></textarea>
-        <?php if (isset($_SESSION['error_description'])) : ?>
-            <p class="error__message">※<?= $_SESSION['error_description'] ?></p>
+        <textarea name="description" cols="70" rows="10"><?= $data['post']['description'] ?? null ?></textarea>
+        <?php if (old('error_description')) : ?>
+            <p class="error__message">※<?= old('error_description') ?></p>
         <?php endif; ?>
 
         <br>

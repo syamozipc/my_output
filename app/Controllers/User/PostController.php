@@ -13,8 +13,6 @@ class PostController extends Controller {
 
     public function __construct()
     {
-        session_start();
-
         $this->postModel = new Post();
         $this->countryModel = new Country();
         $this->postService = new PostService();
@@ -30,7 +28,7 @@ class PostController extends Controller {
             'css' => 'css/user/post/index.css',
             'js' => 'js/user/post/index.js',
             'description' => $description,
-            'postsList' => $postsList
+            'postsList' => $postsList,
         ];
 
         $this->view(view:'user/post/index', data:$data);
@@ -45,7 +43,7 @@ class PostController extends Controller {
             'css' => 'css/user/post/create.css',
             'js' => 'js/user/post/create.js',
             'countriesList' => $countriesList,
-            'post' => $_SESSION['old_post'] ?? $_POST
+            'post' => old() ?: $_POST
         ];
 
         $this->view(view:'user/post/create', data:$data);
@@ -53,15 +51,10 @@ class PostController extends Controller {
 
     public function confirm()
     {
-        unset($_SESSION['old_post'], $_SESSION['error_country_id'], $_SESSION['error_description']);
-
         $validator = new PostCreateValidator();
         $isValidated = $validator->validate($_POST);
 
-        if (!$isValidated) {
-            $_SESSION['old_post'] = $_POST;
-            redirect('post/create');
-        }
+        if (!$isValidated) redirect('post/create');
 
         $filePath = $this->postService->uploadFileToPublic($_FILES);
 

@@ -11,10 +11,33 @@ class Core {
     protected $currentMethod = 'index';
     protected $params = [];
 
+    public function __construct()
+    {
+        $this->initSession();
+        $this->callFunction();
+    }
+
     /**
+     * session宣言、flash sessionのoldへの移行
+     *
+     * @return void
+     */
+    public function initSession()
+    {
+        session_start();
+
+        if (isset( $_SESSION['flash'])) {
+            $_SESSION['old'] = $_SESSION['flash'];
+            unset($_SESSION['flash']);
+        } else {
+            $_SESSION['old'] = [];
+        }
+    }
+
+     /**
      * URLを取得し、対応するclassのmethodを呼び出す基幹処理
      */
-    public function __construct()
+    public function callFunction()
     {
         $url = isset($_GET['url'])
             ? $this->formatAndSanitizeUrl($_GET['url'])
