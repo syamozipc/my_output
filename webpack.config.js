@@ -19,7 +19,7 @@ glob.sync('**/*.js', {
     ignore: '**/_share/*.js',
     cwd: srcDir,
 }).forEach((jsFileName) => {
-    const fileNameExceptExt = jsFileName.replace(/\.js/, '');
+    const fileNameExceptExt = jsFileName.replace(/\.js$/, '');
     entries[fileNameExceptExt] = path.resolve(srcDir, jsFileName);
 });
 
