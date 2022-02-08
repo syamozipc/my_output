@@ -36,6 +36,10 @@
         <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
         <input type="file" name="upload" class="js-inputImg">
 
+        <?php if (old('error_upload')) : ?>
+            <p class="error__message">※<?= old('error_upload') ?></p>
+        <?php endif; ?>
+
         <img width="400" height="400" class="is-hidden js-displayImg">
 
         <br>
