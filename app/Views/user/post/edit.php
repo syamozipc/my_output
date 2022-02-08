@@ -26,6 +26,10 @@
             <?php endforeach; ?>
         </datalist>
 
+        <?php if (old('error_country_id')) : ?>
+            <p class="error__message">※<?= old('error_country_id') ?></p>
+        <?php endif; ?>
+
         <p>画像・動画は編集できません</p>
         <img 
             src="<?= PUBLIC_PATH . 'upload/' . $data['post']->path ?>"
@@ -38,6 +42,10 @@
         <br>
 
         <textarea name="description" cols="70" rows="10"><?= $data['post']->description ?></textarea>
+
+        <?php if (old('error_description')) : ?>
+            <p class="error__message">※<?= old('error_description') ?></p>
+        <?php endif; ?>
 
         <br>
         <br>

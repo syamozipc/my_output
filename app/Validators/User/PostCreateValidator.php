@@ -34,7 +34,7 @@ class PostCreateValidator extends Validator{
             return;
         }
 
-        if (!$this->isValidCountryId(param:$countryId)) {
+        if (!$this->isValidRangeCountryId(param:$countryId)) {
             $this->setFlashSession('error_country_id', '無効な値です。');
             $this->hasError = true;
             return;

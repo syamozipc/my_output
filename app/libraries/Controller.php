@@ -1,8 +1,6 @@
 <?php
 namespace App\Libraries;
 
-// use app\models\{Post, Country};
-
 /**
  * base controller
  * modelとviewをloadする

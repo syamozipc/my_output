@@ -4,7 +4,7 @@ namespace App\Controllers\User;
 use App\Libraries\Controller;
 use App\Services\PostService;
 use App\models\{Post, Country};
-use App\Validators\User\PostCreateValidator;
+use App\Validators\User\{PostCreateValidator, PostEditValidator};
 
 class PostController extends Controller {
     public $postModel;
@@ -96,9 +96,9 @@ class PostController extends Controller {
     {
         $post = $this->postModel->fetchPostById($id);
 
-        if ($_POST) {
-            $post->country_id = $_POST['country_id'];
-            $post->description = $_POST['description'];
+        if (old() || $_POST) {
+            $post->country_id = old('country_id') ?? $_POST['country_id'];
+            $post->description = old('description') ?? $_POST['description'];
         }
 
         $countriesList = $this->countryModel->fetchCountriesList();
@@ -115,6 +115,11 @@ class PostController extends Controller {
 
     public function editConfirm($id)
     {
+        $validator = new PostEditValidator();
+        $isValidated = $validator->validate($_POST);
+
+        if (!$isValidated) redirect("post/edit/{$id}");
+
         $post = $this->postModel->fetchPostById($id);
 
         $post->country_id = $_POST['country_id'];

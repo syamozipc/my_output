@@ -29,15 +29,20 @@ https://github.com/syamozipc/my_output
 
 -   [ ] validation
     -   [x] flash session 実装
-    -   [ ] post/create
-    -   [ ] post/edit
+    -   [x] file validation 実装
+    -   [x] post/create
+    -   [x] post/edit
     -   [ ] post/delete（confrim window ではなく popup 出す）
--   [ ] ディレクトリ構成を Laravel like に
+-   [ ] リファクタ
+    -   [ ] ディレクトリ構成を Laravel like に
+    -   [ ] データの流れを、model インスタンスに当てはめたやり方にしたい
+    -   [ ] session の unset が多分不十分（独習 PHP 参照）
+    -   [ ] file は動画/画像混在の複数投稿アップロードに対応させたい
 -   [ ] ログイン機能
     -   [ ] メール認証での新規登録
     -   [ ] パスワードリセット
-    -   [ ] SNS ログイン
     -   [ ] user ページ
+    -   [ ] SNS ログイン
 -   [ ] PHP 8 を使う
     -   [x] 名前付き引数
     -   [ ] constructor の省略形
@@ -61,10 +66,5 @@ https://github.com/syamozipc/my_output
 <!-- 実行済機能
 ・CRUD
 ・npm/webpackとESLint
+・validation
 -->
-
-## 修正案
-
-・view に渡す post とかは、post モデルのオブジェクトにしたい（`'post' => old() ?: $_POST`あたりの処理修正）
-・session の unset が多分不十分（独習 PHP 参照）
-・file は動画/画像混在の複数投稿アップロードに対応させたい

@@ -14,7 +14,7 @@ class Validator {
         return is_numeric($param);
     }
 
-    public function isValidCountryId($param)
+    public function isValidRangeCountryId($param)
     {
         return (Counrty['min_id'] <= $param && $param <= Counrty['max_id']);
     }
