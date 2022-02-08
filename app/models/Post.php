@@ -5,12 +5,10 @@ use App\Services\PostService;
 use App\Libraries\Database;
 class Post {
     private $db;
-    private $postService;
 
     public function __construct()
     {
         $this->db = new Database;
-        $this->postService = new PostService();
     }
 
     public function fetchPostsList(): array
