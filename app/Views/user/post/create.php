@@ -12,9 +12,6 @@
                 </option>
             <?php endforeach; ?>
         </select>
-        <?php if (old('error_country_id')) : ?>
-            <p class="error__message">※<?= old('error_country_id') ?></p>
-        <?php endif; ?>
 
         <input
             type="search"
@@ -28,6 +25,10 @@
                 <option value="<?= $country->name ?>" data-country-id="<?= $country->id ?>"></option>
             <?php endforeach; ?>
         </datalist>
+
+        <?php if (old('error_country_id')) : ?>
+            <p class="error__message">※<?= old('error_country_id') ?></p>
+        <?php endif; ?>
 
         <br>
         <br>

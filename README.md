@@ -27,8 +27,6 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
-次やること：post/create の file upload の validation（session trait 作る）
-
 -   [ ] validation
     -   [x] flash session 実装
     -   [ ] post/create
@@ -60,7 +58,13 @@ https://github.com/syamozipc/my_output
 -   [ ] CSV ファイル読み込み・書き出し
 -   [ ] HTML/CSS 勉強後、マークアップ部分を改善
 
-<!-- 実行機能
+<!-- 実行済機能
 ・CRUD
 ・npm/webpackとESLint
 -->
+
+## 修正案
+
+・view に渡す post とかは、post モデルのオブジェクトにしたい（`'post' => old() ?: $_POST`あたりの処理修正）
+・session の unset が多分不十分（独習 PHP 参照）
+・file は動画/画像混在の複数投稿アップロードに対応させたい
