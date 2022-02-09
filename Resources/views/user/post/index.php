@@ -1,6 +1,6 @@
 <div>
     <p><?= $data['description']; ?></p>
-    <!-- <a href='<?= route('post/create'); ?>'>新規投稿はこちら</a> -->
+    <a href='<?= route('post/create'); ?>'>新規投稿はこちら</a>
 </div>
 
 <div>
@@ -15,10 +15,6 @@
         </thead>
         <tbody>
             <?php foreach ($data['postsList'] as $post) : ?>
-                <?php 
-    // $fp = fopen("sample.txt", "a");fwrite($fp, print_r('true', true));fclose($fp);
-                    
-                    ?>
                 <tr>
                     <td>
                         <a href="<?= route('post/show', $post->id); ?>">

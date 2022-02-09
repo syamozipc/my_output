@@ -14,9 +14,8 @@ function redirect($route) {
 // }
 
 function route(string $route, $params = 'a') {
-    $fp = fopen("sample.txt", "a");fwrite($fp, print_r(__FILE__.PHP_EOL, true));fclose($fp);
-    if ($params = []) return BASE_URL . $route;
+    if ($params === []) return BASE_URL . $route;
 
     $paramStr = is_array($params) ? implode('/', $params) : $params;
-    return BASE_URL . $route . $paramStr;
+    return BASE_URL . $route . '/' . $paramStr;
 }
