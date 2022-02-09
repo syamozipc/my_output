@@ -27,7 +27,7 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
--   [ ] validation
+-   [x] validation
     -   [x] flash session 実装
     -   [x] file validation 実装
     -   [x] post/create
