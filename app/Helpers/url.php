@@ -13,8 +13,8 @@ function redirect($route) {
 //     return BASE_URL . $route;
 // }
 
-function route(string $route, $params = 'a') {
-    if ($params === []) return BASE_URL . $route;
+function route(string $route, string|array $params = NULL) {
+    if (is_null($params)) return BASE_URL . $route;
 
     $paramStr = is_array($params) ? implode('/', $params) : $params;
     return BASE_URL . $route . '/' . $paramStr;
