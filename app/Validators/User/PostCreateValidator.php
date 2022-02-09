@@ -39,6 +39,8 @@ class PostCreateValidator extends Validator{
             $this->hasError = true;
             return;
         }
+
+        return;
     }
 
     private function validateDescription($description)
@@ -61,6 +63,8 @@ class PostCreateValidator extends Validator{
             $this->hasError = true;
             return;
         }
+
+        return;
     }
 
     /**
@@ -109,6 +113,8 @@ class PostCreateValidator extends Validator{
                 $this->hasError = true;
                 return;
         }
+
+        return;
             // if (!move_uploaded_file($src, 'doc/'.$dest)) {
             //     $err_msg = 'アップロード処理に失敗しました。';
             // }

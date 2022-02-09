@@ -1,3 +1,6 @@
+<?php if (old('error_message')) : ?>
+        <p class="error__message">※<?= old('error_message') ?></p>
+    <?php endif; ?>
 <section class="section">
     <div>
         <table>

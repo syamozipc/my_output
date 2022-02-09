@@ -4,7 +4,7 @@ namespace App\Controllers\User;
 use App\Libraries\Controller;
 use App\Services\PostService;
 use App\models\{Post, Country};
-use App\Validators\User\{PostCreateValidator, PostEditValidator};
+use App\Validators\User\{PostCreateValidator, PostEditValidator, PostDeleteValidator};
 
 class PostController extends Controller {
     public $postModel;
@@ -31,7 +31,7 @@ class PostController extends Controller {
             'postsList' => $postsList,
         ];
 
-        $this->view(view:'user/post/index', data:$data);
+        return $this->view(view:'user/post/index', data:$data);
     }
 
     public function create(): void
@@ -46,7 +46,7 @@ class PostController extends Controller {
             'post' => old() ?: $_POST
         ];
 
-        $this->view(view:'user/post/create', data:$data);
+        return $this->view(view:'user/post/create', data:$data);
     }
 
     public function confirm()
@@ -54,7 +54,7 @@ class PostController extends Controller {
         $validator = new PostCreateValidator();
         $isValidated = $validator->validate($_POST, $_FILES);
 
-        if (!$isValidated) redirect('post/create');
+        if (!$isValidated) return redirect('post/create');
 
         $filePath = $this->postService->uploadFileToPublic($_FILES);
 
@@ -68,7 +68,7 @@ class PostController extends Controller {
             'filePath' => $filePath
         ];
 
-        $this->view(view:'user/post/confirm', data:$data);
+        return $this->view(view:'user/post/confirm', data:$data);
     }
 
     public function save(): void
@@ -76,7 +76,7 @@ class PostController extends Controller {
         // path含めpost・post_detailsテーブルに保存
         $this->postModel->save(post:$_POST);
 
-        redirect('post/index');
+        return redirect('post/index');
     }
 
     public function show(int $id): void
@@ -89,10 +89,10 @@ class PostController extends Controller {
             'post' => $post
         ];
 
-        $this->view(view:'user/post/show', data:$data);
+        return $this->view(view:'user/post/show', data:$data);
     }
 
-    public function edit(int $id): void
+    public function edit(int $id)
     {
         $post = $this->postModel->fetchPostById($id);
 
@@ -110,7 +110,7 @@ class PostController extends Controller {
             'post' => $post
         ];
 
-        $this->view(view:'user/post/edit', data:$data);
+        return $this->view(view:'user/post/edit', data:$data);
     }
 
     public function editConfirm($id)
@@ -118,7 +118,7 @@ class PostController extends Controller {
         $validator = new PostEditValidator();
         $isValidated = $validator->validate($_POST);
 
-        if (!$isValidated) redirect("post/edit/{$id}");
+        if (!$isValidated) return redirect("post/edit/{$id}");
 
         $post = $this->postModel->fetchPostById($id);
 
@@ -134,7 +134,7 @@ class PostController extends Controller {
             'post' => $post,
         ];
 
-        $this->view(view:'user/post/edit_confirm', data:$data);
+        return $this->view(view:'user/post/edit_confirm', data:$data);
     }
 
     public function update(int $id): void
@@ -142,13 +142,19 @@ class PostController extends Controller {
         // path含めpost・post_detailsテーブルに保存
         $this->postModel->update(post:$_POST, id:$id);
 
-        redirect("post/show/{$id}");
+        return redirect("post/show/{$id}");
     }
 
-    public function delete(int $id): void
+    public function delete(int $id)
     {
+        // deleteもvalidation必要
+        $validator = new PostDeleteValidator();
+        $isValidated = $validator->validate($id);
+
+        if (!$isValidated) return redirect("post/show/{$id}");
+
         $this->postModel->delete(id:$id);
 
-        redirect('post/index');
+        return redirect('post/index');
     }
 }

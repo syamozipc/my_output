@@ -38,6 +38,8 @@ class PostEditValidator extends Validator{
             $this->hasError = true;
             return;
         }
+
+        return;
     }
 
     private function validateDescription($description)
@@ -60,5 +62,7 @@ class PostEditValidator extends Validator{
             $this->hasError = true;
             return;
         }
+        
+        return;
     }
 }
