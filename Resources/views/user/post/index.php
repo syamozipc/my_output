@@ -1,6 +1,6 @@
 <div>
     <p><?= $data['description']; ?></p>
-    <a href='<?= URL_PATH . 'post/create'; ?>'>新規投稿はこちら</a>
+    <!-- <a href='<?= route('post/create'); ?>'>新規投稿はこちら</a> -->
 </div>
 
 <div>
@@ -15,11 +15,15 @@
         </thead>
         <tbody>
             <?php foreach ($data['postsList'] as $post) : ?>
+                <?php 
+    // $fp = fopen("sample.txt", "a");fwrite($fp, print_r('true', true));fclose($fp);
+                    
+                    ?>
                 <tr>
                     <td>
-                        <a href="<?= URL_PATH . 'post/show/' . $post->id ?>">
+                        <a href="<?= route('post/show', $post->id); ?>">
                             <img 
-                            src="<?= PUBLIC_PATH . 'upload/' . $post->path ?>"
+                            src="<?= PUBLIC_URL . 'upload/' . $post->path ?>"
                             alt="アップロードファイル"
                             width="400"
                             height="400"

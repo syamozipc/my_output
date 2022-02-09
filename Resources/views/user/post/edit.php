@@ -1,6 +1,6 @@
 <p>編集フォーム</p>
 <div>
-    <form action="<?= URL_PATH . 'post/editConfirm/' . $data['post']->id ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?= route('post/editConfirm/', $data['post']->id); ?>" method="POST" enctype="multipart/form-data">
 
         <select name="country_id" class="js-countriesSelect">
             <?php foreach ($data['countriesList'] as $country) : ?>
@@ -32,7 +32,7 @@
 
         <p>画像・動画は編集できません</p>
         <img 
-            src="<?= PUBLIC_PATH . 'upload/' . $data['post']->path ?>"
+            src="<?= PUBLIC_URL . 'upload/' . $data['post']->path ?>"
             alt="アップロードファイル"
             width="400"
             height="400"

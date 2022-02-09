@@ -1,9 +1,9 @@
 <p>確認</p>
 <div>
-    <form action="<?= URL_PATH . 'post/save' ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?= route('post/save'); ?>" method="POST" enctype="multipart/form-data">
         <p><?= $data['country']->name ?></p>
         <img
-            src="<?= PUBLIC_PATH . 'upload/' . basename($data['filePath']) ?>"
+            src="<?= PUBLIC_URL . 'upload/' . basename($data['filePath']); ?>"
             alt="アップロードファイル"
             width="400"
             height="400"
@@ -21,7 +21,7 @@
 </div>
 
 <div>
-    <form action="<?= URL_PATH . 'post/create' ?>" method="POST">
+    <form action="<?= route('post/create'); ?>" method="POST">
         <input type="hidden" name="country_id" value="<?= $data['post']['country_id'] ?>">
         <input type="hidden" name="description" value="<?= $data['post']['description'] ?>">
 

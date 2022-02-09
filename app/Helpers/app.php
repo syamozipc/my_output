@@ -1,15 +1,4 @@
 <?php
-
-/**
- * redirect処理
- *
- * @param string $route redirect先のpath
- * @return void
- */
-function redirect($route) {
-    header('Location: ' . URL_PATH . $route);
-}
-
 /**
  * flash sessionを取得
  *

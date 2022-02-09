@@ -16,7 +16,7 @@
                 <tr>
                     <td>
                         <img 
-                            src="<?= PUBLIC_PATH . 'upload/' . $data['post']->path ?>"
+                            src="<?= PUBLIC_URL . 'upload/' . $data['post']->path ?>"
                             alt="アップロードファイル"
                             width="400"
                             height="400"
@@ -31,13 +31,13 @@
         </table>
     </div>
     <p>
-        <a href="<?= URL_PATH . 'post/edit/' . $data['post']->id ?>">編集</a>
+        <a href="<?= route('post/edit/', $data['post']->id); ?>">編集</a>
         &nbsp;
-        <form action="<?= URL_PATH . 'post/delete/' . $data['post']->id ?>" method="POST" class="js-delete-form">
+        <form action="<?= route('post/delete/', $data['post']->id); ?>" method="POST" class="js-delete-form">
             <input type="submit" value="削除" class="btn-open-modal js-btn-open-modal">
         </form>
     </p>
-    <p><a href="<?= URL_PATH . 'post/index' ?>">一覧へ戻る</a></p>
+    <p><a href="<?= route('post/index'); ?>">一覧へ戻る</a></p>
     <!-- モーダル -->
     <div class="modal js-modal is-hidden">
         <button class="btn-close-modal js-btn-close-modal">×</button>

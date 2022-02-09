@@ -27,17 +27,12 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
--   [x] validation
-    -   [x] flash session 実装
-    -   [x] file validation 実装
-    -   [x] post/create
-    -   [x] post/edit
-    -   [ ] post/delete（confrim window ではなく popup 出す）
 -   [ ] リファクタ
     -   [ ] ディレクトリ構成を Laravel like に
     -   [ ] データの流れを、model インスタンスに当てはめたやり方にしたい
     -   [ ] session の unset が多分不十分（独習 PHP 参照）
     -   [ ] file は動画/画像混在の複数投稿アップロードに対応させたい
+    -   [ ] ルーティングを別のやり方にしたい
 -   [ ] ログイン機能
     -   [ ] メール認証での新規登録
     -   [ ] パスワードリセット
