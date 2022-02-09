@@ -18,7 +18,7 @@ class PostController extends Controller {
         $this->postService = new PostService();
     }
 
-    public function index(): void
+    public function index()
     {
         $description = "投稿一覧";
 
@@ -34,7 +34,7 @@ class PostController extends Controller {
         return $this->view(view:'user/post/index', data:$data);
     }
 
-    public function create(): void
+    public function create()
     {
         // 国一覧を取得
         $countriesList = $this->countryModel->fetchCountriesList();
@@ -71,7 +71,7 @@ class PostController extends Controller {
         return $this->view(view:'user/post/confirm', data:$data);
     }
 
-    public function save(): void
+    public function save()
     {
         // path含めpost・post_detailsテーブルに保存
         $this->postModel->save(post:$_POST);
@@ -79,7 +79,7 @@ class PostController extends Controller {
         return redirect('post/index');
     }
 
-    public function show(int $id): void
+    public function show(int $id)
     {
         $post = $this->postModel->fetchPostById($id);
 
@@ -137,7 +137,7 @@ class PostController extends Controller {
         return $this->view(view:'user/post/edit_confirm', data:$data);
     }
 
-    public function update(int $id): void
+    public function update(int $id)
     {
         // path含めpost・post_detailsテーブルに保存
         $this->postModel->update(post:$_POST, id:$id);
