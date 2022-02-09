@@ -10,5 +10,5 @@ require_once '../app/helpers/url.php';
 spl_autoload_register(function ($className) {
     $className = str_replace('\\', '/', $className);
 
-    require_once BASE_PATH . "{$className}.php";
+    require_once base_path("{$className}.php");
 });

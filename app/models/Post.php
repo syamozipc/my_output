@@ -119,7 +119,7 @@ class Post {
                 ->executeAndFetch();
 
             $filePath = $postDetail->path;
-            if (!unlink(UPLOAD_PATH . $filePath)) throw new \Exception(('ファイルがありません'));
+            if (!unlink(public_path('upload/' . $filePath))) throw new \Exception(('ファイルがありません'));
 
             // post_detailを削除
             $sqlDeletePostDetail = 'DELETE FROM post_details WHERE post_id = :post_id';

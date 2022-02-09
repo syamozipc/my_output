@@ -1,5 +1,9 @@
 <?php
 /**
+ * 汎用helper
+ */
+
+/**
  * flash sessionを取得
  *
  * @param string|null $key sessionのkey名

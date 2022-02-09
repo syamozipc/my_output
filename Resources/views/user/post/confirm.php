@@ -3,7 +3,7 @@
     <form action="<?= route('post/save'); ?>" method="POST" enctype="multipart/form-data">
         <p><?= $data['country']->name ?></p>
         <img
-            src="<?= PUBLIC_URL . 'upload/' . basename($data['filePath']); ?>"
+            src="<?=  public_url('upload/' . basename($data['filePath'])); ?>"
             alt="アップロードファイル"
             width="400"
             height="400"

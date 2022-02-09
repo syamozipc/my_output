@@ -7,7 +7,7 @@ class PostService {
     {
         $tempPath = $files['upload']['tmp_name'];
         $randomFileName = md5(uniqid());
-        $filePath = UPLOAD_PATH . $randomFileName . '.' . basename($files['upload']['type']);
+        $filePath = public_path('upload/' . $randomFileName . '.' . basename($files['upload']['type']));
 
         move_uploaded_file($tempPath, $filePath);
 

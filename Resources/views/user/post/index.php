@@ -1,3 +1,5 @@
+<p><a href="<?= route('home/index'); ?>">TOPへ</a></p>
+<br>
 <div>
     <p><?= $data['description']; ?></p>
     <a href='<?= route('post/create'); ?>'>新規投稿はこちら</a>
@@ -19,7 +21,7 @@
                     <td>
                         <a href="<?= route('post/show', $post->id); ?>">
                             <img 
-                            src="<?= PUBLIC_URL . 'upload/' . $post->path ?>"
+                            src="<?= public_url('upload/' . $post->path); ?>"
                             alt="アップロードファイル"
                             width="400"
                             height="400"

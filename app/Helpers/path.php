@@ -1,12 +1,25 @@
 <?php
+/**
+ * path関連helper
+ * 主に特定ディレクトリへのpath生成時に使用
+ */
 
-// // URL rootを定義
-// const BASE_URL = 'http://localhost:8888/my_output/';
-// // public folderまでのpath
-// const PUBLIC_URL = 'http://localhost:8888/my_output/public/';
-// // app folderまでのpath
-// define('APP_PATH', dirname(__FILE__) . '/');
+ /**
+  * application root へのpathを生成する
+  *
+  * @param string|null $route root配下の任意のパラメータ
+  * @return string 生成したpath
+  */
+function base_path(string $route = null):string {
+    return BASE_PATH . $route;
+}
 
-// define('BASE_PATH', dirname(dirname(__FILE__)) . '/');
-
-// define('UPLOAD_PATH', dirname(dirname(__FILE__)) . '/public/upload/');
+/**
+ * public folderへのpathを生成する
+ *
+ * @param string|null $route public配下の任意のパラメータ
+ * @return string 生成したpath
+ */
+function public_path(string $route = null):string {
+    return BASE_PATH . 'public/' . $route;
+}

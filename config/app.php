@@ -5,16 +5,11 @@ const DB_USER = 'root';
 const DB_PASS = 'root';
 const DB_NAME = 'my_output';
 
-// URL rootを定義
+// URL root
 const BASE_URL = 'http://localhost:8888/my_output/';
-// public folderまでのpath
-const PUBLIC_URL = 'http://localhost:8888/my_output/public/';
-// app folderまでのpath
-define('APP_PATH', dirname(__FILE__) . '/');
 
+// application root
 define('BASE_PATH', dirname(dirname(__FILE__)) . '/');
-
-define('UPLOAD_PATH', dirname(dirname(__FILE__)) . '/public/upload/');
 
 // Site Name
 const SITENAME = 'My Output';

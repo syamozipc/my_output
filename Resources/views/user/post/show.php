@@ -16,7 +16,7 @@
                 <tr>
                     <td>
                         <img 
-                            src="<?= PUBLIC_URL . 'upload/' . $data['post']->path ?>"
+                            src="<?= public_url('upload/' . $data['post']->path); ?>"
                             alt="アップロードファイル"
                             width="400"
                             height="400"
