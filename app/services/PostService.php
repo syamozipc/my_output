@@ -11,6 +11,12 @@ class PostService {
         $this->postModel = new Post();
     }
 
+    /**
+     * tmpフォルダにアップロードされたファイルをpublic/uploadへ移動
+     *
+     * @param array $files file情報
+     * @return void
+     */
     public function uploadFileToPublic(array $files)
     {
         $tempPath = $files['upload']['tmp_name'];
@@ -22,7 +28,11 @@ class PostService {
         return $filePath;
     }
 
-
+    /**
+     * 投稿一覧を取得
+     *
+     * @return array
+     */
     public function fetchPostsList(): array
     {
         $sql = '
@@ -46,6 +56,12 @@ class PostService {
         return $postsList;
     }
 
+    /**
+     * 新規投稿を保存
+     *
+     * @param array $post 投稿内容
+     * @return void
+     */
     public function savePost(array $post): void
     {
         try {
@@ -77,6 +93,12 @@ class PostService {
         }
     }
 
+    /**
+     * 主キー指定で投稿を取得
+     *
+     * @param integer $id
+     * @return object
+     */
     public function fetchPostById(int $id): object
     {
         $sql = '
@@ -102,6 +124,13 @@ class PostService {
             return $post;
     }
 
+    /**
+     * 主キー指定で投稿を更新
+     *
+     * @param array $post 投稿内容
+     * @param integer $id
+     * @return void
+     */
     public function updatePost(array $post, int $id): void
     {
             $sql = 'UPDATE posts SET country_id = :country_id, description = :description WHERE id = :id';
@@ -113,6 +142,12 @@ class PostService {
                 ->execute();
     }
 
+    /**
+     * 投稿を削除→画像を削除→投稿詳細を削除
+     *
+     * @param integer $id
+     * @return void
+     */
     public function deletePost(int $id): void
     {
         try {
