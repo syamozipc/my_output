@@ -149,7 +149,6 @@ class PostController extends Controller {
 
     public function delete(int $id)
     {
-        // deleteもvalidation必要
         $validator = new PostDeleteValidator();
         $isValidated = $validator->validate($id);
 
