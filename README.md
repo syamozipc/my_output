@@ -28,8 +28,6 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] リファクタ
-    -   [x] ディレクトリ構成を Laravel like に
-    -   [x] URL や path の生成を、定数ではなく helper にする
     -   [ ] データの流れを、model インスタンスに当てはめたやり方にしたい
     -   [ ] session の unset が多分不十分（独習 PHP 参照）
     -   [ ] file は動画/画像混在の複数投稿アップロードに対応させたい

@@ -2,19 +2,16 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
-use App\Services\PostService;
-use App\models\{Post, Country};
+use App\Services\{CountryService, PostService};
 use App\Validators\User\{PostCreateValidator, PostEditValidator, PostDeleteValidator};
 
 class PostController extends Controller {
-    public $postModel;
-    public $countryModel;
+    public $countryService;
     public $postService;
 
     public function __construct()
     {
-        $this->postModel = new Post();
-        $this->countryModel = new Country();
+        $this->countryService = new CountryService();
         $this->postService = new PostService();
     }
 
@@ -22,7 +19,7 @@ class PostController extends Controller {
     {
         $description = "投稿一覧";
 
-        $postsList = $this->postModel->fetchPostsList();
+        $postsList = $this->postService->fetchPostsList();
 
         $data = [
             'css' => 'css/user/post/index.css',
@@ -37,7 +34,7 @@ class PostController extends Controller {
     public function create()
     {
         // 国一覧を取得
-        $countriesList = $this->countryModel->fetchCountriesList();
+        $countriesList = $this->countryService->fetchCountriesList();
 
         $data = [
             'css' => 'css/user/post/create.css',
@@ -58,7 +55,7 @@ class PostController extends Controller {
 
         $filePath = $this->postService->uploadFileToPublic($_FILES);
 
-        $country = $this->countryModel->fetchCountryByID($_POST['country_id']);
+        $country = $this->countryService->fetchCountryByID($_POST['country_id']);
 
         $data = [
             'css' => 'css/user/post/confirm.css',
@@ -74,14 +71,14 @@ class PostController extends Controller {
     public function save()
     {
         // path含めpost・post_detailsテーブルに保存
-        $this->postModel->save(post:$_POST);
+        $this->postService->savePost(post:$_POST);
 
         return redirect('post/index');
     }
 
     public function show(int $id)
     {
-        $post = $this->postModel->fetchPostById($id);
+        $post = $this->postService->fetchPostById($id);
 
         $data = [
             'css' => 'css/user/post/show.css',
@@ -94,14 +91,14 @@ class PostController extends Controller {
 
     public function edit(int $id)
     {
-        $post = $this->postModel->fetchPostById($id);
+        $post = $this->postService->fetchPostById($id);
 
         if (old() || $_POST) {
             $post->country_id = old('country_id') ?? $_POST['country_id'];
             $post->description = old('description') ?? $_POST['description'];
         }
 
-        $countriesList = $this->countryModel->fetchCountriesList();
+        $countriesList = $this->countryService->fetchCountriesList();
 
         $data = [
             'css' => 'css/user/post/edit.css',
@@ -120,12 +117,12 @@ class PostController extends Controller {
 
         if (!$isValidated) return redirect("post/edit/{$id}");
 
-        $post = $this->postModel->fetchPostById($id);
+        $post = $this->postService->fetchPostById($id);
 
         $post->country_id = $_POST['country_id'];
         $post->description = $_POST['description'];
 
-        $country = $this->countryModel->fetchCountryByID($_POST['country_id']);
+        $country = $this->countryService->fetchCountryByID($_POST['country_id']);
         $post->country_name = $country->name;
 
         $data = [
@@ -140,7 +137,7 @@ class PostController extends Controller {
     public function update(int $id)
     {
         // path含めpost・post_detailsテーブルに保存
-        $this->postModel->update(post:$_POST, id:$id);
+        $this->postService->updatePost(post:$_POST, id:$id);
 
         return redirect("post/show/{$id}");
     }
@@ -153,7 +150,7 @@ class PostController extends Controller {
 
         if (!$isValidated) return redirect("post/show/{$id}");
 
-        $this->postModel->delete(id:$id);
+        $this->postService->deletePost(id:$id);
 
         return redirect('post/index');
     }

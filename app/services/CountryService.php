@@ -1,20 +1,21 @@
 <?php
-namespace App\Models;
+namespace App\Services;
 
-use App\Libraries\Model;
+use App\models\Country;
 
-class Country extends Model{
+class CountryService {
+    public object $countryModel;
 
     public function __construct()
     {
-        parent::__construct();
+        $this->countryModel = new Country();
     }
 
     public function fetchCountriesList()
     {
         $sql = 'SELECT * FROM countries';
 
-        $countriesList = $this->db->prepare($sql)->executeAndFetchAll();
+        $countriesList = $this->countryModel->db->prepare($sql)->executeAndFetchAll();
 
         return $countriesList;
     }
@@ -23,7 +24,7 @@ class Country extends Model{
     {
         $sql = 'SELECT * FROM countries WHERE id = :id';
 
-        $countriesList = $this->db->prepare($sql)
+        $countriesList = $this->countryModel->db->prepare($sql)
             ->bind(':id', $id)
             ->executeAndFetch();
 
