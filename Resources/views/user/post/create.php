@@ -6,7 +6,7 @@
             <?php foreach ($data['countriesList'] as $country) : ?>
                 <option
                     value="<?= $country->id ?>"
-                    <?php if (($data['post']['country_id'] ?? null) === $country->id) echo 'selected'; ?>
+                    <?php if (($data['post']->country_id ?? null) === $country->id) echo 'selected'; ?>
                 >
                     <?= $country->name ?>
                 </option>
@@ -45,7 +45,7 @@
         <br>
         <br>
 
-        <textarea name="description" cols="70" rows="10"><?= $data['post']['description'] ?? null ?></textarea>
+        <textarea name="description" cols="70" rows="10"><?= $data['post']->description ?? null ?></textarea>
         <?php if (old('error_description')) : ?>
             <p class="error__message">※<?= old('error_description') ?></p>
         <?php endif; ?>

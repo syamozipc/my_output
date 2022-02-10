@@ -8,11 +8,11 @@
             width="400"
             height="400"
         >
-        <p><?= $data['post']['description'] ?></p>
+        <p><?= $data['post']->description ?></p>
 
 
-        <input type="hidden" name="country_id" value="<?= $data['post']['country_id'] ?>">
-        <input type="hidden" name="description" value="<?= $data['post']['description'] ?>">
+        <input type="hidden" name="country_id" value="<?= $data['post']->country_id ?>">
+        <input type="hidden" name="description" value="<?= $data['post']->description ?>">
         <input type="hidden" name="file_path" value="<?= $data['filePath'] ?>">
 
 
@@ -22,8 +22,8 @@
 
 <div>
     <form action="<?= route('post/create'); ?>" method="POST">
-        <input type="hidden" name="country_id" value="<?= $data['post']['country_id'] ?>">
-        <input type="hidden" name="description" value="<?= $data['post']['description'] ?>">
+        <input type="hidden" name="country_id" value="<?= $data['post']->country_id ?>">
+        <input type="hidden" name="description" value="<?= $data['post']->description ?>">
 
         <button type="submit">修正する</button>
     </form>

@@ -3,6 +3,7 @@ namespace App\Controllers\User;
 
 use App\Libraries\Controller;
 use App\Services\{CountryService, PostService};
+use App\Models\{Country, Post};
 use App\Validators\User\{PostCreateValidator, PostEditValidator, PostDeleteValidator};
 
 class PostController extends Controller {
@@ -36,11 +37,13 @@ class PostController extends Controller {
         // 国一覧を取得
         $countriesList = $this->countryService->fetchCountriesList();
 
+        $post = new Post(old() ?: $_POST);
+
         $data = [
             'css' => 'css/user/post/create.css',
             'js' => 'js/user/post/create.js',
             'countriesList' => $countriesList,
-            'post' => old() ?: $_POST
+            'post' => $post
         ];
 
         return $this->view(view:'user/post/create', data:$data);
@@ -53,6 +56,8 @@ class PostController extends Controller {
 
         if (!$isValidated) return redirect('post/create');
 
+        $post = new Post(old() ?: $_POST);
+
         $filePath = $this->postService->uploadFileToPublic($_FILES);
 
         $country = $this->countryService->fetchCountryByID($_POST['country_id']);
@@ -60,7 +65,7 @@ class PostController extends Controller {
         $data = [
             'css' => 'css/user/post/confirm.css',
             'js' => 'js/user/post/confirm.js',
-            'post' => $_POST,
+            'post' => $post,
             'country' => $country,
             'filePath' => $filePath
         ];
