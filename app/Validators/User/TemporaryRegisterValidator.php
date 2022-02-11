@@ -20,25 +20,11 @@ class TemporaryRegisterValidator extends Validator{
 
     private function validateEmail($email)
     {
-        if (!$this->isfilled(param:$email)) {
-            $this->setFlashSession(key:'error_email', param:'入力必須項目です。');
-            $this->hasError = true;
+        if (!$this->isfilled(key:'email', param:$email)) return $this->hasError = true;
 
-            return;
-        }
-        if (!$this->isValidEmailFormat(email:$email)) {
-            $this->setFlashSession(key:'error_email', param:'正しい形式で入力してください。');
-            $this->hasError = true;
+        if (!$this->isValidEmailFormat(key:'email', email:$email)) return $this->hasError = true;
 
-            return;
-        }
-
-        if ($this->isExist(email:$email)) {
-            $this->setFlashSession(key:'error_email', param:'既に登録済みです。');
-            $this->hasError = true;
-            
-            return;
-        }
+        if ($this->isExist(key:'email', email:$email)) return $this->hasError = true;
         
         return;
     }

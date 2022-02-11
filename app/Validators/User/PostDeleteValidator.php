@@ -14,17 +14,16 @@ class PostDeleteValidator extends Validator{
     public function validate($id)
     {
         $this->validatePostId($id);
+        // $idが存在するかチェック必要
+        // $idとuser_idが同一かどうかのチェックも必要
 
         return !$this->hasError;
     }
 
     private function validatePostId($id)
     {
-        if (!$this->isNumeric(param:$id)) {
-            $this->setFlashSession('error_message', '不正な操作です。');
-            $this->hasError = true;
-        }
+        if (!$this->isNumeric(key:'message', param:$id)) return $this->hasError = true;
         
-        return;
+        return true;
     }
 }

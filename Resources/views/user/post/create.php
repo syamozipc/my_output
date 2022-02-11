@@ -32,7 +32,7 @@
 
         <br>
         <br>
-
+        
         <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
         <input type="file" name="upload" class="js-inputImg">
 

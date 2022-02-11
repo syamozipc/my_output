@@ -38,6 +38,7 @@ https://github.com/syamozipc/my_output
     -   [ ] session の unset が多分不十分（独習 PHP 参照）
     -   [ ] file は動画/画像混在の複数投稿アップロードに対応させたい
     -   [ ] ルーティングを別のやり方にしたい
+    -   [ ] 定数はヘルパでドット繋ぎにしたい
 -   [ ] PHP 8 を使う
     -   [x] 名前付き引数
     -   [ ] constructor の省略形

@@ -21,9 +21,13 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isfilled($param):bool
+    public function isfilled($key, $param):bool
     {
-        return ($param !== "" && !is_null($param));
+        if (!($param === "" || is_null($param))) return true;
+
+        $this->setFlashSession(key:"error_{$key}", param:'入力必須項目です。');
+
+        return false;
     }
 
     /**
@@ -32,9 +36,13 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isNumeric($param):bool
+    public function isNumeric($key, $param):bool
     {
-        return is_numeric($param);
+        if (is_numeric($param)) return true;
+
+        $this->setFlashSession(key:"error_{$key}", param:'数字で入力してください');
+
+        return false;
     }
 
     /**
@@ -43,9 +51,13 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isValidRangeCountryId($param):bool
+    public function isValidRangeCountryId($key, $param):bool
     {
-        return (Counrty['min_id'] <= $param && $param <= Counrty['max_id']);
+        if (Counrty['min_id'] <= $param && $param <= Counrty['max_id']) return true;
+
+        $this->setFlashSession(key:"error_{$key}", param:'登録されていない国です。');
+
+        return false;
     }
 
     /**
@@ -54,9 +66,13 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isString($param):bool
+    public function isString($key, $param):bool
     {
-        return is_string($param);
+        if (is_string($param)) return true;
+
+        $this->setFlashSession(key:"error_{$key}", param:'文字列で入力してください');
+
+        return false;
     }
 
     /**
@@ -67,13 +83,18 @@ class Validator {
      * @param boolean $isMb trueならマルチバイトに対応、falseなら非対応
      * @return boolean
      */
-    public function isValidLength($param, $length, $isMb = false):bool
+    public function isValidLength($key, $param, $length, $isMb = false):bool
     {
-        if ($isMb) {
-            return mb_strlen($param) <= $length;
-        } else {
-            return strlen($param) <= $length;
+        if (
+            ($isMb && mb_strlen($param) <= $length)
+            || (!$isMb && strlen($param) <= $length)
+        ) {
+            return true;
         }
+
+        $this->setFlashSession(key:"error_{$key}", param:"文字数は{$length}以内に収めてください。");
+
+        return false;
     }
 
     // ここから画像アップロード系（現状、複数アップロード未対応）
@@ -85,9 +106,25 @@ class Validator {
      * @return integer
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
      */
-    public function getUploadErrorNumber($file):int
+    public function hasUploadError($key, $file):int
     {
-        return $file['upload']['error'];
+        $errorNumber = $file['upload']['error'];
+
+        if ($errorNumber === UPLOAD_ERR_OK) return false;
+
+        $errorMessage = [
+            UPLOAD_ERR_INI_SIZE => 'php.iniのupload_max_filesize制限を越えています。',
+            UPLOAD_ERR_FORM_SIZE => 'HTMLのMAX_FILE_SIZE 制限を越えています。',
+            UPLOAD_ERR_PARTIAL => 'ファイルが一部しかアップロードされていません。',
+            UPLOAD_ERR_NO_FILE => 'ファイルを選択してください。',
+            UPLOAD_ERR_NO_TMP_DIR => '一時保存フォルダーが存在しません。',
+            UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
+            UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
+        ];
+
+        $this->setFlashSession("error_{$key}", $errorMessage[$errorNumber]);
+
+        return true;
     }
 
     /**
@@ -99,12 +136,19 @@ class Validator {
      * @return boolean
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
      */
-    public function isValidExt($file):bool
+    public function isValidExt($key, $file):bool
     {
-        return in_array(
-                strtolower(pathinfo($file['upload']['name'])['extension']),
-                ['gif', 'jpg', 'jpeg', 'png']
+        $isValidExt = in_array(
+            strtolower(pathinfo($file['upload']['name'])['extension']),
+            ['gif', 'jpg', 'jpeg', 'png'],
+            true
         );
+
+        if ($isValidExt) return true;
+
+        $this->setFlashSession("error_{$key}", '有効な拡張子はgif, jpg, jpeg, pngのみです。');
+
+        return false;
     }
 
     /**
@@ -113,12 +157,19 @@ class Validator {
      * @param array $file アップロードしたファイルの情報
      * @return boolean
      */
-    public function isImgContent($file):bool
+    public function isImgContent($key, $file):bool
     {
-        return in_array(
-                finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['upload']['tmp_name']),
-                ['image/gif', 'image/jpg', 'image/jpeg', 'image/png']
+        $isImgContent = in_array(
+            finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['upload']['tmp_name']),
+            ['image/gif', 'image/jpg', 'image/jpeg', 'image/png'],
+            true
         );
+
+        if ($isImgContent) return true;
+
+        $this->setFlashSession("error_{$key}", 'ファイルの内容が画像ではありません。');
+
+        return false;
     }
 
     // メールアドレスのバリデーション
@@ -129,9 +180,13 @@ class Validator {
      * @param [type] $email
      * @return string|boolean 有効なメールアドレスならそれを、無効ならfalseを返す
      */
-    public function isValidEmailFormat($email):string|bool
+    public function isValidEmailFormat($key, $email):string|bool
     {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) return true;
+
+        $this->setFlashSession("error_{$key}", '有効なメールアドレスの形式ではありません。');
+
+        return false;
     }
 
     /**
@@ -140,13 +195,22 @@ class Validator {
      * @param [type] $email
      * @return boolean 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る
      */
-    public function isExist($email)
+    public function isExist($key, $email)
     {
-        $sql = 'SELECT * FROM users WHERE email = :email AND password IS NOT NULL';
+        $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `password` IS NOT NULL';
 
-        $this->userModel->db->prepare(sql:$sql)->bind(param:':email', value:$email)->execute();
+        $this->userModel->db
+            ->prepare(sql:$sql)
+            ->bind(param:':email', value:$email)
+            ->execute();
 
         // 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る
-        return $this->userModel->db->rowCount();
+        $isExist = $this->userModel->db->rowCount();
+
+        if (!$isExist) return false;
+
+        $this->setFlashSession("error_{$key}", '登録済みのメールアドレスです。');
+
+        return true;
     }
 }

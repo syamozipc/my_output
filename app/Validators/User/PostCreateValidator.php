@@ -27,47 +27,25 @@ class PostCreateValidator extends Validator{
 
     private function validateCountryId($countryId)
     {
-        if (!$this->isfilled(param:$countryId)) {
-            $this->setFlashSession('error_country_id', '選択必須項目です。');
-            $this->hasError = true;
-            return;
-        }
+        if (!$this->isfilled(key:'country_id', param:$countryId)) return $this->hasError = true;
 
-        if (!$this->isNumeric(param:$countryId)) {
-            $this->setFlashSession('error_country_id', '無効な入力形式です。');
-            $this->hasError = true;
-            return;
-        }
+        if (!$this->isNumeric(key:'country_id', param:$countryId)) return $this->hasError = true;
 
-        if (!$this->isValidRangeCountryId(param:$countryId)) {
-            $this->setFlashSession('error_country_id', '無効な値です。');
-            $this->hasError = true;
-            return;
-        }
+        if (!$this->isValidRangeCountryId(key:'country_id', param:$countryId)) return $this->hasError = true;
 
         return;
     }
 
     private function validateDescription($description)
     {
-        if (!$this->isfilled(param:$description)) {
-            $this->setFlashSession('error_description', '入力必須項目です。');
-            $this->hasError = true;
-            return;
-        }
+        if (!$this->isfilled(key:'description', param:$description)) return $this->hasError = true;
 
-        if (!$this->isString(param:$description)) {
-            $this->setFlashSession('error_description', '文字列で入力してください。');
-            $this->hasError = true;
-            return;
-        }
+        if (!$this->isString(key:'description', param:$description)) return $this->hasError = true;
 
         $length = CHAR_LENGTH['post_description'];
-        if (!$this->isValidLength(param:$description, length:$length, isMb:true)) {
-            $this->setFlashSession('error_description', "文字数は{$length}以内に収めてください。");
-            $this->hasError = true;
-            return;
-        }
+        if (!$this->isValidLength(key:'description', param:$description, length:$length, isMb:true)) {
+            return $this->hasError = true;
+        } 
 
         return;
     }
@@ -82,38 +60,13 @@ class PostCreateValidator extends Validator{
     private function validateFiles($file)
     {
         // アップロード処理のエラーチェック
-        if (($errorNumber = $this->getUploadErrorNumber(file:$file)) !== UPLOAD_ERR_OK) {
-            $msg = [
-                UPLOAD_ERR_INI_SIZE => 'php.iniのupload_max_filesize制限を越えています。',
-                UPLOAD_ERR_FORM_SIZE => 'HTMLのMAX_FILE_SIZE 制限を越えています。',
-                UPLOAD_ERR_PARTIAL => 'ファイルが一部しかアップロードされていません。',
-                UPLOAD_ERR_NO_FILE => 'ファイルを選択してください。',
-                UPLOAD_ERR_NO_TMP_DIR => '一時保存フォルダーが存在しません。',
-                UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
-                UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
-            ];
+        if ($this->hasUploadError(key:'upload', file:$file)) return $this->hasError = true;
 
-            $this->setFlashSession('error_upload', $msg[$errorNumber]);
-            $this->hasError = true;
-
-            return;
-        }    
-        
         // 拡張子が許可されたものかチェック
-        if (!$this->isValidExt(file:$file)) {
-            $this->setFlashSession('error_upload', '画像以外のファイルはアップロードできません。');
-            $this->hasError = true;
-
-            return;
-        } 
+        if (!$this->isValidExt(key:'upload', file:$file)) return $this->hasError = true;
         
         // ファイルの内容が画像かチェック
-        if (!$this->isImgContent(file:$file)) {
-            $this->setFlashSession('error_upload', 'ファイルの内容が画像ではありません。');
-            $this->hasError = true;
-
-            return;
-        }
+        if (!$this->isImgContent(key:'upload', file:$file)) return $this->hasError = true;
 
         return;
             // if (!move_uploaded_file($src, 'doc/'.$dest)) {

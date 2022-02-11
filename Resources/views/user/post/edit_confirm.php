@@ -1,6 +1,6 @@
 <p>確認</p>
 <div>
-    <form action="<?=  route('post/update/', $data['post']->id); ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?=  route('post/update', $data['post']->id); ?>" method="POST" enctype="multipart/form-data">
         <p><?= $data['post']->country_name ?></p>
         <img
             src="<?= public_url('upload/' . basename($data['post']->path)); ?>"
@@ -19,7 +19,7 @@
 </div>
 
 <div>
-    <form action="<?=  route('post/edit/', $data['post']->id); ?>" method="POST">
+    <form action="<?=  route('post/edit', $data['post']->id); ?>" method="POST">
         <input type="hidden" name="country_id" value="<?= $data['post']->country_id ?>">
         <input type="hidden" name="description" value="<?= $data['post']->description ?>">
 

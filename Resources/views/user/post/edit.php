@@ -1,6 +1,6 @@
 <p>編集フォーム</p>
 <div>
-    <form action="<?= route('post/editConfirm/', $data['post']->id); ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?= route('post/editConfirm', $data['post']->id); ?>" method="POST" enctype="multipart/form-data">
 
         <select name="country_id" class="js-countriesSelect">
             <?php foreach ($data['countriesList'] as $country) : ?>
