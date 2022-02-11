@@ -74,10 +74,10 @@ class PostCreateValidator extends Validator{
      * @param [type] $files
      * @return void
      */
-    private function validateFiles($files)
+    private function validateFiles($file)
     {
         // アップロード処理のエラーチェック
-        if ($files['upload']['error'] !== UPLOAD_ERR_OK) {
+        if (($errorNumber = $this->getUploadErrorNumber($file)) !== UPLOAD_ERR_OK) {
             $msg = [
                 UPLOAD_ERR_INI_SIZE => 'php.iniのupload_max_filesize制限を越えています。',
                 UPLOAD_ERR_FORM_SIZE => 'HTMLのMAX_FILE_SIZE 制限を越えています。',
@@ -87,31 +87,27 @@ class PostCreateValidator extends Validator{
                 UPLOAD_ERR_CANT_WRITE => 'ディスクへの書き込みに失敗しました。',
                 UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
             ];
-            $this->setFlashSession('error_upload', $msg[$files['upload']['error']]);
+
+            $this->setFlashSession('error_upload', $msg[$errorNumber]);
             $this->hasError = true;
+
             return;
         }    
         
         // 拡張子が許可されたものかチェック
-        // $_FILES['type']は偽装が簡単なため、チェックには利用しない
-        if (!in_array(
-                strtolower(pathinfo($files['upload']['name'])['extension']),
-                ['gif', 'jpg', 'jpeg', 'png']
-            )) {
-                $this->setFlashSession('error_upload', '画像以外のファイルはアップロードできません。');
-                $this->hasError = true;
-                return;
+        if (!$this->isValidExt($file)) {
+            $this->setFlashSession('error_upload', '画像以外のファイルはアップロードできません。');
+            $this->hasError = true;
+
+            return;
         } 
         
         // ファイルの内容が画像かチェック
-        // 画像以外のファイルに画像用拡張子をつけた場合、上記の処理を通過してしまう
-        if (!in_array(
-                finfo_file(finfo_open(FILEINFO_MIME_TYPE), $files['upload']['tmp_name']),
-                ['image/gif', 'image/jpg', 'image/jpeg', 'image/png']
-            )) {
-                $this->setFlashSession('error_upload', 'ファイルの内容が画像ではありません。');
-                $this->hasError = true;
-                return;
+        if (!$this->isImgContent($file)) {
+            $this->setFlashSession('error_upload', 'ファイルの内容が画像ではありません。');
+            $this->hasError = true;
+
+            return;
         }
 
         return;
