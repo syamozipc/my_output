@@ -6,15 +6,20 @@ use App\Libraries\Validator;
 class PostCreateValidator extends Validator{
     public bool $hasError = false;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function validate($post, $files)
     {
-        $this->validateCountryId(($post['country_id']));
-        $this->validateDescription($post['description']);
-        $this->validateFiles($files);
+        $this->validateCountryId(countryId:$post['country_id']);
+        $this->validateDescription(description:$post['description']);
+        $this->validateFiles(file:$files);
 
         if ($this->hasError) {
-            $this->setFlashSession('country_id', $post['country_id']);
-            $this->setFlashSession('description', $post['description']);
+            $this->setFlashSession(key:'country_id', param:$post['country_id']);
+            $this->setFlashSession(key:'description', param:$post['description']);
         }
 
         return !$this->hasError;
@@ -77,7 +82,7 @@ class PostCreateValidator extends Validator{
     private function validateFiles($file)
     {
         // アップロード処理のエラーチェック
-        if (($errorNumber = $this->getUploadErrorNumber($file)) !== UPLOAD_ERR_OK) {
+        if (($errorNumber = $this->getUploadErrorNumber(file:$file)) !== UPLOAD_ERR_OK) {
             $msg = [
                 UPLOAD_ERR_INI_SIZE => 'php.iniのupload_max_filesize制限を越えています。',
                 UPLOAD_ERR_FORM_SIZE => 'HTMLのMAX_FILE_SIZE 制限を越えています。',
@@ -95,7 +100,7 @@ class PostCreateValidator extends Validator{
         }    
         
         // 拡張子が許可されたものかチェック
-        if (!$this->isValidExt($file)) {
+        if (!$this->isValidExt(file:$file)) {
             $this->setFlashSession('error_upload', '画像以外のファイルはアップロードできません。');
             $this->hasError = true;
 
@@ -103,7 +108,7 @@ class PostCreateValidator extends Validator{
         } 
         
         // ファイルの内容が画像かチェック
-        if (!$this->isImgContent($file)) {
+        if (!$this->isImgContent(file:$file)) {
             $this->setFlashSession('error_upload', 'ファイルの内容が画像ではありません。');
             $this->hasError = true;
 

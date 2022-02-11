@@ -6,6 +6,11 @@ use App\Libraries\Validator;
 class PostDeleteValidator extends Validator{
     public bool $hasError = false;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function validate($id)
     {
         $this->validatePostId($id);

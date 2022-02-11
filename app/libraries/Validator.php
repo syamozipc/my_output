@@ -1,8 +1,19 @@
 <?php
 namespace App\Libraries;
 
+use App\Models\User;
+
 class Validator {
     use \App\Traits\SessionTrait;
+
+    public object $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = new User();
+    }
+
+    // 基本的なバリデーション
 
     /**
      * 値が空かどうか
@@ -10,7 +21,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isfilled($param)
+    public function isfilled($param):bool
     {
         return ($param !== "" && !is_null($param));
     }
@@ -21,7 +32,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isNumeric($param)
+    public function isNumeric($param):bool
     {
         return is_numeric($param);
     }
@@ -32,7 +43,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isValidRangeCountryId($param)
+    public function isValidRangeCountryId($param):bool
     {
         return (Counrty['min_id'] <= $param && $param <= Counrty['max_id']);
     }
@@ -43,7 +54,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isString($param)
+    public function isString($param):bool
     {
         return is_string($param);
     }
@@ -56,7 +67,7 @@ class Validator {
      * @param boolean $isMb trueならマルチバイトに対応、falseなら非対応
      * @return boolean
      */
-    public function isValidLength($param, $length, $isMb = false)
+    public function isValidLength($param, $length, $isMb = false):bool
     {
         if ($isMb) {
             return mb_strlen($param) <= $length;
@@ -74,7 +85,7 @@ class Validator {
      * @return integer
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
      */
-    public function getUploadErrorNumber($file)
+    public function getUploadErrorNumber($file):int
     {
         return $file['upload']['error'];
     }
@@ -88,7 +99,7 @@ class Validator {
      * @return boolean
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
      */
-    public function isValidExt($file)
+    public function isValidExt($file):bool
     {
         return in_array(
                 strtolower(pathinfo($file['upload']['name'])['extension']),
@@ -102,11 +113,40 @@ class Validator {
      * @param array $file アップロードしたファイルの情報
      * @return boolean
      */
-    public function isImgContent($file)
+    public function isImgContent($file):bool
     {
         return in_array(
                 finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['upload']['tmp_name']),
                 ['image/gif', 'image/jpg', 'image/jpeg', 'image/png']
         );
+    }
+
+    // メールアドレスのバリデーション
+
+    /**
+     * 正しいメールアドレス形式か
+     *
+     * @param [type] $email
+     * @return string|boolean 有効なメールアドレスならそれを、無効ならfalseを返す
+     */
+    public function isValidEmailFormat($email):string|bool
+    {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+     * 既に本登録済みのメールアドレスか
+     *
+     * @param [type] $email
+     * @return boolean 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る
+     */
+    public function isExist($email)
+    {
+        $sql = 'SELECT * FROM users WHERE email = :email AND password IS NOT NULL';
+
+        $this->userModel->db->prepare(sql:$sql)->bind(param:':email', value:$email)->execute();
+
+        // 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る
+        return $this->userModel->db->rowCount();
     }
 }

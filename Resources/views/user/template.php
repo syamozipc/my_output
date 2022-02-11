@@ -5,10 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= SITENAME ?></title>
-    <link rel="stylesheet" href="<?= public_url($data['css']); ?>">
+    <?php if (isset($data['css'])) : ?>
+        <link rel="stylesheet" href="<?= public_url($data['css']); ?>">
+    <?php endif; ?>
 </head>
 <body>
     <?php require_once($viewFile) ?>
-    <script src="<?= public_url($data['js']); ?>"></script>
+    <?php if (isset($data['js'])) : ?>
+        <script src="<?= public_url($data['js']); ?>"></script>
+    <?php endif; ?>
 </body>
 </html>

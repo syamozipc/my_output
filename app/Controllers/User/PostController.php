@@ -52,7 +52,7 @@ class PostController extends Controller {
     public function confirm()
     {
         $validator = new PostCreateValidator();
-        $isValidated = $validator->validate($_POST, $_FILES);
+        $isValidated = $validator->validate(post:$_POST, files:$_FILES);
 
         if (!$isValidated) return redirect('post/create');
 
