@@ -28,13 +28,12 @@ class RegisterController extends Controller {
         return $this->view(view:'user/register/index', data:$data);
     }
 
-    // emailをvalidation
-    // transaction
-// テーブルに仮登録
-// email登録済みかつパスワードnullなら、email、email_verify_token、email_verify_token_created_at
-// なければ新規でemail登録、パスワードはnull
-// メール送信
-// commit
+    /**
+     * 会員登録フォームに入力されたemailとtoken、token生成時間をusersテーブルに保存し、
+     * 本登録用URLを記載したメールを送信
+     *
+     * @return void
+     */
     public function sendRegisterMail()
     {
         $validator = new TemporaryRegisterValidator();
@@ -43,5 +42,20 @@ class RegisterController extends Controller {
         if (!$isValidated) return redirect('register/index');
 
         $this->registerService->temporaryRegister(email:$_POST['email']);
+    }
+
+    /**
+     * 仮登録完了メールにて記載URLにアクセスされると、
+     * ・emailとquery stringのtokenがテーブルのレコードと合致するか
+     * ・token発行から指定時間以内のアクセスか
+     * をチェックし、
+     * ・指定時間以内なら本登録案内
+     * ・指定時間を過ぎていたら再度仮登録メールを送る
+     *
+     * @return void
+     */
+    public function verifyEmail()
+    {
+        echo '<pre>';var_dump($_GET);die;
     }
 }
