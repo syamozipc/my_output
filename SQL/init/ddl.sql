@@ -27,8 +27,8 @@ CREATE TABLE countries (
 
 CREATE TABLE users (
     `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    `country_id` TINYINT(200) UNSIGNED NOT NULL REFERENCES countries(id),
-    `name` VARCHAR(60) NOT NULL,
+    `country_id` TINYINT(200) UNSIGNED REFERENCES countries(id),
+    `name` VARCHAR(60),
     `tel` VARCHAR(20),
     `date_of_birth` DATE,
     `profile_image_path` VARCHAR(60),

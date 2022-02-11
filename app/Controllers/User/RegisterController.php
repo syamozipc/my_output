@@ -42,6 +42,6 @@ class RegisterController extends Controller {
 
         if (!$isValidated) return redirect('register/index');
 
-        return $this->registerService->temporaryRegister();
+        $this->registerService->temporaryRegister(email:$_POST['email']);
     }
 }

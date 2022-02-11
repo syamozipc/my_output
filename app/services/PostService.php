@@ -87,8 +87,10 @@ class PostService {
                 ->execute();
 
             $this->postModel->db->commit();
+
         } catch (\Exception $e) {
             $this->postModel->db->rollBack();
+            
              exit($e->getMessage());
         }
     }
