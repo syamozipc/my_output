@@ -5,6 +5,7 @@ use App\models\User;
 use DateTime;
 
 class RegisterService {
+    const Token_Valid_Period_Hour = 1;
     public object $userModel;
 
     public function __construct()
@@ -18,7 +19,7 @@ class RegisterService {
      * @param string $email
      * @return void
      */
-    public function temporaryRegister($email)
+    public function temporarilyRegister(string $email)
     {
         try {
             $this->userModel->db->beginTransaction();
@@ -38,12 +39,17 @@ class RegisterService {
                 ? 'UPDATE `users` SET `email_verify_token` = :email_verify_token, `email_verify_token_created_at` = :email_verify_token_created_at WHERE `email` = :email'
                 : 'INSERT INTO `users` (`email`, `email_verify_token`, `email_verify_token_created_at`) VALUES (:email, :email_verify_token, :email_verify_token_created_at)';
 
-            $emailVerifyToken =  base64_encode($email);
+            /**
+             * @todo 送り直しの都度tokenが同じなのは微妙？
+             */
+            $emailVerifyToken = base64_encode($email);
+            $currentDateTime = (new DateTime())->format(Date_Time_Default_Format);
 
-            $this->userModel->db->prepare($sql)
+            $this->userModel->db
+                ->prepare($sql)
                 ->bind(':email', $email)
                 ->bind(':email_verify_token', $emailVerifyToken)
-                ->bind(':email_verify_token_created_at', (new DateTime())->format('Y-m-d H:i:s'))
+                ->bind(':email_verify_token_created_at', $currentDateTime)
                 ->execute();
 
             $isSent = $this->sendEmail(to:$email, token:$emailVerifyToken);
@@ -68,20 +74,21 @@ class RegisterService {
      * @param string $token
      * @return boolean 送信成功でtrue、失敗でfalseが返る
      */
-    public function sendEmail($to, $token):bool
+    public function sendEmail(string $to, string $token):bool
     {
         // 無くてもいけるかも
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
         $url = route('register/verifyEmail', "?token={$token}");
+        $hour = self::Token_Valid_Period_Hour;
 
         $subject = SITENAME . 'への仮登録が完了しました';
 
         $body = <<<EOD
             会員登録ありがとうございます！
 
-            24時間以内</span>に下記URLへアクセスし、本登録を完了してください。
+            {$hour}時間以内に下記URLへアクセスし、本登録を完了してください。
             {$url}
             EOD;
 
@@ -89,5 +96,36 @@ class RegisterService {
         $headers .= "Content-Type : text/plain";
 
         return mb_send_mail($to, $subject, $body, $headers);
+    }
+
+    /**
+     * トークンに一致するユーザーを取得
+     * トークンが一致しないもしくは期限切れの場合、falseをリターン
+     *
+     * @param string $token
+     * @return object|false
+     */
+    public function getTemporarilyRegisteredUser(string $token):object|false
+    {
+        $sql = 'SELECT * FROM `users` WHERE `email_verify_token` = :email_verify_token AND `email_verify_token_created_at` >= :email_verify_token_created_at AND `email_verified_at` IS NULL AND `password` IS NULL';
+
+        $hour = self::Token_Valid_Period_Hour;
+        $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(Date_Time_Default_Format);
+
+        $user = $this->userModel->db
+            ->prepare($sql)
+            ->bind(':email_verify_token', $token)
+            ->bind(':email_verify_token_created_at', $tokenValidPeriod)
+            ->executeAndFetch();
+
+        /**
+         * @todo エラーメッセージを細かく出し分けたい
+         *  email_verify_tokenだけで取得し、
+         * ・userがいなければ無効なURL
+         * ・passwordがNULLでなければ登録済み
+         * ・期限切れであればその旨
+         */
+
+        return $user;
     }
 }

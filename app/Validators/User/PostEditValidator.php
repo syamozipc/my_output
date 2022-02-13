@@ -42,7 +42,7 @@ class PostEditValidator extends Validator{
         if (!$this->isString(key:'description', param:$description)) return $this->hasError = true;
 
         $length = CHAR_LENGTH['post_description'];
-        if (!$this->isValidLength(key:'description', param:$description, length:$length, isMb:true)) {
+        if (!$this->isValidLength(key:'description', param:$description, minLength:0, maxLength:$length, isMb:true)) {
             return $this->hasError = true;
         }
         

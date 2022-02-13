@@ -40,6 +40,7 @@ https://github.com/syamozipc/my_output
     -   [ ] ルーティングを別のやり方にしたい
     -   [ ] 定数はヘルパでドット繋ぎにしたい
     -   [ ] user 登録時は、password の null を見ずに status_id に仮登録ステータスを追加し、そちらを見るようにしたい
+    -   [ ] CSRF/XSS 対策
 -   [ ] PHP 8 を使う
     -   [x] 名前付き引数
     -   [ ] constructor の省略形

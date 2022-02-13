@@ -18,6 +18,7 @@ class Validator {
     /**
      * 値が空かどうか
      *
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param mixed $param
      * @return boolean
      */
@@ -32,7 +33,8 @@ class Validator {
 
     /**
      * 値が数字または数値形式の文字列であるか
-     *
+     * 
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param mixed $param
      * @return boolean
      */
@@ -48,6 +50,7 @@ class Validator {
     /**
      * 値がcountriesテーブルに登録されているidか
      *
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param mixed $param
      * @return boolean
      */
@@ -63,6 +66,7 @@ class Validator {
     /**
      * 値が文字列か
      *
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param mixed $param
      * @return boolean
      */
@@ -78,21 +82,20 @@ class Validator {
     /**
      * 値の長さが指定文字数以内か
      *
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param mixed $param
-     * @param integer $length
+     * @param integer $minLength
+     * @param integer $maxLength
      * @param boolean $isMb trueならマルチバイトに対応、falseなら非対応
      * @return boolean
      */
-    public function isValidLength($key, $param, $length, $isMb = false):bool
+    public function isValidLength($key, $param, $minLength, $maxLength, $isMb = false):bool
     {
-        if (
-            ($isMb && mb_strlen($param) <= $length)
-            || (!$isMb && strlen($param) <= $length)
-        ) {
-            return true;
-        }
+        $charLength = $isMb ? mb_strlen($param) : strlen($param);
 
-        $this->setFlashSession(key:"error_{$key}", param:"文字数は{$length}以内に収めてください。");
+        if ($minLength <= $charLength && $charLength <= $maxLength) return true;
+
+        $this->setFlashSession(key:"error_{$key}", param:"文字数は{$minLength}〜${$maxLength}字以内に収めてください。");
 
         return false;
     }
@@ -102,6 +105,7 @@ class Validator {
     /**
      * アップロード処理時にエラーがあるか
      *
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param array $file アップロードしたファイルの情報
      * @return integer
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
@@ -132,6 +136,7 @@ class Validator {
      * $_FILES['type']は偽装が簡単なため、チェックには利用しない
      * ただしこれも、適当な拡張子で保存した矛盾したファイル（.pngのcsvファイルなど）を検出できない
      * 
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param array $file アップロードしたファイルの情報
      * @return boolean
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
@@ -154,6 +159,7 @@ class Validator {
     /**
      * ファイルの内容が画像かチェック
      *
+     * @param string $key error時、sessionのkeyの1部を構成する
      * @param array $file アップロードしたファイルの情報
      * @return boolean
      */
@@ -177,7 +183,8 @@ class Validator {
     /**
      * 正しいメールアドレス形式か
      *
-     * @param [type] $email
+     * @param string $key error時、sessionのkeyの1部を構成する
+     * @param string $email
      * @return string|boolean 有効なメールアドレスならそれを、無効ならfalseを返す
      */
     public function isValidEmailFormat($key, $email):string|bool
@@ -192,10 +199,11 @@ class Validator {
     /**
      * 既に本登録済みのメールアドレスか
      *
-     * @param [type] $email
+     * @param string $key error時、sessionのkeyの1部を構成する
+     * @param string $email
      * @return boolean 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る
      */
-    public function isExist($key, $email)
+    public function isExistEmail($key, $email)
     {
         $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `password` IS NOT NULL';
 
@@ -212,5 +220,40 @@ class Validator {
         $this->setFlashSession("error_{$key}", '登録済みのメールアドレスです。');
 
         return true;
+    }
+
+    // パスワードのバリデーション
+
+    /**
+     * パスワードが正しい形式（英字・数字をそれぞれ1字以上含む8〜12字）か
+     *
+     * @param string $key error時、sessionのkeyの1部を構成する
+     * @param string $password
+     * @return boolean
+     */
+    public function isValidPasswordFormat($key, $password)
+    {
+        if (preg_match('/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}+\z/i', $password)) return true;
+
+        $this->setFlashSession("error_{$key}", 'パスワードは英数字をそれぞれ1文字以上含む、8〜12字で指定してください。');
+
+        return false;
+    }
+
+    /**
+     * 2つの値が一致するか
+     *
+     * @param string $key error時、sessionのkeyの1部を構成する
+     * @param string $param1
+     * @param string $param2
+     * @return boolean
+     */
+    public function isMatch($key, $compareKey, $param1, $param2)
+    {
+        if ($param1 === $param2) return true;
+
+        $this->setFlashSession("error_{$key}", "{$compareKey}と値が一致しません。");
+
+        return false;
     }
 }

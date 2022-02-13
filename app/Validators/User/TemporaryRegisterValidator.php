@@ -15,6 +15,10 @@ class TemporaryRegisterValidator extends Validator{
     {
         $this->validateEmail(email:$post['email']);
 
+        if ($this->hasError) {
+            $this->setFlashSession(key:'email', param:$post['email']);
+        }
+
         return !$this->hasError;
     }
 
@@ -24,7 +28,7 @@ class TemporaryRegisterValidator extends Validator{
 
         if (!$this->isValidEmailFormat(key:'email', email:$email)) return $this->hasError = true;
 
-        if ($this->isExist(key:'email', email:$email)) return $this->hasError = true;
+        if ($this->isExistEmail(key:'email', email:$email)) return $this->hasError = true;
         
         return;
     }

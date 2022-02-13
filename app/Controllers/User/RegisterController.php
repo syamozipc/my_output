@@ -3,9 +3,11 @@ namespace App\Controllers\User;
 
 use App\Libraries\Controller;
 use App\Services\RegisterService;
-use App\Validators\User\TemporaryRegisterValidator;
+use App\Validators\User\{TemporaryRegisterValidator, RegisterValidator};
 
 class RegisterController extends Controller {
+    use \App\Traits\SessionTrait;
+
     public $registerService;
 
     public function __construct()
@@ -18,14 +20,14 @@ class RegisterController extends Controller {
      *
      * @return void
      */
-    public function index()
+    public function tmpRegister()
     {
         $data = [
-            'css' => 'css/user/register/index.css',
-            'js' => 'js/user/register/index.js',
+            'css' => 'css/user/register/tmpRegister.css',
+            'js' => 'js/user/register/tmpRegister.js',
         ];
 
-        return $this->view(view:'user/register/index', data:$data);
+        return $this->view(view:'user/register/tmpRegister', data:$data);
     }
 
     /**
@@ -39,9 +41,11 @@ class RegisterController extends Controller {
         $validator = new TemporaryRegisterValidator();
         $isValidated = $validator->validate(post:$_POST);
 
-        if (!$isValidated) return redirect('register/index');
+        if (!$isValidated) return redirect('register/tmpRegister');
 
-        $this->registerService->temporaryRegister(email:$_POST['email']);
+        $this->registerService->temporarilyRegister(email:$_POST['email']);
+
+        return;
     }
 
     /**
@@ -56,6 +60,35 @@ class RegisterController extends Controller {
      */
     public function verifyEmail()
     {
-        echo '<pre>';var_dump($_GET);die;
+        $token = filter_input(INPUT_GET, 'token');
+
+        $user = $this->registerService->getTemporarilyRegisteredUser(token:$token);
+
+        if (!$user) {
+            $this->setFlashSession(key:"error_email", param:'無効なURLです。再度メールアドレスを入力してください。');
+            
+            return redirect('register/tmpRegister');
+        }
+
+        return $this->showRegisterForm(emailVerifyToken:$user->email_verify_token);
+    }
+
+    private function showRegisterForm($emailVerifyToken)
+    {
+        $data = [
+            'emailVerifyToken' => $emailVerifyToken
+        ];
+
+        return $this->view(view:'user/register/showRegisterForm', data:$data);
+    }
+
+    public function register()
+    {
+        $request = filter_input_array(INPUT_POST);
+
+        $validator = new RegisterValidator();
+        $isValidated = $validator->validate($request);
+
+        if (!$isValidated) return redirect("register/verifyEmail?token={$request['email_verify_token']}");
     }
 }
