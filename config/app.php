@@ -23,4 +23,4 @@ const Counrty = [
     'max_id' => 195
 ];
 
-const Date_Time_Default_Format = 'Y-m-d H:i:s';
+const DateTime_Default_Format = 'Y-m-d H:i:s';

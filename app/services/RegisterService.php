@@ -43,7 +43,7 @@ class RegisterService {
              * @todo 送り直しの都度tokenが同じなのは微妙？
              */
             $emailVerifyToken = base64_encode($email);
-            $currentDateTime = (new DateTime())->format(Date_Time_Default_Format);
+            $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
 
             $this->userModel->db
                 ->prepare($sql)
@@ -110,7 +110,7 @@ class RegisterService {
         $sql = 'SELECT * FROM `users` WHERE `email_verify_token` = :email_verify_token AND `email_verify_token_created_at` >= :email_verify_token_created_at AND `email_verified_at` IS NULL AND `password` IS NULL';
 
         $hour = self::Token_Valid_Period_Hour;
-        $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(Date_Time_Default_Format);
+        $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
         $user = $this->userModel->db
             ->prepare($sql)
@@ -127,5 +127,24 @@ class RegisterService {
          */
 
         return $user;
+    }
+
+    public function regsterUser($request)
+    {
+        // hash passwordとstr::randomのapi tokenを取得
+        $sql = 'UPDATE users SET `email_verified_at` = :email_verified_at, `password` = :password, `api_token` = :api_token WHERE `email_verify_token` = :email_verify_token';
+
+        $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
+        $hashPassword = password_hash($request['password'], PASSWORD_BCRYPT);
+
+        $this->userModel->db
+            ->prepare($sql)
+            ->bind(':email_verified_at', $currentDateTime)
+            ->bind(':password', $hashPassword)
+            ->bind(':api_token', str_random(length:80))
+            ->bind(':email_verify_token', $request['email_verify_token'])
+            ->execute();
+
+        return;
     }
 }

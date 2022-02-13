@@ -38,14 +38,20 @@ class RegisterController extends Controller {
      */
     public function sendRegisterMail()
     {
+        $request = filter_input_array(INPUT_POST);
+
         $validator = new TemporaryRegisterValidator();
-        $isValidated = $validator->validate(post:$_POST);
+        $isValidated = $validator->validate(post:$request);
 
         if (!$isValidated) return redirect('register/tmpRegister');
 
-        $this->registerService->temporarilyRegister(email:$_POST['email']);
+        $this->registerService->temporarilyRegister(email:$request['email']);
 
-        return;
+        $data = [
+            'email' => $request['email']
+        ];
+
+        return $this->view(view:'user/register/success_temporary_register', data:$data);
     }
 
     /**
@@ -76,6 +82,8 @@ class RegisterController extends Controller {
     private function showRegisterForm($emailVerifyToken)
     {
         $data = [
+            'css' => 'css/user/register/showRegisterForm.css',
+            'js' => 'js/user/register/showRegisterForm.js',
             'emailVerifyToken' => $emailVerifyToken
         ];
 
@@ -90,5 +98,13 @@ class RegisterController extends Controller {
         $isValidated = $validator->validate($request);
 
         if (!$isValidated) return redirect("register/verifyEmail?token={$request['email_verify_token']}");
+
+        $this->registerService->regsterUser($request);
+
+        // login
+        // ref：
+        // ・laravelのやり方（login trait）
+        // ・https://qiita.com/mpyw/items/bb8305ba196f5105be15
+        exit('login');
     }
 }

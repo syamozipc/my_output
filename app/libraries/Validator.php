@@ -32,6 +32,22 @@ class Validator {
     }
 
     /**
+     * 値が文字列か
+     *
+     * @param string $key error時、sessionのkeyの1部を構成する
+     * @param mixed $param
+     * @return boolean
+     */
+    public function isString($key, $param):bool
+    {
+        if (is_string($param)) return true;
+
+        $this->setFlashSession(key:"error_{$key}", param:'文字列で入力してください');
+
+        return false;
+    }
+
+    /**
      * 値が数字または数値形式の文字列であるか
      * 
      * @param string $key error時、sessionのkeyの1部を構成する
@@ -64,22 +80,6 @@ class Validator {
     }
 
     /**
-     * 値が文字列か
-     *
-     * @param string $key error時、sessionのkeyの1部を構成する
-     * @param mixed $param
-     * @return boolean
-     */
-    public function isString($key, $param):bool
-    {
-        if (is_string($param)) return true;
-
-        $this->setFlashSession(key:"error_{$key}", param:'文字列で入力してください');
-
-        return false;
-    }
-
-    /**
      * 値の長さが指定文字数以内か
      *
      * @param string $key error時、sessionのkeyの1部を構成する
@@ -96,6 +96,23 @@ class Validator {
         if ($minLength <= $charLength && $charLength <= $maxLength) return true;
 
         $this->setFlashSession(key:"error_{$key}", param:"文字数は{$minLength}〜${$maxLength}字以内に収めてください。");
+
+        return false;
+    }
+
+    /**
+     * 2つの値が一致するか
+     *
+     * @param string $key error時、sessionのkeyの1部を構成する
+     * @param string $param1
+     * @param string $param2
+     * @return boolean
+     */
+    public function isMatch($key, $compareKey, $param1, $param2)
+    {
+        if ($param1 === $param2) return true;
+
+        $this->setFlashSession("error_{$key}", "{$compareKey}と同じ値を入力してください。");
 
         return false;
     }
@@ -233,26 +250,9 @@ class Validator {
      */
     public function isValidPasswordFormat($key, $password)
     {
-        if (preg_match('/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,100}+\z/i', $password)) return true;
+        if (preg_match('/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,12}+\z/i', $password)) return true;
 
         $this->setFlashSession("error_{$key}", 'パスワードは英数字をそれぞれ1文字以上含む、8〜12字で指定してください。');
-
-        return false;
-    }
-
-    /**
-     * 2つの値が一致するか
-     *
-     * @param string $key error時、sessionのkeyの1部を構成する
-     * @param string $param1
-     * @param string $param2
-     * @return boolean
-     */
-    public function isMatch($key, $compareKey, $param1, $param2)
-    {
-        if ($param1 === $param2) return true;
-
-        $this->setFlashSession("error_{$key}", "{$compareKey}と値が一致しません。");
 
         return false;
     }

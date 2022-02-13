@@ -10,7 +10,8 @@
   * @param string|null $route root配下の任意のパラメータ
   * @return string 生成したpath
   */
-function base_path(string $route = null):string {
+function base_path(string $route = null):string
+{
     return BASE_PATH . $route;
 }
 
@@ -20,6 +21,7 @@ function base_path(string $route = null):string {
  * @param string|null $route public配下の任意のパラメータ
  * @return string 生成したpath
  */
-function public_path(string $route = null):string {
+function public_path(string $route = null):string
+{
     return BASE_PATH . 'public/' . $route;
 }

@@ -11,11 +11,12 @@ class RegisterValidator extends Validator{
         parent::__construct();
     }
 
-    public function validate($post)
+    public function validate($request)
     {
-        $this->validateEmailVerifyToken(token:$post['email_verify_token']);
-        $this->validatePassword(password:$post['password']);
-        $this->validatePasswordConfirmation(password:$post['password_confirmation'], passwordConfirmation:$post['password_confirmation']);
+        // ここのエラーは現状、verifyEmail()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
+        $this->validateEmailVerifyToken(token:$request['email_verify_token']);
+        $this->validatePassword(password:$request['password']);
+        $this->validatePasswordConfirmation(password:$request['password'], passwordConfirmation:$request['password_confirmation']);
 
         return !$this->hasError;
     }
@@ -39,7 +40,7 @@ class RegisterValidator extends Validator{
         return;
     }
 
-    private function validatePasswordConfirmation($password, passwordConfirmation)
+    private function validatePasswordConfirmation($password, $passwordConfirmation)
     {
         if (!$this->isMatch(
             key:'password_confirmation',

@@ -10,7 +10,8 @@
  * @param string $route redirect先のpath
  * @return void
  */
-function redirect($route) {
+function redirect($route)
+{
     header('Location: ' . BASE_URL . $route);
 }
 
@@ -25,7 +26,8 @@ function redirect($route) {
  * @param string|array|null $params 任意のパラメータ
  * @return string ページ遷移用url
  */
-function route(string $route, string|array $params = null):string {
+function route(string $route, string|array $params = null):string
+{
     if (is_null($params)) return BASE_URL . $route;
 
     $paramStr = is_array($params) 
@@ -42,7 +44,8 @@ function route(string $route, string|array $params = null):string {
  * @param string $route 遷移先パス
  * @return string public配下URL
  */
-function public_url(string $route):string {
+function public_url(string $route):string
+{
     
     return BASE_URL . 'public/' . $route;
 }
