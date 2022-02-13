@@ -2,17 +2,22 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
-use App\Services\RegisterService;
+use App\Services\{RegisterService, UserService};
+use App\Models\User;
 use App\Validators\User\{TemporaryRegisterValidator, RegisterValidator};
 
 class RegisterController extends Controller {
     use \App\Traits\SessionTrait;
 
-    public $registerService;
+    public RegisterService $registerService;
+    public UserService $userService;
+    public user $userModel;
 
     public function __construct()
     {
         $this->registerService = new RegisterService();
+        $this->userService = new UserService();
+        $this->userModel = new User();
     }
 
     /**
@@ -31,7 +36,7 @@ class RegisterController extends Controller {
     }
 
     /**
-     * 会員登録フォームに入力されたemailとtoken、token生成時間をusersテーブルに保存し、
+     * 会員登録フォームに入力されたemail、token、token生成時間をusersテーブルに保存し、
      * 本登録用URLを記載したメールを送信
      *
      * @return void
@@ -45,7 +50,30 @@ class RegisterController extends Controller {
 
         if (!$isValidated) return redirect('register/tmpRegister');
 
-        $this->registerService->temporarilyRegister(email:$request['email']);
+        try {
+            /**
+             * @todo user modelからdb呼ぶのも微妙？
+             */
+            $this->userModel->db->beginTransaction();
+
+            /**
+            * @todo 送り直しの都度tokenが同じなのは微妙？
+            */
+            $emailVerifyToken = base64_encode($request['email']);
+
+            $this->registerService->temporarilyRegister(email:$request['email'], emailVerifyToken:$emailVerifyToken);
+
+            $isSent = $this->registerService->sendEmail(to:$request['email'], emailVerifyToken:$emailVerifyToken);
+
+            if (!$isSent) throw new \Exception('メール送信に失敗しました。');
+
+            $this->userModel->db->commit();
+
+        } catch (\Exception $e) {
+            $this->userModel->db->rollBack();
+
+            exit($e->getMessage());
+        }
 
         $data = [
             'email' => $request['email']
@@ -99,8 +127,17 @@ class RegisterController extends Controller {
 
         if (!$isValidated) return redirect("register/verifyEmail?token={$request['email_verify_token']}");
 
-        $this->registerService->regsterUser($request);
+        // sendRegisterMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 
+        $this->registerService->regsterUser(request:$request);
+
+        $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['email_verify_token']);
+
+        $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
+    
+        if (!$isSent) die('メール送信に失敗しました。');
+
+                    
         // login
         // ref：
         // ・laravelのやり方（login trait）

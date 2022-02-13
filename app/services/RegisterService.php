@@ -19,50 +19,31 @@ class RegisterService {
      * @param string $email
      * @return void
      */
-    public function temporarilyRegister(string $email)
+    public function temporarilyRegister(string $email, string $emailVerifyToken)
     {
-        try {
-            $this->userModel->db->beginTransaction();
+        // 仮登録済みかどうか（本登録済みの場合は、validationで弾かれている）
+        // $userが取れれば仮登録済み、いなければ未登録
+        $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `password` IS NULL';
 
-            // 仮登録済みかどうか（本登録済みの場合は、validationで弾かれている）
-            // $userが取れれば仮登録済み、いなければ未登録
-            $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `password` IS NULL';
+        // $userがいればobject、いなければfalseが返る
+        $user = $this->userModel->db
+            ->prepare(sql:$sql)
+            ->bind(':email', $email)
+            ->executeAndFetch();
+        
+        // 仮登録済みかどうかで UPDATE/INSERT 分岐
+        $sql = $user
+            ? 'UPDATE `users` SET `email_verify_token` = :email_verify_token, `email_verify_token_created_at` = :email_verify_token_created_at WHERE `email` = :email'
+            : 'INSERT INTO `users` (`email`, `email_verify_token`, `email_verify_token_created_at`) VALUES (:email, :email_verify_token, :email_verify_token_created_at)';
 
-            // $userがいればobject、いなければfalseが返る
-            $user = $this->userModel->db
-                ->prepare(sql:$sql)
-                ->bind(':email', $email)
-                ->executeAndFetch();
-            
-            // 仮登録済みかどうかで UPDATE/INSERT 分岐
-            $sql = $user
-                ? 'UPDATE `users` SET `email_verify_token` = :email_verify_token, `email_verify_token_created_at` = :email_verify_token_created_at WHERE `email` = :email'
-                : 'INSERT INTO `users` (`email`, `email_verify_token`, `email_verify_token_created_at`) VALUES (:email, :email_verify_token, :email_verify_token_created_at)';
+        $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
 
-            /**
-             * @todo 送り直しの都度tokenが同じなのは微妙？
-             */
-            $emailVerifyToken = base64_encode($email);
-            $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
-
-            $this->userModel->db
-                ->prepare($sql)
-                ->bind(':email', $email)
-                ->bind(':email_verify_token', $emailVerifyToken)
-                ->bind(':email_verify_token_created_at', $currentDateTime)
-                ->execute();
-
-            $isSent = $this->sendEmail(to:$email, token:$emailVerifyToken);
-
-            if (!$isSent) throw new \Exception('メール送信に失敗しました。');
-
-            $this->userModel->db->commit();
-
-        } catch (\Exception $e) {
-            $this->userModel->db->rollBack();
-
-            exit($e->getMessage());
-        }
+        $this->userModel->db
+            ->prepare($sql)
+            ->bind(':email', $email)
+            ->bind(':email_verify_token', $emailVerifyToken)
+            ->bind(':email_verify_token_created_at', $currentDateTime)
+            ->execute();
 
         return;
     }
@@ -74,13 +55,13 @@ class RegisterService {
      * @param string $token
      * @return boolean 送信成功でtrue、失敗でfalseが返る
      */
-    public function sendEmail(string $to, string $token):bool
+    public function sendEmail(string $to, string $emailVerifyToken):bool
     {
         // 無くてもいけるかも
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $url = route('register/verifyEmail', "?token={$token}");
+        $url = route('register/verifyEmail', "?token={$emailVerifyToken}");
         $hour = self::Token_Valid_Period_Hour;
 
         $subject = SITENAME . 'への仮登録が完了しました';
@@ -129,9 +110,14 @@ class RegisterService {
         return $user;
     }
 
+    /**
+     * userを本登録する
+     *
+     * @param array $request
+     * @return void
+     */
     public function regsterUser($request)
     {
-        // hash passwordとstr::randomのapi tokenを取得
         $sql = 'UPDATE users SET `email_verified_at` = :email_verified_at, `password` = :password, `api_token` = :api_token WHERE `email_verify_token` = :email_verify_token';
 
         $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
@@ -146,5 +132,33 @@ class RegisterService {
             ->execute();
 
         return;
+    }
+
+    public function sendRegisteredEmail(string $to):bool
+    {
+            // 無くてもいけるかも
+            mb_language("Japanese");
+            mb_internal_encoding("UTF-8");
+    
+            $subject = SITENAME . 'への本登録が完了しました';
+
+            $loginUrl = route('user/login');
+            $topUrl = route('user/home/index');
+    
+            $body = <<<EOD
+                会員登録ありがとうございます！
+
+                本登録が完了しました。
+
+                ログインページはコチラ：
+                $loginUrl
+                TOPページはコチラ：
+                $topUrl
+                EOD;
+    
+            $headers = "From : syamozipc@gmail.com\n";
+            $headers .= "Content-Type : text/plain";
+    
+            return mb_send_mail($to, $subject, $body, $headers);
     }
 }
