@@ -15,6 +15,7 @@ class RegisterValidator extends Validator{
     {
         // ここのエラーは現状、verifyEmail()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
         $this->validateEmailVerifyToken(token:$request['email_verify_token']);
+        $this->validateEmail(email:$request['email']);
         $this->validatePassword(password:$request['password']);
         $this->validatePasswordConfirmation(password:$request['password'], passwordConfirmation:$request['password_confirmation']);
 
@@ -27,6 +28,15 @@ class RegisterValidator extends Validator{
 
         if (!$this->isString(key:'email_verify_token', param:$token)) return $this->hasError = true;
         
+        return;
+    }
+
+    private function validateEmail($email)
+    {
+        if (!$this->isfilled(key:'email', param:$email)) return $this->hasError = true;
+
+        if (!$this->isValidEmailFormat(key:'email', email:$email)) return $this->hasError = true;
+
         return;
     }
 

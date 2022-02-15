@@ -96,23 +96,23 @@ class RegisterController extends Controller {
     {
         $token = filter_input(INPUT_GET, 'token');
 
-        $user = $this->registerService->getTemporarilyRegisteredUser(token:$token);
+        $user = $this->registerService->getTemporarilyRegisteredUser(emailVerifyToken:$token);
 
         if (!$user) {
             $this->setFlashSession(key:"error_email", param:'無効なURLです。再度メールアドレスを入力してください。');
-            
+
             return redirect('register/tmpRegister');
         }
 
-        return $this->showRegisterForm(emailVerifyToken:$user->email_verify_token);
+        return $this->showRegisterForm(user:$user);
     }
 
-    private function showRegisterForm($emailVerifyToken)
+    private function showRegisterForm($user)
     {
         $data = [
             'css' => 'css/user/register/showRegisterForm.css',
             'js' => 'js/user/register/showRegisterForm.js',
-            'emailVerifyToken' => $emailVerifyToken
+            'user' => $user
         ];
 
         return $this->view(view:'user/register/showRegisterForm', data:$data);
@@ -129,19 +129,17 @@ class RegisterController extends Controller {
 
         // sendRegisterMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 
-        $this->registerService->regsterUser(request:$request);
+        $isRegistered = $this->registerService->regsterUser(request:$request);
 
-        $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['email_verify_token']);
+        // @todo validationに処理をまとめたい（該当のtokenとemailを持つユーザーがいるか）
+        if (!$isRegistered) die('新規登録に失敗しました。');
 
-        $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
+        $isSent = $this->registerService->sendRegisteredEmail(to:$request['email']);
     
-        if (!$isSent) die('メール送信に失敗しました。');
-
+        // @todo log出力のみにする
+        if (!$isSent) die('メール送信に失敗しましたが、登録は完了しています。');
                     
-        // login
-        // ref：
-        // ・laravelのやり方（login trait）
-        // ・https://qiita.com/mpyw/items/bb8305ba196f5105be15
-        exit('login');
+        // post送信内容を引き継ぎたいので、307
+        return redirect(route:'login/login', status:307);
     }
 }

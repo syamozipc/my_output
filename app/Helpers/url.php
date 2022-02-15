@@ -10,9 +10,11 @@
  * @param string $route redirect先のpath
  * @return void
  */
-function redirect($route)
+function redirect($route, $replace = true, $status = 302)
 {
-    header('Location: ' . BASE_URL . $route);
+    $url = BASE_URL . $route;
+
+    return header("Location: {$url}", $replace, $status);
 }
 
 // function url($route) {

@@ -86,7 +86,7 @@ class RegisterService {
      * @param string $token
      * @return object|false
      */
-    public function getTemporarilyRegisteredUser(string $token):object|false
+    public function getTemporarilyRegisteredUser(string $emailVerifyToken):object|false
     {
         $sql = 'SELECT * FROM `users` WHERE `email_verify_token` = :email_verify_token AND `email_verify_token_created_at` >= :email_verify_token_created_at AND `email_verified_at` IS NULL AND `password` IS NULL';
 
@@ -95,7 +95,7 @@ class RegisterService {
 
         $user = $this->userModel->db
             ->prepare($sql)
-            ->bind(':email_verify_token', $token)
+            ->bind(':email_verify_token', $emailVerifyToken)
             ->bind(':email_verify_token_created_at', $tokenValidPeriod)
             ->executeAndFetch();
 
@@ -118,20 +118,21 @@ class RegisterService {
      */
     public function regsterUser($request)
     {
-        $sql = 'UPDATE users SET `email_verified_at` = :email_verified_at, `password` = :password, `api_token` = :api_token WHERE `email_verify_token` = :email_verify_token';
+        $sql = 'UPDATE users SET `email_verified_at` = :email_verified_at, `password` = :password, `api_token` = :api_token WHERE `email_verify_token` = :email_verify_token AND `email` = :email';
 
         $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
         $hashPassword = password_hash($request['password'], PASSWORD_BCRYPT);
 
-        $this->userModel->db
+        $isRegistered = $this->userModel->db
             ->prepare($sql)
             ->bind(':email_verified_at', $currentDateTime)
             ->bind(':password', $hashPassword)
             ->bind(':api_token', str_random(length:80))
             ->bind(':email_verify_token', $request['email_verify_token'])
+            ->bind(':email', $request['email'])
             ->execute();
 
-        return;
+        return $isRegistered;
     }
 
     public function sendRegisteredEmail(string $to):bool
