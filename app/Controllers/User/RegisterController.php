@@ -8,6 +8,7 @@ use App\Validators\User\{TemporaryRegisterValidator, RegisterValidator};
 
 class RegisterController extends Controller {
     use \App\Traits\SessionTrait;
+    use \App\Traits\LoginTrait;
 
     public RegisterService $registerService;
     public UserService $userService;
@@ -132,13 +133,15 @@ class RegisterController extends Controller {
         $this->registerService->regsterUser(request:$request);
 
         $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['email_verify_token']);
-        
+
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
 
         // @todo log出力のみにする
         if (!$isSent) die('メール送信に失敗しましたが、登録は完了しています。');
                     
-        // post送信内容を引き継ぎたいので、307
-        return redirect(route:'login/login', status:307);
+        // @todo loginServiceの方が良さそう（traitはinstance化できないので）
+        $this->baseLogin(email:$user->email, password:$request['password'], model:$this->userModel);
+
+        return redirect('mypage/index');
     }
 }

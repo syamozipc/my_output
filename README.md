@@ -30,6 +30,8 @@ https://github.com/syamozipc/my_output
 -   [ ] 認証機能
     -   [x] メール認証での新規登録
     -   [ ] ログイン/ログアウト
+    -   [ ] remember token
+    -   [ ] last logind at
     -   [ ] パスワードリセット
     -   [ ] user ページ
     -   [ ] SNS ログイン

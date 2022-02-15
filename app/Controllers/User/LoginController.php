@@ -13,7 +13,9 @@ class LoginController extends Controller {
          * login
          * 
          * ・validation
+         * ・passwordとemailでlogin確認
          * ・session登録
+         * ・api更新（必要？）
          * ・mypageへ遷移
          */
         $description = "My Outputへようこそ\n好きなように練習してね";
