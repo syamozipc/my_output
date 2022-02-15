@@ -104,15 +104,15 @@ class RegisterController extends Controller {
             return redirect('register/tmpRegister');
         }
 
-        return $this->showRegisterForm(user:$user);
+        return $this->showRegisterForm(emailVerifyToken:$user->email_verify_token);
     }
 
-    private function showRegisterForm($user)
+    private function showRegisterForm($emailVerifyToken)
     {
         $data = [
             'css' => 'css/user/register/showRegisterForm.css',
             'js' => 'js/user/register/showRegisterForm.js',
-            'user' => $user
+            'emailVerifyToken' => $emailVerifyToken
         ];
 
         return $this->view(view:'user/register/showRegisterForm', data:$data);
@@ -129,13 +129,12 @@ class RegisterController extends Controller {
 
         // sendRegisterMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 
-        $isRegistered = $this->registerService->regsterUser(request:$request);
+        $this->registerService->regsterUser(request:$request);
 
-        // @todo validationに処理をまとめたい（該当のtokenとemailを持つユーザーがいるか）
-        if (!$isRegistered) die('新規登録に失敗しました。');
+        $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['email_verify_token']);
+        
+        $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
 
-        $isSent = $this->registerService->sendRegisteredEmail(to:$request['email']);
-    
         // @todo log出力のみにする
         if (!$isSent) die('メール送信に失敗しましたが、登録は完了しています。');
                     

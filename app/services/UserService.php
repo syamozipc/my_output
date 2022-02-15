@@ -30,4 +30,23 @@ class UserService {
 
         return $user;
     }
+
+    /**
+     * emailVerifyTokenからユーザーを取得
+     * 失敗時はfalseを返す
+     *
+     * @param int $id
+     * @return object|false $user
+     */
+    public function getUserByEmailVerifyToken(string $emailVerifyToken):object|false
+    {
+        $sql = 'SELECT * FROM users WHERE `email_verify_token` = :email_verify_token';
+
+        $user = $this->userModel->db
+            ->prepare($sql)
+            ->bind(':email_verify_token', $emailVerifyToken)
+            ->executeAndFetch();
+
+        return $user;
+    }
 }
