@@ -2,22 +2,23 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
-use App\Services\{RegisterService, UserService};
+use App\Services\{RegisterService, UserService, LoginService};
 use App\Models\User;
 use App\Validators\User\{TemporaryRegisterValidator, RegisterValidator};
 
 class RegisterController extends Controller {
     use \App\Traits\SessionTrait;
-    use \App\Traits\LoginTrait;
 
     public RegisterService $registerService;
     public UserService $userService;
+    public LoginService $loginService;
     public user $userModel;
 
     public function __construct()
     {
         $this->registerService = new RegisterService();
         $this->userService = new UserService();
+        $this->loginService = new LoginService();
         $this->userModel = new User();
     }
 
@@ -140,7 +141,7 @@ class RegisterController extends Controller {
         if (!$isSent) die('メール送信に失敗しましたが、登録は完了しています。');
                     
         // @todo loginServiceの方が良さそう（traitはinstance化できないので）
-        $this->baseLogin(email:$user->email, password:$request['password'], model:$this->userModel);
+        $this->loginService->baseLogin(email:$user->email, password:$request['password'], model:$this->userModel);
 
         return redirect('mypage/index');
     }

@@ -36,6 +36,7 @@ https://github.com/syamozipc/my_output
     -   [ ] user ページ
     -   [ ] SNS ログイン
 -   [ ] リファクタ
+    -   [ ] @todo 解消
     -   [ ] post モデルが post_detail モデルを持つよう、リレーションを作りたい
     -   [ ] モデルオブジェクトに引数を渡し、save するだけでテーブルに入るようにしたい
     -   [ ] session の unset が多分不十分（独習 PHP 参照）
