@@ -31,6 +31,12 @@ module.exports = {
         path: path.resolve(__dirname, 'public'),
         filename: 'js/[name].js',
     },
+    resolve: {
+        alias: {
+            '@sass': path.resolve(__dirname, 'resources/sass'),
+            '@js': path.resolve(__dirname, 'resources/js'),
+        },
+    },
     module: {
         rules: [
             {
