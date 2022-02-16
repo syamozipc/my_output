@@ -31,9 +31,7 @@ https://github.com/syamozipc/my_output
     -   [x] メール認証での新規登録
     -   [ ] ログイン/ログアウト
     -   [ ] remember token
-    -   [ ] last logind at
     -   [ ] パスワードリセット
-    -   [ ] user ページ
     -   [ ] SNS ログイン
 -   [ ] 自己結合の多対多（フォロー機能）
 -   [ ] AWS 実装
