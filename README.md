@@ -46,7 +46,6 @@ https://github.com/syamozipc/my_output
     -   [ ] user 登録時は、password の null を見ずに status_id に仮登録ステータスを追加し、そちらを見るようにしたい
     -   [ ] CSRF/XSS 対策
     -   [ ] PHP8 の機能（null 安全演算子、match 式）
--   [ ] ページネーション実装
 -   [ ] cron を利用したタスク作る
 -   [ ] 自己結合の多対多（フォロー機能）
 -   [ ] AWS 実装
