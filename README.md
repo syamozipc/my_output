@@ -45,7 +45,7 @@ https://github.com/syamozipc/my_output
     -   [ ] 定数はヘルパでドット繋ぎにしたい
     -   [ ] user 登録時は、password の null を見ずに status_id に仮登録ステータスを追加し、そちらを見るようにしたい
     -   [ ] CSRF/XSS 対策
-    -   [ ] PHP8 の機能（null 安全子、名前付き変数、match 式、str_contains）
+    -   [ ] PHP8 の機能（null 安全演算子、match 式）
 -   [ ] ページネーション実装
 -   [ ] cron を利用したタスク作る
 -   [ ] 自己結合の多対多（フォロー機能）
@@ -53,7 +53,6 @@ https://github.com/syamozipc/my_output
     -   [ ] 画像・動画を S3 に cludfront 経由でアップロード
     -   [ ] EC2 動かす
     -   [ ] RDS 使う
--   [ ] CKEditor 使う（ブログ的な機能）
 -   [ ] TypeScript 実装
 -   [ ] HTML/CSS 勉強後、マークアップ部分を改善
 
