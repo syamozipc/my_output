@@ -27,6 +27,9 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
+・最新版で学ぶ webpack5 入門読む
+・typescript 入門読む
+
 -   [ ] 認証機能
     -   [x] メール認証での新規登録
     -   [ ] ログイン/ログアウト
