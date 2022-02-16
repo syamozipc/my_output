@@ -35,7 +35,6 @@ https://github.com/syamozipc/my_output
     -   [ ] パスワードリセット
     -   [ ] user ページ
     -   [ ] SNS ログイン
--   [ ] cron を利用したタスク作る
 -   [ ] 自己結合の多対多（フォロー機能）
 -   [ ] AWS 実装
     -   [ ] 画像・動画を S3 に cludfront 経由でアップロード
