@@ -1,4 +1,4 @@
-import '../../../scss/user/post/show.scss';
+import '@scss/user/post/show.scss';
 
 // 削除確認モーダルの開閉処理
 const toggleModal = (modal, overlay) => {

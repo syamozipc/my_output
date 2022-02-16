@@ -1,7 +1,7 @@
 // scssのimport
-import '../../../scss/user/post/create.scss';
+import '@scss/user/post/create.scss';
 // jsのimport
-import * as $form from '../../_share/form';
+import * as $form from '@js/_share/form';
 
 $form.reflectInput();
 $form.displayInputImg();

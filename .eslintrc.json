@@ -4,8 +4,9 @@
         "browser": true
     },
     "rules": {
-        "indent": [2, 4],
+        "indent": [2, 4], // space4つでerrorが出ないようにする
         "no-alert": 0, // confirmは使いたい
-        "comma-dangle": 0 // 末尾のカンマはいらない派
+        "comma-dangle": 0, // 末尾のカンマはいらない派
+        "import/no-unresolved": 0 // jsファイルでのimportでerrorを発するので、一旦非表示
     }
 }

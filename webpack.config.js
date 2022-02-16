@@ -33,7 +33,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            '@sass': path.resolve(__dirname, 'resources/sass'),
+            '@scss': path.resolve(__dirname, 'resources/scss'),
             '@js': path.resolve(__dirname, 'resources/js'),
         },
     },

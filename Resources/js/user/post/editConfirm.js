@@ -1,1 +1,1 @@
-import '../../../scss/user/post/editConfirm.scss';
+import '@scss/user/post/editConfirm.scss';

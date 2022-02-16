@@ -1,1 +1,1 @@
-import '../../../scss/user/register/tmpRegister.scss';
+import '@scss/user/register/tmpRegister.scss';

@@ -1,1 +1,1 @@
-import '../../../scss/user/home/index.scss';
+import '@scss/user/home/index.scss';
