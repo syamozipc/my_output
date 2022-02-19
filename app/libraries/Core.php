@@ -39,9 +39,9 @@ class Core {
      */
     public function callFunction()
     {
-        $url = isset($_GET['url'])
-            ? $this->formatAndSanitizeUrl($_GET['url'])
-            : NULL;
+        $url = filter_input(INPUT_GET, 'url');
+
+        if ($url) $url = $this->formatAndSanitizeUrl($url);
 
             // fileがあれば、それをcontrollerとしてセット
         if (

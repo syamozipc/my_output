@@ -28,7 +28,6 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] 認証機能
-    -   [ ] ログイン/ログアウト
     -   [ ] remember token
     -   [ ] パスワードリセット
     -   [ ] SNS ログイン
@@ -48,6 +47,7 @@ https://github.com/syamozipc/my_output
     -   [ ] ルーティングを別のやり方にしたい
     -   [ ] 定数はヘルパでドット繋ぎにしたい
     -   [ ] user 登録時は、password の null を見ずに status_id に仮登録ステータスを追加し、そちらを見るようにしたい
+    -   [x] XSS 対策
     -   [ ] CSRF/XSS 対策
     -   [ ] PHP8 の機能（null 安全演算子、match 式）
 
