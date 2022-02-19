@@ -15,3 +15,13 @@ function old(string $key = null): string|int|array|null
         ? $_SESSION['old']
         : $_SESSION['old'][$key] ?? null;
 }
+
+/**
+ * userがログイン済みかどうか
+ *
+ * @return boolean
+ */
+function isLogedIn(): bool
+{
+    return isset($_SESSION['user_id']);
+}
