@@ -40,6 +40,7 @@ https://github.com/syamozipc/my_output
 -   [ ] HTML/CSS 勉強後、マークアップ部分を改善
 -   [ ] リファクタ
     -   [ ] @todo 解消
+    -   [ ] register 時、第 3 者にそのアドレスが登録されているか分からないようにする
     -   [ ] post モデルが post_detail モデルを持つよう、リレーションを作りたい
     -   [ ] モデルオブジェクトに引数を渡し、save するだけでテーブルに入るようにしたい
     -   [ ] session の unset が多分不十分（独習 PHP 参照）
