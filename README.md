@@ -43,13 +43,12 @@ https://github.com/syamozipc/my_output
     -   [ ] post モデルが post_detail モデルを持つよう、リレーションを作りたい
     -   [ ] モデルオブジェクトに引数を渡し、save するだけでテーブルに入るようにしたい
     -   [ ] session の unset が多分不十分（独習 PHP 参照）
-    -   [ ] file は動画/画像混在の複数投稿アップロードに対応させたい
-    -   [ ] ルーティングを別のやり方にしたい
-    -   [ ] 定数はヘルパでドット繋ぎにしたい
     -   [ ] user 登録時は、password の null を見ずに status_id に仮登録ステータスを追加し、そちらを見るようにしたい
+    -   [ ] file は動画/画像混在の複数投稿アップロードに対応させたい
+    -   [ ] Laravel のやり方に寄せる（定数はヘルパでドット繋ぎ、routing/名前付き route）
     -   [x] XSS 対策
-    -   [ ] CSRF/XSS 対策
-    -   [ ] PHP8 の機能（null 安全演算子、match 式）
+    -   [ ] CSRF 対策
+    -   [ ] PHP8 の機能を追加（null 安全演算子、match 式、名前付き引数、constructor 省略構文、str_contains）
 
 <!-- 実行済機能
 ・CRUD
