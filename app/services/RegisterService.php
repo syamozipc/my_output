@@ -5,7 +5,6 @@ use App\models\User;
 use DateTime;
 
 class RegisterService {
-    const Token_Valid_Period_Hour = 1;
     public object $userModel;
 
     public function __construct()
@@ -62,7 +61,7 @@ class RegisterService {
         mb_internal_encoding("UTF-8");
 
         $url = route('register/verifyEmail', "?token={$emailVerifyToken}");
-        $hour = self::Token_Valid_Period_Hour;
+        $hour = Token_Valid_Period_Hour;
 
         $subject = SITENAME . 'への仮登録が完了しました';
 
@@ -90,7 +89,7 @@ class RegisterService {
     {
         $sql = 'SELECT * FROM `users` WHERE `email_verify_token` = :email_verify_token AND `email_verify_token_created_at` >= :email_verify_token_created_at AND `email_verified_at` IS NULL AND `password` IS NULL';
 
-        $hour = self::Token_Valid_Period_Hour;
+        $hour = Token_Valid_Period_Hour;
         $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
         $user = $this->userModel->db

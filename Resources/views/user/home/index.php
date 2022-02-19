@@ -1,6 +1,6 @@
 <div>
     <p><?= $data['description']; ?></p>
-    <a href='<?= route('register/tmpRegister'); ?>'>会員登録はこちら</a>
+    <a href='<?= route('register/tmpRegisterForm'); ?>'>会員登録はこちら</a>
     <br>
     <a href='<?= route('login/showLoginForm'); ?>'>ログインはこちら</a>
     <br>

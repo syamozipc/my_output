@@ -24,3 +24,4 @@ const Counrty = [
 ];
 
 const DateTime_Default_Format = 'Y-m-d H:i:s';
+const Token_Valid_Period_Hour = 24;

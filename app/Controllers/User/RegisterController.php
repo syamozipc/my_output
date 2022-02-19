@@ -27,14 +27,14 @@ class RegisterController extends Controller {
      *
      * @return void
      */
-    public function tmpRegister()
+    public function tmpRegisterForm()
     {
         $data = [
-            'css' => 'css/user/register/tmpRegister.css',
-            'js' => 'js/user/register/tmpRegister.js',
+            'css' => 'css/user/register/tmpRegisterForm.css',
+            'js' => 'js/user/register/tmpRegisterForm.js',
         ];
 
-        return $this->view(view:'user/register/tmpRegister', data:$data);
+        return $this->view(view:'user/register/tmpRegisterForm', data:$data);
     }
 
     /**
@@ -54,7 +54,7 @@ class RegisterController extends Controller {
         $validator = new TemporaryRegisterValidator();
         $isValidated = $validator->validate(post:$request);
 
-        if (!$isValidated) return redirect('register/tmpRegister');
+        if (!$isValidated) return redirect('register/tmpRegisterForm');
 
         try {
             /**
@@ -107,7 +107,7 @@ class RegisterController extends Controller {
         if (!$user) {
             $this->setFlashSession(key:"error_email", param:'無効なURLです。再度メールアドレスを入力してください。');
 
-            return redirect('register/tmpRegister');
+            return redirect('register/tmpRegisterForm');
         }
 
         return $this->showRegisterForm(emailVerifyToken:$user->email_verify_token);
