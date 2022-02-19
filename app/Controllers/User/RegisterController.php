@@ -38,8 +38,12 @@ class RegisterController extends Controller {
     }
 
     /**
-     * 会員登録フォームに入力されたemail、token、token生成時間をusersテーブルに保存し、
-     * 本登録用URLを記載したメールを送信
+     * 1.会員登録フォームに入力されたemailが本登録済みでないか確認
+     * 2.下記をDBに保存
+     *   ・会員登録フォームに入力されたemail
+     *   ・URLに加えるために生成したtoken
+     *   ・token生成時間
+     * 3.本登録用URL（生成したtokenをクエリに持たせている）を記載したメールを送信
      *
      * @return void
      */
