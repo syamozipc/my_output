@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use App\models\User;
-use DateTime;
 
 class UserService {
     public User $userModel;

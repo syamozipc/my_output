@@ -9,13 +9,13 @@ use App\Models\User;
 class LoginController extends Controller {
     use \App\Traits\SessionTrait;
 
-    public LoginService $loginService;
     public user $userModel;
+    public LoginService $loginService;
 
     public function __construct()
     {
-        $this->loginService = new LoginService();
         $this->userModel = new User();
+        $this->loginService = new LoginService();
     }
 
 

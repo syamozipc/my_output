@@ -2,20 +2,32 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
+use App\Models\User;
+use App\Services\UserService;
 
 class MypageController extends Controller {
+    use \App\Traits\SessionTrait;
+
+    private UserService $userService;
+
+    public function __construct()
+    {
+        $this->userService = new UserService();
+    }
 
     public function index()
     {
-        echo '<pre>';var_dump('mypage/indexです');die;
-        $description = "My Outputへようこそ\n好きなように練習してね";
+        $description = 'My Page';
+        $userId = $this->getSession('user_id');
 
-        $data = [
-            'css' => 'css/user/home/index.css',
-            'js' => 'js/user/home/index.js',
-            'description' => $description
+        $user = $this->userService->getUserById($userId);
+
+
+        $data = [   
+            'description' => $description,
+            'user' => $user
         ];
 
-        $this->view(view:'user/home/index', data:$data);
+        $this->view(view:'user/mypage/index', data:$data);
     }
 }
