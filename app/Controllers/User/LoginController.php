@@ -2,30 +2,50 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
+use App\Validators\User\LoginValidator;
+use App\Services\LoginService;
+use App\Models\User;
 
 class LoginController extends Controller {
+    use \App\Traits\SessionTrait;
+
+    public LoginService $loginService;
+    public user $userModel;
+
+    public function __construct()
+    {
+        $this->loginService = new LoginService();
+        $this->userModel = new User();
+    }
+
+
+    public function showLoginForm()
+    {
+        $data = [
+            'css' => 'css/user/login/showLoginForm.css',
+            'js' => 'js/user/login/showLoginForm.js',
+        ];
+
+        $this->view(view: 'user/login/showLoginForm', data:$data);
+    }
 
     public function login()
     {
-        echo '<pre>';var_dump($_POST);die;
-        // ・https://qiita.com/mpyw/items/bb8305ba196f5105be15
-        /**
-         * login
-         * 
-         * ・validation
-         * ・passwordとemailでlogin確認
-         * ・session登録
-         * ・api更新（必要？）
-         * ・mypageへ遷移
-         */
-        $description = "My Outputへようこそ\n好きなように練習してね";
+        $request = filter_input_array(INPUT_POST);
 
-        $data = [
-            'css' => 'css/user/home/index.css',
-            'js' => 'js/user/home/index.js',
-            'description' => $description
-        ];
+        $validator = new LoginValidator();
+        $isValidated = $validator->validate($request);
 
-        $this->view(view:'user/home/index', data:$data);
+        if (!$isValidated) return redirect('login/showLoginForm');
+
+        $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password'], model:$this->userModel);
+
+        if (!$isLogedIn) {
+            $this->setFlashSession(key:"error_email", param:'ログインに失敗しました。');
+
+            return redirect('mypage/index');
+        }
+
+        return redirect('mypage/index');
     }
 }

@@ -136,7 +136,7 @@ class PostController extends Controller {
             'post' => $post,
         ];
 
-        return $this->view(view:'user/post/edit_confirm', data:$data);
+        return $this->view(view:'user/post/editConfirm', data:$data);
     }
 
     public function update(int $id)

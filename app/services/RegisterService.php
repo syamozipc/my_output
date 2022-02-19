@@ -142,7 +142,7 @@ class RegisterService {
     
             $subject = SITENAME . 'への本登録が完了しました';
 
-            $loginUrl = route('user/login');
+            $loginUrl = route('login/showLoginForm');
             $topUrl = route('user/home/index');
     
             $body = <<<EOD

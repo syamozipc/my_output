@@ -81,7 +81,7 @@ class RegisterController extends Controller {
             'email' => $request['email']
         ];
 
-        return $this->view(view:'user/register/success_temporary_register', data:$data);
+        return $this->view(view:'user/register/successTemporaryRegister', data:$data);
     }
 
     /**
@@ -140,7 +140,6 @@ class RegisterController extends Controller {
         // @todo log出力のみにする
         if (!$isSent) die('メール送信に失敗しましたが、登録は完了しています。');
                     
-        // @todo loginServiceの方が良さそう（traitはinstance化できないので）
         $this->loginService->baseLogin(email:$user->email, password:$request['password'], model:$this->userModel);
 
         return redirect('mypage/index');
