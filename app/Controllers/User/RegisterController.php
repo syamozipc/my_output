@@ -62,10 +62,7 @@ class RegisterController extends Controller {
              */
             $this->userModel->db->beginTransaction();
 
-            /**
-            * @todo 送り直しの都度tokenが同じなのは微妙？
-            */
-            $emailVerifyToken = base64_encode($request['email']);
+            $emailVerifyToken = str_random(60);// 業務で使っているlaravelのtokenも60字だったので
 
             $this->registerService->temporarilyRegister(email:$request['email'], emailVerifyToken:$emailVerifyToken);
 
@@ -93,8 +90,8 @@ class RegisterController extends Controller {
      * ・emailとquery stringのtokenがテーブルのレコードと合致するか
      * ・token発行から指定時間以内のアクセスか
      * をチェックし、
-     * ・指定時間以内なら本登録案内
-     * ・指定時間を過ぎていたら再度仮登録メールを送る
+     * ・どちらも満たせば本登録案内
+     * ・片方でも満たさなければ仮登録画面へ遷移
      *
      * @return void
      */
@@ -110,7 +107,7 @@ class RegisterController extends Controller {
             return redirect('register/tmpRegisterForm');
         }
 
-        return $this->showRegisterForm(emailVerifyToken:$user->email_verify_token);
+        return $this->showRegisterForm(emailVerifyToken:$user->register_token);
     }
 
     private function showRegisterForm($emailVerifyToken)
@@ -131,13 +128,13 @@ class RegisterController extends Controller {
         $validator = new RegisterValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect("register/verifyEmail?token={$request['email_verify_token']}");
+        if (!$isValidated) return redirect("register/verifyEmail?token={$request['register_token']}");
 
         // sendRegisterMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 
         $this->registerService->regsterUser(request:$request);
 
-        $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['email_verify_token']);
+        $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['register_token']);
 
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
 

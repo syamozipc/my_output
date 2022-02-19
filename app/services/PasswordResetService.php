@@ -4,7 +4,7 @@ namespace App\Services;
 use App\models\User;
 use DateTime;
 
-class RegisterService {
+class PasswordResetService {
     public object $userModel;
 
     public function __construct()
@@ -13,62 +13,58 @@ class RegisterService {
     }
 
     /**
-     * ユーザーを仮登録し、本登録メールを送信
+     * password_resetsテーブルに情報をinsert（もしくはupdate）
      *
      * @param string $email
      * @return void
      */
-    public function temporarilyRegister(string $email, string $emailVerifyToken)
+    public function savePasswordResetRequest(string $email, string $passwordResetToken)
     {
-        // 仮登録済みかどうか（本登録済みの場合は、validationで弾かれている）
-        // $userが取れれば仮登録済み、いなければ未登録
-        $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `password` IS NULL';
+        $sql = 'SELECT * FROM `password_resets` WHERE `email` = :email';
 
-        // $userがいればobject、いなければfalseが返る
+        // 期限切れ含め、既にパスワードリセットフロー中か（$userが取れればフロー中、取れなければfalseが返る）
         $user = $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(':email', $email)
+            ->bind(param:':email', value:$email)
             ->executeAndFetch();
         
-        // 仮登録済みかどうかで UPDATE/INSERT 分岐
+        // レコードがあるかどうかで UPDATE/INSERT 分岐
         $sql = $user
-            ? 'UPDATE `users` SET `register_token` = :register_token, `register_token_sent_at` = :register_token_sent_at WHERE `email` = :email'
-            : 'INSERT INTO `users` (`email`, `register_token`, `register_token_sent_at`) VALUES (:email, :register_token, :register_token_sent_at)';
+            ? 'UPDATE `password_resets` SET `token` = :token, `token_sent_at` = :token_sent_at WHERE `email` = :email'
+            : 'INSERT INTO `password_resets` (`email`, `token`, `token_sent_at`) VALUES (:email, :token, :token_sent_at)';
 
         $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
 
         $this->userModel->db
-            ->prepare($sql)
-            ->bind(':email', $email)
-            ->bind(':register_token', $emailVerifyToken)
-            ->bind(':register_token_sent_at', $currentDateTime)
+            ->prepare(sql:$sql)
+            ->bind(param:':email', value:$email)
+            ->bind(param:':token', value:$passwordResetToken)
+            ->bind(param:':token_sent_at', value:$currentDateTime)
             ->execute();
 
         return;
     }
 
     /**
-     * 仮登録完了メールを送信
+     * パスワードリセット用メールを送信
      *
      * @param string $email
      * @param string $token
      * @return boolean 送信成功でtrue、失敗でfalseが返る
      */
-    public function sendEmail(string $to, string $emailVerifyToken):bool
+    public function sendEmail(string $to, string $passwordResetToken):bool
     {
         // 無くてもいけるかも
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $url = route('register/verifyEmail', "?token={$emailVerifyToken}");
+        $url = route('passwordReset/verifyEmail', "?token={$passwordResetToken}");
         $hour = Token_Valid_Period_Hour;
 
-        $subject = SITENAME . 'への仮登録が完了しました';
+        $subject = '【' . SITENAME . '】' . 'パスワードリセット用URLをお送りします。';
 
         $body = <<<EOD
-            会員登録ありがとうございます！
-
-            {$hour}時間以内に下記URLへアクセスし、本登録を完了してください。
+            下記URLへ{$hour}時間以内に下記URLへアクセスし、パスワードの変更を完了してください。
             {$url}
             EOD;
 
@@ -85,17 +81,17 @@ class RegisterService {
      * @param string $token
      * @return object|false
      */
-    public function getTemporarilyRegisteredUser(string $emailVerifyToken):object|false
+    public function getValidRequestByToken(string $passwordResetToken):object|false
     {
-        $sql = 'SELECT * FROM `users` WHERE `register_token` = :register_token AND `register_token_sent_at` >= :register_token_sent_at AND `register_token_verified_at` IS NULL AND `password` IS NULL';
+        $sql = 'SELECT * FROM `password_resets` WHERE `token` = :token AND `token_sent_at` >= :token_sent_at';
 
         $hour = Token_Valid_Period_Hour;
         $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
         $user = $this->userModel->db
-            ->prepare($sql)
-            ->bind(':register_token', $emailVerifyToken)
-            ->bind(':register_token_sent_at', $tokenValidPeriod)
+            ->prepare(sql:$sql)
+            ->bind(param:':token', value:$passwordResetToken)
+            ->bind(param:':token_sent_at', value:$tokenValidPeriod)
             ->executeAndFetch();
 
         return $user;
@@ -112,12 +108,12 @@ class RegisterService {
         $sql = 'UPDATE users SET `register_token_verified_at` = :register_token_verified_at, `password` = :password, `api_token` = :api_token WHERE `register_token` = :register_token';
 
         $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
-        $hashedPassword = password_hash($request['password'], PASSWORD_BCRYPT);
+        $hashPassword = password_hash($request['password'], PASSWORD_BCRYPT);
 
         $isRegistered = $this->userModel->db
             ->prepare($sql)
             ->bind(':register_token_verified_at', $currentDateTime)
-            ->bind(':password', $hashedPassword)
+            ->bind(':password', $hashPassword)
             ->bind(':api_token', str_random(length:80))
             ->bind(':register_token', $request['register_token'])
             ->execute();

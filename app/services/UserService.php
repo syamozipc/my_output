@@ -16,18 +16,36 @@ class UserService {
      * idからユーザーを取得
      *
      * @param int $id
-     * @return object $user
+     * @return object|false $userOrFalse
      */
-    public function getUserById(int $id):object
+    public function getUserById(int $id): object|false
     {
         $sql = 'SELECT * FROM users WHERE `id` = :id';
 
-        $user = $this->userModel->db
+        $userOrFalse = $this->userModel->db
             ->prepare($sql)
             ->bind(':id', $id)
             ->executeAndFetch();
 
-        return $user;
+        return $userOrFalse;
+    }
+
+    /**
+     * emailからユーザーを取得
+     *
+     * @param string $email
+     * @return object|false $userOrFalse
+     */
+    public function getUserByEmail(string $email): object|false
+    {
+        $sql = 'SELECT * FROM users WHERE `email` = :email';
+
+        $userOrFalse = $this->userModel->db
+            ->prepare($sql)
+            ->bind(':email', $email)
+            ->executeAndFetch();
+
+        return $userOrFalse;
     }
 
     /**
@@ -39,16 +57,22 @@ class UserService {
      */
     public function getUserByEmailVerifyToken(string $emailVerifyToken):object|false
     {
-        $sql = 'SELECT * FROM users WHERE `email_verify_token` = :email_verify_token';
+        $sql = 'SELECT * FROM users WHERE `register_token` = :register_token';
 
-        $user = $this->userModel->db
+        $userOrFalse = $this->userModel->db
             ->prepare($sql)
-            ->bind(':email_verify_token', $emailVerifyToken)
+            ->bind(':register_token', $emailVerifyToken)
             ->executeAndFetch();
 
-        return $user;
+        return $userOrFalse;
     }
 
+    /**
+     * ユーザーがログイン中、HTTPリクエストの都度、usersテーブルのlast_login_atを更新する
+     *
+     * @param integer $userId
+     * @return void
+     */
     public function updateLastLogin(int $userId)
     {
         $sql = 'UPDATE users SET `last_login_at` = :last_login_at WHERE `id` = :id';
@@ -63,4 +87,26 @@ class UserService {
 
         return;
     }
+
+    /**
+     * パスワードを変更
+     *
+     * @param integer $userId
+     * @return void
+     */
+    public function updatePassword(string $email, string $password)
+    {
+        $sql = 'UPDATE users SET `password` = :password WHERE `email` = :email';
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+        $this->userModel->db
+            ->prepare(sql:$sql)
+            ->bind(param:':password', value:$hashedPassword)
+            ->bind(param:':email', value:$email)
+            ->execute();
+
+        return;
+    }
+
+
 }

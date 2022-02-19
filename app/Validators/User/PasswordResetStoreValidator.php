@@ -3,7 +3,7 @@ namespace App\Validators\User;
 
 use App\Libraries\Validator;
 
-class RegisterValidator extends Validator{
+class PasswordResetStoreValidator extends Validator{
     public bool $hasError = false;
 
     public function __construct()
@@ -14,14 +14,14 @@ class RegisterValidator extends Validator{
     public function validate($request)
     {
         // ここのエラーは現状、verifyEmail()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
-        $this->validateEmailVerifyToken(token:$request['register_token']);
+        $this->validatePasswordResetToken(token:$request['password_reset_token']);
         $this->validatePassword(password:$request['password']);
         $this->validatePasswordConfirmation(password:$request['password'], passwordConfirmation:$request['password_confirmation']);
 
         return !$this->hasError;
     }
 
-    private function validateEmailVerifyToken($token)
+    private function validatePasswordResetToken($token)
     {
         if (!$this->isfilled(key:'register_token', param:$token)) return $this->hasError = true;
 

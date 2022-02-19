@@ -1,13 +1,13 @@
 <section>
-    <p>本会員登録</p>
-    <form action="<?= route('register/register') ?>" method="POST">
+    <p>パスワードリセット</p>
+    <form action="<?= route('passwordReset/reset') ?>" method="POST">
         <?= csrf() ?>
-        <input type="hidden" name="register_token" value="<?= $data['emailVerifyToken'] ?>">
-        <?php if (old('error_register_token')) : ?>
-            <p class="error__message">※<?= old('error_register_token') ?></p>
+        <input type="hidden" name="password_reset_token" value="<?= $data['passwordResetToken'] ?>">
+        <?php if (old('error_password_reset_token')) : ?>
+            <p class="error__message">※<?= old('error_password_reset_token') ?></p>
         <?php endif; ?>
 
-        <label>パスワード
+        <label>新しいパスワード
             <br>
             <input type="password" name="password">
         </label>
