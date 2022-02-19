@@ -35,6 +35,7 @@
         <a href="<?= route('post/edit', $data['post']->id); ?>">編集</a>
         &nbsp;
         <form action="<?= route('post/delete', $data['post']->id); ?>" method="POST" class="js-delete-form">
+            <?= csrf() ?>
             <input type="submit" value="削除" class="btn-open-modal js-btn-open-modal">
         </form>
     </div>

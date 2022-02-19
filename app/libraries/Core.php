@@ -7,6 +7,8 @@ namespace App\Libraries;
  * URL FORMAT - /controller/method/params
  */
 class Core {
+    use \App\Traits\SessionTrait;
+
     protected $currentController = 'HomeController';
     protected $currentMethod = 'index';
     protected $params = [];
@@ -14,6 +16,8 @@ class Core {
     public function __construct()
     {
         $this->initSession();
+        $this->checkCSRF();
+        $this->initCSRF();
         $this->callFunction();
     }
 
@@ -31,6 +35,46 @@ class Core {
             unset($_SESSION['flash']);
         } else {
             $_SESSION['old'] = [];
+        }
+    }
+
+    /**
+     * postリクエスト時、
+     * ・csrf tokenが設定されているか
+     * ・sessionのtokenの値と同一か
+     * をチェックし、不正ならひとつ前のURLへ戻す
+     *
+     * @return void
+     */
+    public function checkCSRF()
+    {   
+        // post以外はcheck不要
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
+        
+        $csrfToken = filter_input(INPUT_POST, 'csrf_token');
+
+        // csrf tokenが正しければOK
+        if (isset($csrfToken) && $csrfToken === $_SESSION['csrf_token']) return;
+
+        $this->setFlashSession(key:"error_status", param:'正規の画面からご利用ください。');
+
+        // 直前のリクエストから必要部分を取得
+        preg_match('|my_output/(.*)$|', $_SERVER['HTTP_REFERER'], $matches);
+
+        $prevUrl = $matches[1] ?? 'home/index';
+
+        return redirect($prevUrl);    
+    }
+    
+    /**
+     * csrfがsessionに保存されていなければ、新たに作成
+     *
+     * @return void
+     */
+    public function initCSRF()
+    {   
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(24));
         }
     }
 

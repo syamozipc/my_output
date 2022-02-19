@@ -1,6 +1,7 @@
 <section>
     <p>ログイン</p>
     <form action="<?= route('login/login') ?>" method="POST">
+        <?= csrf() ?>
         <label>メールアドレス
             <br>
             <input type="email" name="email">

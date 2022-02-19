@@ -51,3 +51,15 @@ function isLogedIn(): bool
 {
     return isset($_SESSION['user_id']);
 }
+
+/**
+ * csrf tokenを取得
+ *
+ * @return string
+ */
+function csrf(): string
+{
+    $csrfToken = $_SESSION['csrf_token'];
+    return "<input type='hidden' name='csrf_token' value='{$csrfToken}'>";
+}
+?>
