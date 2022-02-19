@@ -9,23 +9,25 @@ class MypageController extends Controller {
     use \App\Traits\SessionTrait;
 
     private UserService $userService;
+    private $user;
 
     public function __construct()
     {
         $this->userService = new UserService();
+        
+        $userId = $this->getSession('user_id');
+        $this->user = $this->userService->getUserById($userId);
+
+        $this->userService->updateLastLogin(userId:$this->user->id);
     }
 
     public function index()
     {
         $description = 'My Page';
-        $userId = $this->getSession('user_id');
-
-        $user = $this->userService->getUserById($userId);
-
 
         $data = [   
             'description' => $description,
-            'user' => $user
+            'user' => $this->user
         ];
 
         $this->view(view:'user/mypage/index', data:$data);

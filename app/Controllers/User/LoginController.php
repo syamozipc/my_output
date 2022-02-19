@@ -21,6 +21,8 @@ class LoginController extends Controller {
 
     public function showLoginForm()
     {
+        if (isLogedIn()) return redirect('mypage/index');
+        
         $data = [
             'css' => 'css/user/login/showLoginForm.css',
             'js' => 'js/user/login/showLoginForm.js',

@@ -48,4 +48,19 @@ class UserService {
 
         return $user;
     }
+
+    public function updateLastLogin(int $userId)
+    {
+        $sql = 'UPDATE users SET `last_login_at` = :last_login_at WHERE `id` = :id';
+
+        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
+
+        $this->userModel->db
+            ->prepare($sql)
+            ->bind(':last_login_at', $currentDateTime)
+            ->bind(':id', $userId)
+            ->execute();
+
+        return;
+    }
 }

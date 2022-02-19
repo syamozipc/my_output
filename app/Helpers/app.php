@@ -41,3 +41,13 @@ function bre(string $string = null): ?string
 
     return nl2br(htmlspecialchars(string:$string));
 }
+
+/*
+ * userがログイン済みかどうか
+ *
+ * @return boolean
+ */
+function isLogedIn(): bool
+{
+    return isset($_SESSION['user_id']);
+}
