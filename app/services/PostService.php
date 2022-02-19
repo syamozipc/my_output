@@ -62,7 +62,7 @@ class PostService {
      * @param array $post 投稿内容
      * @return void
      */
-    public function savePost(array $post): void
+    public function savePost(array $post, int $userId): void
     {
         try {
             $this->postModel->db->beginTransaction();
@@ -70,7 +70,7 @@ class PostService {
             $sql = 'INSERT INTO posts (user_id, country_id, description) VALUES (:user_id, :country_id, :description)';
 
             $this->postModel->db->prepare($sql)
-                ->bind(':user_id', 1)
+                ->bind(':user_id', $userId)
                 ->bind(':country_id', $post['country_id'])
                 ->bind(':description', $post['description'])
                 ->execute();

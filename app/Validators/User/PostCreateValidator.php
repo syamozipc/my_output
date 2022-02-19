@@ -11,15 +11,15 @@ class PostCreateValidator extends Validator{
         parent::__construct();
     }
 
-    public function validate($post, $files)
+    public function validate($request, $files)
     {
-        $this->validateCountryId(countryId:$post['country_id']);
-        $this->validateDescription(description:$post['description']);
+        $this->validateCountryId(countryId:$request['country_id']);
+        $this->validateDescription(description:$request['description']);
         $this->validateFiles(file:$files);
 
         if ($this->hasError) {
-            $this->setFlashSession(key:'country_id', param:$post['country_id']);
-            $this->setFlashSession(key:'description', param:$post['description']);
+            $this->setFlashSession(key:'country_id', param:$request['country_id']);
+            $this->setFlashSession(key:'description', param:$request['description']);
         }
 
         return !$this->hasError;

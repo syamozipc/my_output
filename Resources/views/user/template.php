@@ -10,9 +10,12 @@
     <?php endif; ?>
 </head>
 <body>
-    <?php require_once($viewFile) ?>
-    <?php if (isset($data['js'])) : ?>
-        <script src="<?= public_url($data['js']); ?>"></script>
-    <?php endif; ?>
+    <?php require_once(base_path('resources/views/components/errors/status.php')) ?>
+    <main class="main">
+        <?php require_once($viewFile) ?>
+        <?php if (isset($data['js'])) : ?>
+            <script src="<?= public_url($data['js']); ?>"></script>
+        <?php endif; ?>
+    </main>
 </body>
 </html>

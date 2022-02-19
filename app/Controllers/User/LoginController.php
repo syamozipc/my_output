@@ -41,9 +41,9 @@ class LoginController extends Controller {
         $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password'], model:$this->userModel);
 
         if (!$isLogedIn) {
-            $this->setFlashSession(key:"error_email", param:'ログインに失敗しました。');
+            $this->setFlashSession(key:"error_status", param:'ログインに失敗しました。');
 
-            return redirect('mypage/index');
+            return redirect('login/showLoginForm');
         }
 
         return redirect('mypage/index');

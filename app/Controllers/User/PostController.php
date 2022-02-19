@@ -7,6 +7,8 @@ use App\Models\{Country, Post};
 use App\Validators\User\{PostCreateValidator, PostEditValidator, PostDeleteValidator};
 
 class PostController extends Controller {
+    use \App\Traits\SessionTrait;
+
     public $countryService;
     public $postService;
 
@@ -37,7 +39,7 @@ class PostController extends Controller {
         // 国一覧を取得
         $countriesList = $this->countryService->fetchCountriesList();
 
-        $post = new Post(old() ?: $_POST);
+        $post = new Post(old() ?: filter_input_array(INPUT_POST));
 
         $data = [
             'css' => 'css/user/post/create.css',
@@ -51,16 +53,18 @@ class PostController extends Controller {
 
     public function confirm()
     {
+        $request = filter_input_array(INPUT_POST);
+
         $validator = new PostCreateValidator();
-        $isValidated = $validator->validate(post:$_POST, files:$_FILES);
+        $isValidated = $validator->validate(request:$request, files:$_FILES);
 
         if (!$isValidated) return redirect('post/create');
 
-        $post = new Post(old() ?: $_POST);
+        $post = new Post(old() ?: $request);
 
         $filePath = $this->postService->uploadFileToPublic($_FILES);
 
-        $country = $this->countryService->fetchCountryByID($_POST['country_id']);
+        $country = $this->countryService->fetchCountryByID($request['country_id']);
 
         $data = [
             'css' => 'css/user/post/confirm.css',
@@ -75,8 +79,17 @@ class PostController extends Controller {
 
     public function save()
     {
+        $request = filter_input_array(INPUT_POST);
+        $userId = $this->getSession('user_id');
+
+        if (!$userId) {
+            $this->setFlashSession(key:"error_status", param:'ログインしてください。');
+
+            return redirect('login/showLoginForm');
+        }
+
         // path含めpost・post_detailsテーブルに保存
-        $this->postService->savePost(post:$_POST);
+        $this->postService->savePost(post:$request, userId:$userId);
 
         return redirect('post/index');
     }
@@ -98,9 +111,11 @@ class PostController extends Controller {
     {
         $post = $this->postService->fetchPostById($id);
 
-        if (old() || $_POST) {
-            $post->country_id = old('country_id') ?? $_POST['country_id'];
-            $post->description = old('description') ?? $_POST['description'];
+        $request = filter_input_array(INPUT_POST);
+
+        if (old() || $request) {
+            $post->country_id = old('country_id') ?? $request['country_id'];
+            $post->description = old('description') ?? $request['description'];
         }
 
         $countriesList = $this->countryService->fetchCountriesList();
@@ -117,17 +132,19 @@ class PostController extends Controller {
 
     public function editConfirm($id)
     {
+        $request = filter_input_array(INPUT_POST);
+
         $validator = new PostEditValidator();
-        $isValidated = $validator->validate($_POST);
+        $isValidated = $validator->validate($request);
 
         if (!$isValidated) return redirect("post/edit/{$id}");
 
         $post = $this->postService->fetchPostById($id);
 
-        $post->country_id = $_POST['country_id'];
-        $post->description = $_POST['description'];
+        $post->country_id = $request['country_id'];
+        $post->description = $request['description'];
 
-        $country = $this->countryService->fetchCountryByID($_POST['country_id']);
+        $country = $this->countryService->fetchCountryByID($request['country_id']);
         $post->country_name = $country->name;
 
         $data = [
@@ -142,7 +159,7 @@ class PostController extends Controller {
     public function update(int $id)
     {
         // path含めpost・post_detailsテーブルに保存
-        $this->postService->updatePost(post:$_POST, id:$id);
+        $this->postService->updatePost(post:filter_input_array(INPUT_POST), id:$id);
 
         return redirect("post/show/{$id}");
     }
