@@ -23,21 +23,24 @@
                             class="js-imgContent"
                         >
                     </td>
-                    <td class="js-description"><?= $data['post']->description ?></td>
+                    <td class="js-description"><?= bre($data['post']->description) ?></td>
                     <td><?= $data['post']->country_name ?></td>
                     <td><?= $data['post']->user_name ?></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <p>
+
+    <div>
         <a href="<?= route('post/edit', $data['post']->id); ?>">編集</a>
         &nbsp;
         <form action="<?= route('post/delete', $data['post']->id); ?>" method="POST" class="js-delete-form">
             <input type="submit" value="削除" class="btn-open-modal js-btn-open-modal">
         </form>
-    </p>
+    </div>
+
     <p><a href="<?= route('post/index'); ?>">一覧へ戻る</a></p>
+
     <!-- モーダル -->
     <div class="modal js-modal is-hidden">
         <button class="btn-close-modal js-btn-close-modal">×</button>

@@ -31,6 +31,7 @@ const deleteConfirm = () => {
         e.preventDefault();
 
         modalImgContent.src = imgContent.src;
+
         modalDescription.textContent = description.textContent;
 
         modalImgContent.addEventListener(

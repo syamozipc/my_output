@@ -28,9 +28,9 @@
                             >
                         </a>
                     </td>
-                    <td><?= $post->description ?></td>
+                    <td><?= bre($post->description) ?></td>
                     <td><?= $post->country_name ?></td>
-                    <td><?= $post->user_name ?></td>
+                    <td><?= e($post->user_name) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

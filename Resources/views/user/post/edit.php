@@ -41,7 +41,7 @@
         <br>
         <br>
 
-        <textarea name="description" cols="70" rows="10"><?= $data['post']->description ?></textarea>
+        <textarea name="description" cols="70" rows="10"><?= e($data['post']->description) ?></textarea>
 
         <?php if (old('error_description')) : ?>
             <p class="error__message">※<?= old('error_description') ?></p>
