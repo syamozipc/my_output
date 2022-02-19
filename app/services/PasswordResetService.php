@@ -98,54 +98,19 @@ class PasswordResetService {
     }
 
     /**
-     * userを本登録する
+     * パスワード変更が完了し、不要になったレコードを削除する
      *
-     * @param array $request
      * @return void
      */
-    public function regsterUser($request)
+    public function delete($passwordResetToken)
     {
-        $sql = 'UPDATE users SET `register_token_verified_at` = :register_token_verified_at, `password` = :password, `api_token` = :api_token WHERE `register_token` = :register_token';
+        $sql = 'DELETE FROM `password_resets` WHERE `token` = :token';
 
-        $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
-        $hashPassword = password_hash($request['password'], PASSWORD_BCRYPT);
+        $user = $this->userModel->db
+            ->prepare(sql:$sql)
+            ->bind(param:':token', value:$passwordResetToken)
+            ->executeAndFetch();
 
-        $isRegistered = $this->userModel->db
-            ->prepare($sql)
-            ->bind(':register_token_verified_at', $currentDateTime)
-            ->bind(':password', $hashPassword)
-            ->bind(':api_token', str_random(length:80))
-            ->bind(':register_token', $request['register_token'])
-            ->execute();
-
-        return $isRegistered;
-    }
-
-    public function sendRegisteredEmail(string $to):bool
-    {
-            // 無くてもいけるかも
-            mb_language("Japanese");
-            mb_internal_encoding("UTF-8");
-    
-            $subject = SITENAME . 'への本登録が完了しました';
-
-            $loginUrl = route('login/showLoginForm');
-            $topUrl = route('user/home/index');
-    
-            $body = <<<EOD
-                会員登録ありがとうございます！
-
-                本登録が完了しました。
-
-                ログインページはコチラ：
-                $loginUrl
-                TOPページはコチラ：
-                $topUrl
-                EOD;
-    
-            $headers = "From : syamozipc@gmail.com\n";
-            $headers .= "Content-Type : text/plain";
-    
-            return mb_send_mail($to, $subject, $body, $headers);
+        return $user;
     }
 }

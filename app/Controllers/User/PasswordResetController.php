@@ -139,7 +139,23 @@ class PasswordResetController extends Controller {
 
         $resetRequest = $this->passwordResetService->getValidRequestByToken(passwordResetToken:$request['password_reset_token']);
 
-        $this->userService->updatePassword(email:$resetRequest->email, password:$request['password']);
+        try {
+            /**
+             * @todo user modelからdb呼ぶのも微妙？
+             */
+            $this->userModel->db->beginTransaction();
+
+            $this->userService->updatePassword(email:$resetRequest->email, password:$request['password']);
+
+            $this->passwordResetService->delete(passwordResetToken:$request['password_reset_token']);
+
+            $this->userModel->db->commit();
+
+        } catch (\Exception $e) {
+            $this->userModel->db->rollBack();
+
+            exit($e->getMessage());
+        }
 
         $this->loginService->baseLogin(email:$resetRequest->email, password:$request['password'], model:$this->userModel);
 
