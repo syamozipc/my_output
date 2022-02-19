@@ -6,7 +6,13 @@ DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS post_details;
 DROP TABLE IF EXISTS favorites;
 
-CREATE TABLE regions (
+CREATE TABLE `password_resets` (
+  `email` varchar(50) PRIMARY KEY,
+  `token` varchar(80) NOT NULL,
+  `token_sent_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE `regions` (
     `id` TINYINT(10) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(20) UNIQUE NOT NULL,
     `name_alpha` VARCHAR(40) UNIQUE NOT NULL,
@@ -15,7 +21,7 @@ CREATE TABLE regions (
 );
 
 
-CREATE TABLE countries (
+CREATE TABLE `countries` (
     `id` TINYINT(200) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `region_id` TINYINT(10) UNSIGNED NOT NULL REFERENCES regions(id),
     `name` VARCHAR(70) UNIQUE NOT NULL,-- 193カ国の最大バイト数は60
@@ -25,7 +31,7 @@ CREATE TABLE countries (
 );
 
 
-CREATE TABLE users (
+CREATE TABLE `users` (
     `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `country_id` TINYINT(200) UNSIGNED REFERENCES countries(id),
     `name` VARCHAR(60),
@@ -34,19 +40,19 @@ CREATE TABLE users (
     `profile_image_path` VARCHAR(60),
     `introduction` VARCHAR(300),
     `email` VARCHAR(50) UNIQUE NOT NULL,
-    `email_verify_token` VARCHAR(191),
-    `email_verify_token_created_at` DATETIME,
-    `email_verified_at` DATETIME,
-    `password` VARCHAR(191),
+    `register_token` VARCHAR(80),
+    `register_token_sent_at` DATETIME,
+    `register_token_verified_at` DATETIME,
+    `password` VARCHAR(80),
     `api_token` VARCHAR(80),
-    `remember_token` VARCHAR(100),
+    `remember_token` VARCHAR(80),
     `last_login_at` DATETIME,
     `status_id` ENUM('publish', 'private', 'deleted') NOT NULL DEFAULT 'publish',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE follows (
+CREATE TABLE `follows` (
     `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL REFERENCES users(id),
     `follow_id` INT UNSIGNED NOT NULL REFERENCES users(id),
@@ -55,7 +61,7 @@ CREATE TABLE follows (
 );
 
 
-CREATE TABLE posts (
+CREATE TABLE `posts` (
     `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL REFERENCES users(id),
     `country_id` TINYINT(200) UNSIGNED NOT NULL REFERENCES regions(id),
@@ -65,7 +71,7 @@ CREATE TABLE posts (
 	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE post_details (
+CREATE TABLE `post_details` (
     `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `post_id` INT UNSIGNED NOT NULL REFERENCES posts(id),
     `type` ENUM('photo', 'video') NOT NULL,
@@ -75,7 +81,7 @@ CREATE TABLE post_details (
 	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE favorites (
+CREATE TABLE `favorites` (
     `id` INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL REFERENCES users(id),
     `post_id` INT UNSIGNED NOT NULL REFERENCES posts(id),
