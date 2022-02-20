@@ -29,6 +29,7 @@ https://github.com/syamozipc/my_output
 
 -   [ ] 認証機能
     -   [ ] remember token
+    -   [ ] api token
     -   [ ] SNS ログイン
 -   [ ] 自己結合の多対多（フォロー機能）
 -   [ ] AWS 実装
