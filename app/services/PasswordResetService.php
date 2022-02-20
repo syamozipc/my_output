@@ -13,12 +13,12 @@ class PasswordResetService {
     }
 
     /**
-     * password_resetsテーブルに情報をinsert（もしくはupdate）
+     * password_resetsテーブルにリクエストをinsert（もしくはupdate）
      *
      * @param string $email
      * @return void
      */
-    public function savePasswordResetRequest(string $email, string $passwordResetToken)
+    public function saveRequest(string $email, string $passwordResetToken)
     {
         $sql = 'SELECT * FROM `password_resets` WHERE `email` = :email';
 
@@ -54,11 +54,10 @@ class PasswordResetService {
      */
     public function sendEmail(string $to, string $passwordResetToken):bool
     {
-        // 無くてもいけるかも
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $url = route('passwordReset/verifyEmail', "?token={$passwordResetToken}");
+        $url = route('passwordReset/verifyToken', "?token={$passwordResetToken}");
         $hour = Token_Valid_Period_Hour;
 
         $subject = '【' . SITENAME . '】' . 'パスワードリセット用URLをお送りします。';

@@ -85,7 +85,7 @@ class PostController extends Controller {
         if (!$userId) {
             $this->setFlashSession(key:"error_status", param:'ログインしてください。');
 
-            return redirect('login/showLoginForm');
+            return redirect('login/loginForm');
         }
 
         // path含めpost・post_detailsテーブルに保存

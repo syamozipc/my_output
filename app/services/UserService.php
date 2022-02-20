@@ -97,6 +97,7 @@ class UserService {
     public function updatePassword(string $email, string $password)
     {
         $sql = 'UPDATE users SET `password` = :password WHERE `email` = :email';
+        
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
         $this->userModel->db

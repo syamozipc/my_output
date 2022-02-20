@@ -95,52 +95,65 @@ class RegisterController extends Controller {
      *
      * @return void
      */
-    public function verifyEmail()
+    public function verifyToken()
     {
         $token = filter_input(INPUT_GET, 'token');
 
         $user = $this->registerService->getTemporarilyRegisteredUser(emailVerifyToken:$token);
 
         if (!$user) {
-            $this->setFlashSession(key:"error_email", param:'無効なURLです。再度メールアドレスを入力してください。');
+            $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
 
             return redirect('register/tmpRegisterForm');
         }
 
-        return $this->showRegisterForm(emailVerifyToken:$user->register_token);
+        return $this->registerForm(emailVerifyToken:$user->register_token);
     }
 
-    private function showRegisterForm($emailVerifyToken)
+    private function registerForm($emailVerifyToken)
     {
         $data = [
-            'css' => 'css/user/register/showRegisterForm.css',
-            'js' => 'js/user/register/showRegisterForm.js',
+            'css' => 'css/user/register/registerForm.css',
+            'js' => 'js/user/register/registerForm.js',
             'emailVerifyToken' => $emailVerifyToken
         ];
 
-        return $this->view(view:'user/register/showRegisterForm', data:$data);
+        return $this->view(view:'user/register/registerForm', data:$data);
     }
 
+    /**
+     * 1. 入力をバリデーション
+     * 2. tokenからpassword_resetsテーブルのレコードを取得する
+     * 3. パスワードを更新
+     * 4. password_resetsから該当のレコードを削除
+     * 5. ログイン処理
+     *
+     * @return void
+     */
     public function register()
     {
         $request = filter_input_array(INPUT_POST);
 
+        // 入力をバリデーション
         $validator = new RegisterValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect("register/verifyEmail?token={$request['register_token']}");
+        if (!$isValidated) return redirect("register/verifyToken?token={$request['register_token']}");
 
         // sendRegisterMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 
+        // usersテーブルの該当レコードを本登録させる
         $this->registerService->regsterUser(request:$request);
 
         $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['register_token']);
 
+        // 本登録完了メール送信
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
 
         // @todo log出力のみにする
         if (!$isSent) die('メール送信に失敗しましたが、登録は完了しています。');
                     
+        // ログイン失敗は無い想定なので、失敗時の処理は書いていない
         $this->loginService->baseLogin(email:$user->email, password:$request['password'], model:$this->userModel);
 
         return redirect('mypage/index');

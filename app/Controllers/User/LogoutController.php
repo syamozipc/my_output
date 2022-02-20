@@ -21,10 +21,10 @@ class LogoutController extends Controller {
     {
         $userId = $this->getSession('user_id');
 
-        if (!$userId) return redirect('login/showLoginForm');
+        if (!$userId) return redirect('login/loginForm');
 
         $this->logoutService->baseLogout(userId:$userId, model:$this->userModel);
 
-        return redirect('login/showLoginForm');
+        return redirect('login/loginForm');
     }
 }

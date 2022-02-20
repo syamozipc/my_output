@@ -19,16 +19,16 @@ class LoginController extends Controller {
     }
 
 
-    public function showLoginForm()
+    public function loginForm()
     {
         if (isLogedIn()) return redirect('mypage/index');
         
         $data = [
-            'css' => 'css/user/login/showLoginForm.css',
-            'js' => 'js/user/login/showLoginForm.js',
+            'css' => 'css/user/login/loginForm.css',
+            'js' => 'js/user/login/loginForm.js',
         ];
 
-        $this->view(view: 'user/login/showLoginForm', data:$data);
+        $this->view(view: 'user/login/loginForm', data:$data);
     }
 
     public function login()
@@ -38,14 +38,14 @@ class LoginController extends Controller {
         $validator = new LoginValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect('login/showLoginForm');
+        if (!$isValidated) return redirect('login/loginForm');
 
         $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password'], model:$this->userModel);
 
         if (!$isLogedIn) {
             $this->setFlashSession(key:"error_status", param:'ログインに失敗しました。');
 
-            return redirect('login/showLoginForm');
+            return redirect('login/loginForm');
         }
 
         return redirect('mypage/index');

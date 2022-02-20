@@ -24,5 +24,5 @@
         
         <button type="submit">送信する</button>
     </form>
-    <a href="<?= route('passwordReset/passwordResetRequest') ?>">パスワードを忘れた方はコチラ</a>
+    <a href="<?= route('passwordReset/resetRequest') ?>">パスワードを忘れた方はコチラ</a>
 </section>
