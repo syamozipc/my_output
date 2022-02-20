@@ -18,7 +18,7 @@ class RegisterService {
      * @param string $email
      * @return void
      */
-    public function temporarilyRegister(string $email, string $emailVerifyToken)
+    public function temporarilyRegister(string $email, string $registerToken)
     {
         // 仮登録済みかどうかで UPDATE/INSERT を分岐
         if ($this->isTemporarilyRegistered(email:$email)) {
@@ -32,7 +32,7 @@ class RegisterService {
         $this->userModel->db
             ->prepare($sql)
             ->bind(':email', $email)
-            ->bind(':register_token', $emailVerifyToken)
+            ->bind(':register_token', $registerToken)
             ->bind(':register_token_sent_at', $currentDateTime)
             ->execute();
 
@@ -71,13 +71,13 @@ class RegisterService {
      * @param string $token
      * @return boolean 送信成功でtrue、失敗でfalseが返る
      */
-    public function sendEmail(string $to, string $emailVerifyToken):bool
+    public function sendEmail(string $to, string $registerToken):bool
     {
         // 無くてもいけるかも
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $url = route('register/verifyToken', "?token={$emailVerifyToken}");
+        $url = route('register/verifyToken', "?token={$registerToken}");
         $hour = Token_Valid_Period_Hour;
 
         $subject =  '【' . SITENAME . '】' . '仮登録が完了しました';
@@ -102,7 +102,7 @@ class RegisterService {
      * @param string $token
      * @return object|false
      */
-    public function getValidTemporarilyRegisteredUser(string $emailVerifyToken):object|false
+    public function getValidTemporarilyRegisteredUser(string $registerToken):object|false
     {
         $sql = 'SELECT * FROM `users` WHERE `register_token` = :register_token AND `register_token_sent_at` >= :register_token_sent_at AND `status_id` = :status_id';
 
@@ -111,12 +111,12 @@ class RegisterService {
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
-            ->bind(':register_token', $emailVerifyToken)
+            ->bind(':register_token', $registerToken)
             ->bind(':register_token_sent_at', $tokenValidPeriod)
-            ->bind(':status_id', ' tentative')
+            ->bind(':status_id', 'tentative')
             ->executeAndFetch();
 
-        return $userOrFalse;
+            return $userOrFalse;
     }
 
     /**

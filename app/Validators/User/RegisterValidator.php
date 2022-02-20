@@ -14,14 +14,14 @@ class RegisterValidator extends Validator{
     public function validate($request)
     {
         // ここのエラーは現状、呼び出し元でverifyToken()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
-        $this->validateEmailVerifyToken(token:$request['register_token']);
+        $this->validateRegisterToken(token:$request['register_token']);
         $this->validatePassword(password:$request['password']);
         $this->validatePasswordConfirmation(password:$request['password'], passwordConfirmation:$request['password_confirmation']);
 
         return !$this->hasError;
     }
 
-    private function validateEmailVerifyToken($token)
+    private function validateRegisterToken($token)
     {
         if (!$this->isfilled(key:'register_token', param:$token)) return $this->hasError = true;
 

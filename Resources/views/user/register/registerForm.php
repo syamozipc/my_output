@@ -2,7 +2,7 @@
     <p>本会員登録</p>
     <form action="<?= route('register/register') ?>" method="POST">
         <?= csrf() ?>
-        <input type="hidden" name="register_token" value="<?= $data['emailVerifyToken'] ?>">
+        <input type="hidden" name="register_token" value="<?= $data['registerToken'] ?>">
         <?php if (old('error_register_token')) : ?>
             <p class="error__message">※<?= old('error_register_token') ?></p>
         <?php endif; ?>

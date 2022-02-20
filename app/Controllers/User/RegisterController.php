@@ -68,11 +68,11 @@ class RegisterController extends Controller {
             $this->userModel->db->beginTransaction();
 
             // 業務で使っているlaravelのtokenも60字だった（ただし生成メソッドはLaravelの方が複雑）
-            $emailVerifyToken = str_random(60);
+            $registerToken = str_random(60);
 
-            $this->registerService->temporarilyRegister(email:$request['email'], emailVerifyToken:$emailVerifyToken);
+            $this->registerService->temporarilyRegister(email:$request['email'], registerToken:$registerToken);
 
-            $isSent = $this->registerService->sendEmail(to:$request['email'], emailVerifyToken:$emailVerifyToken);
+            $isSent = $this->registerService->sendEmail(to:$request['email'], registerToken:$registerToken);
 
             if (!$isSent) throw new \Exception('メール送信に失敗しました。');
 
@@ -105,7 +105,7 @@ class RegisterController extends Controller {
     {
         $token = filter_input(INPUT_GET, 'token');
 
-        $user = $this->registerService->getValidTemporarilyRegisteredUser(emailVerifyToken:$token);
+        $user = $this->registerService->getValidTemporarilyRegisteredUser(registerToken:$token);
 
         if (!$user) {
             $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
@@ -113,15 +113,15 @@ class RegisterController extends Controller {
             return redirect('register/tmpRegisterForm');
         }
 
-        return $this->registerForm(emailVerifyToken:$user->register_token);
+        return $this->registerForm(registerToken:$user->register_token);
     }
 
-    private function registerForm($emailVerifyToken)
+    private function registerForm($registerToken)
     {
         $data = [
             'css' => 'css/user/register/registerForm.css',
             'js' => 'js/user/register/registerForm.js',
-            'emailVerifyToken' => $emailVerifyToken
+            'registerToken' => $registerToken
         ];
 
         return $this->view(view:'user/register/registerForm', data:$data);
@@ -152,7 +152,7 @@ class RegisterController extends Controller {
         $this->registerService->regsterUser(request:$request);
 
         // tokenの値で、先ほど登録したuserを取得
-        $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['register_token']);
+        $user = $this->userService->getUserByRegisterToken(registerToken:$request['register_token']);
 
         // 本登録完了メール送信
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);

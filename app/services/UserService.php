@@ -51,19 +51,19 @@ class UserService {
     }
 
     /**
-     * emailVerifyTokenからユーザーを取得
+     * registerTokenからユーザーを取得
      * 失敗時はfalseを返す
      * 
      * @param int $id
      * @return object|false $user
      */
-    public function getUserByEmailVerifyToken(string $emailVerifyToken):object|false
+    public function getUserByRegisterToken(string $registerToken):object|false
     {
         $sql = 'SELECT * FROM users WHERE `register_token` = :register_token AND `status_id` = :status_id';
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
-            ->bind(':register_token', $emailVerifyToken)
+            ->bind(':register_token', $registerToken)
             ->bind(':status_id', 'public')
             ->executeAndFetch();
 
