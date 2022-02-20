@@ -29,8 +29,6 @@ https://github.com/syamozipc/my_output
 
 -   [ ] 認証機能
     -   [ ] remember token
-    -   [ ] register 時、第 3 者にそのアドレスが登録されているか分からないようにする
-    -   [ ] 退会済みユーザーの再登録どうする
     -   [ ] SNS ログイン
 -   [ ] 自己結合の多対多（フォロー機能）
 -   [ ] AWS 実装
