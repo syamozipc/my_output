@@ -26,6 +26,8 @@ class MypageController extends Controller {
         $description = 'My Page';
 
         $data = [   
+            'css' => 'css/user/mypage/index.css',
+            'js' => 'js/user/mypage/index.js',
             'description' => $description,
             'user' => $this->user
         ];
