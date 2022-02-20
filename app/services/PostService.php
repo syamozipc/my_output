@@ -48,7 +48,7 @@ class PostService {
             JOIN post_details ON posts.id = post_details.post_id
             JOIN countries ON posts.country_id = countries.id
             JOIN users ON posts.user_id = users.id
-            WHERE posts.status_id = "publish"
+            WHERE posts.status_id = "public"
         ';
 
         $postsList = $this->postModel->db->prepare($sql)->executeAndFetchAll();

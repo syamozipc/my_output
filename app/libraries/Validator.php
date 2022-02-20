@@ -216,6 +216,8 @@ class Validator {
     /**
      * 既に本登録済みのメールアドレスか
      *
+     * @todo 使わないので削除？
+     * 
      * @param string $key error時、sessionのkeyの1部を構成する
      * @param string $email
      * @return boolean 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る

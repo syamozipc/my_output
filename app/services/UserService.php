@@ -20,11 +20,12 @@ class UserService {
      */
     public function getUserById(int $id): object|false
     {
-        $sql = 'SELECT * FROM users WHERE `id` = :id';
+        $sql = 'SELECT * FROM users WHERE `id` = :id AND `status_id` = :status_id';
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
             ->bind(':id', $id)
+            ->bind(':status_id', 'public')
             ->executeAndFetch();
 
         return $userOrFalse;
@@ -38,11 +39,12 @@ class UserService {
      */
     public function getUserByEmail(string $email): object|false
     {
-        $sql = 'SELECT * FROM users WHERE `email` = :email';
+        $sql = 'SELECT * FROM users WHERE `email` = :email AND `status_id` = :status_id';
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
             ->bind(':email', $email)
+            ->bind(':status_id', 'public')
             ->executeAndFetch();
 
         return $userOrFalse;
@@ -51,20 +53,45 @@ class UserService {
     /**
      * emailVerifyTokenからユーザーを取得
      * 失敗時はfalseを返す
-     *
+     * 
      * @param int $id
      * @return object|false $user
      */
     public function getUserByEmailVerifyToken(string $emailVerifyToken):object|false
     {
-        $sql = 'SELECT * FROM users WHERE `register_token` = :register_token';
+        $sql = 'SELECT * FROM users WHERE `register_token` = :register_token AND `status_id` = :status_id';
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
             ->bind(':register_token', $emailVerifyToken)
+            ->bind(':status_id', 'public')
             ->executeAndFetch();
 
         return $userOrFalse;
+    }
+
+    /**
+     * emailからpublicステータスのユーザーを取得
+     * 
+     * @todo 非公開/削除済みには未対応
+     *
+     * @param string $email
+     * @return boolean $userOrFalse
+     */
+    public function isPublicUser(string $email): bool
+    {
+        $sql = 'SELECT * FROM users WHERE `email` = :email AND `status_id` = :status_id';
+
+        $this->userModel->db
+            ->prepare($sql)
+            ->bind(':email', $email)
+            ->bind(':status_id', 'public')
+            ->execute();
+
+        // 本登録済みなら1（当てはまる桁数）、そうでなければ0が返る
+        $isExist = $this->userModel->db->rowCount();
+
+        return $isExist;
     }
 
     /**
@@ -108,6 +135,4 @@ class UserService {
 
         return;
     }
-
-
 }

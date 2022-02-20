@@ -58,11 +58,10 @@ class PasswordResetController extends Controller {
 
         if (!$isValidated) return redirect('passwordReset/resetRequest');
 
-        $user = $this->userService->getUserByEmail(email:$request['email']);
-
-        // 未登録のメールアドレスだった場合は、メール送信完了画面を表示する
-        // セキュリティ上、メールアドレスが未登録である旨のエラー（情報）を出さないようにする
-        if (!$user) return $this->view(view:'user/passwordReset/acceptRequest', data:['email' => $request['email']]); 
+        // 未登録のメールアドレスでも、その旨のエラーを出すと未登録とバレる（情報を与える）ので良くない
+        // 未登録の場合は即座にメール送信完了画面にする
+        $isExist = $this->userService->isPublicUser(email:$request['email']);
+        if (!$isExist) return $this->view(view:'user/passwordReset/acceptRequest', data:['email' => $request['email']]); 
 
         try {
             /**
@@ -74,10 +73,10 @@ class PasswordResetController extends Controller {
             $passwordResetToken = str_random(60);
 
             // password_resetsテーブルに保存
-            $this->passwordResetService->saveRequest(email:$user->email, passwordResetToken:$passwordResetToken);
+            $this->passwordResetService->saveRequest(email:$request['email'], passwordResetToken:$passwordResetToken);
 
             // tokenをqueryに持たせたリセット用URLをメール送信
-            $isSent = $this->passwordResetService->sendEmail(to:$user->email, passwordResetToken:$passwordResetToken);
+            $isSent = $this->passwordResetService->sendEmail(to:$request['email'], passwordResetToken:$passwordResetToken);
 
             if (!$isSent) throw new \Exception('メール送信に失敗しました。');
 

@@ -56,13 +56,19 @@ class RegisterController extends Controller {
 
         if (!$isValidated) return redirect('register/tmpRegisterForm');
 
+        // 本登録済みでも、その旨のエラーを出すと登録済みとバレる（情報を与える）ので良くない
+        // 本登録済みの場合は即座にメール送信完了画面にする
+        $isExistUser = $this->userService->isPublicUser($request['email']);
+        if ($isExistUser) return $this->view(view:'user/register/successTemporaryRegister', data:['email' => $request['email']]);
+
         try {
             /**
              * @todo user modelからdb呼ぶのも微妙？
              */
             $this->userModel->db->beginTransaction();
 
-            $emailVerifyToken = str_random(60);// 業務で使っているlaravelのtokenも60字だったので
+            // 業務で使っているlaravelのtokenも60字だった（ただし生成メソッドはLaravelの方が複雑）
+            $emailVerifyToken = str_random(60);
 
             $this->registerService->temporarilyRegister(email:$request['email'], emailVerifyToken:$emailVerifyToken);
 
@@ -99,7 +105,7 @@ class RegisterController extends Controller {
     {
         $token = filter_input(INPUT_GET, 'token');
 
-        $user = $this->registerService->getTemporarilyRegisteredUser(emailVerifyToken:$token);
+        $user = $this->registerService->getValidTemporarilyRegisteredUser(emailVerifyToken:$token);
 
         if (!$user) {
             $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
@@ -145,6 +151,7 @@ class RegisterController extends Controller {
         // usersテーブルの該当レコードを本登録させる
         $this->registerService->regsterUser(request:$request);
 
+        // tokenの値で、先ほど登録したuserを取得
         $user = $this->userService->getUserByEmailVerifyToken(emailVerifyToken:$request['register_token']);
 
         // 本登録完了メール送信

@@ -13,7 +13,7 @@ class PasswordResetStoreValidator extends Validator{
 
     public function validate($request)
     {
-        // ここのエラーは現状、verifyToken()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
+        // ここのエラーは現状、呼び出し元でverifyToken()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
         $this->validatePasswordResetToken(token:$request['password_reset_token']);
         $this->validatePassword(password:$request['password']);
         $this->validatePasswordConfirmation(password:$request['password'], passwordConfirmation:$request['password_confirmation']);

@@ -13,7 +13,7 @@ class LoginValidator extends Validator{
 
     public function validate($request)
     {
-        // ここのエラーは現状、verifyToken()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
+        // ここのエラーは現状、呼び出し元でverifyToken()へリダイレクト時に別のエラーに引っ掛かり、エラーメッセージも上書きされる
         $this->validateEmail(email:$request['email']);
         $this->validatePassword(password:$request['password']);
 

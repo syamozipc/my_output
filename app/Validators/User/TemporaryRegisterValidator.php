@@ -27,8 +27,6 @@ class TemporaryRegisterValidator extends Validator{
         if (!$this->isfilled(key:'email', param:$email)) return $this->hasError = true;
 
         if (!$this->isValidEmailFormat(key:'email', email:$email)) return $this->hasError = true;
-
-        if ($this->isExistEmail(key:'email', email:$email)) return $this->hasError = true;
         
         return;
     }

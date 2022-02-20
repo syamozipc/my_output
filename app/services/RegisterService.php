@@ -20,21 +20,13 @@ class RegisterService {
      */
     public function temporarilyRegister(string $email, string $emailVerifyToken)
     {
-        // 仮登録済みかどうか（本登録済みの場合は、validationで弾かれている）
-        // $userが取れれば仮登録済み、いなければ未登録
-        $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `password` IS NULL';
-
-        // $userがいればobject、いなければfalseが返る
-        $user = $this->userModel->db
-            ->prepare(sql:$sql)
-            ->bind(':email', $email)
-            ->executeAndFetch();
+        // 仮登録済みかどうかで UPDATE/INSERT を分岐
+        if ($this->isTemporarilyRegistered(email:$email)) {
+            $sql = 'UPDATE `users` SET `register_token` = :register_token, `register_token_sent_at` = :register_token_sent_at WHERE `email` = :email';
+        } else {
+            $sql = 'INSERT INTO `users` (`email`, `register_token`, `register_token_sent_at`) VALUES (:email, :register_token, :register_token_sent_at)';
+        }
         
-        // 仮登録済みかどうかで UPDATE/INSERT 分岐
-        $sql = $user
-            ? 'UPDATE `users` SET `register_token` = :register_token, `register_token_sent_at` = :register_token_sent_at WHERE `email` = :email'
-            : 'INSERT INTO `users` (`email`, `register_token`, `register_token_sent_at`) VALUES (:email, :register_token, :register_token_sent_at)';
-
         $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
 
         $this->userModel->db
@@ -45,6 +37,31 @@ class RegisterService {
             ->execute();
 
         return;
+    }
+
+    /**
+     * ユーザーが仮登録状態かどうか
+     *
+     * @param string $email
+     * @return boolean
+     */
+    public function isTemporarilyRegistered(string $email): bool
+    {
+        // 仮登録済みかどうか
+        // $userが取れれば仮登録済み、いなければ未登録
+        $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `status_id` = :status_id';
+
+        // $userがいればobject、いなければfalseが返る
+        $this->userModel->db
+            ->prepare(sql:$sql)
+            ->bind(':email', $email)
+            ->bind(':status_id', ' tentative')
+            ->execute();
+
+        // 仮登録済みなら1（当てはまる桁数）、未登録もしくは本登録なら、0が返る
+        $isExist = $this->userModel->db->rowCount();
+
+        return $isExist;
     }
 
     /**
@@ -85,20 +102,21 @@ class RegisterService {
      * @param string $token
      * @return object|false
      */
-    public function getTemporarilyRegisteredUser(string $emailVerifyToken):object|false
+    public function getValidTemporarilyRegisteredUser(string $emailVerifyToken):object|false
     {
-        $sql = 'SELECT * FROM `users` WHERE `register_token` = :register_token AND `register_token_sent_at` >= :register_token_sent_at AND `register_token_verified_at` IS NULL AND `password` IS NULL';
+        $sql = 'SELECT * FROM `users` WHERE `register_token` = :register_token AND `register_token_sent_at` >= :register_token_sent_at AND `status_id` = :status_id';
 
         $hour = Token_Valid_Period_Hour;
         $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
-        $user = $this->userModel->db
+        $userOrFalse = $this->userModel->db
             ->prepare($sql)
             ->bind(':register_token', $emailVerifyToken)
             ->bind(':register_token_sent_at', $tokenValidPeriod)
+            ->bind(':status_id', ' tentative')
             ->executeAndFetch();
 
-        return $user;
+        return $userOrFalse;
     }
 
     /**
@@ -109,7 +127,7 @@ class RegisterService {
      */
     public function regsterUser($request)
     {
-        $sql = 'UPDATE users SET `register_token_verified_at` = :register_token_verified_at, `password` = :password, `api_token` = :api_token WHERE `register_token` = :register_token';
+        $sql = 'UPDATE users SET `register_token_verified_at` = :register_token_verified_at, `password` = :password, `status_id` = :status_id, `status_updated_at` = :status_updated_at WHERE `register_token` = :register_token';
 
         $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
         $hashedPassword = password_hash($request['password'], PASSWORD_BCRYPT);
@@ -118,7 +136,8 @@ class RegisterService {
             ->prepare($sql)
             ->bind(':register_token_verified_at', $currentDateTime)
             ->bind(':password', $hashedPassword)
-            ->bind(':api_token', str_random(length:80))
+            ->bind(':status_id', 'public')
+            ->bind(':status_updated_at', $currentDateTime)
             ->bind(':register_token', $request['register_token'])
             ->execute();
 
