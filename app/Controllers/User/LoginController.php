@@ -14,6 +14,8 @@ class LoginController extends Controller {
 
     public function __construct()
     {
+        if (isLogedIn()) return redirect('mypage/index');
+        
         $this->userModel = new User();
         $this->loginService = new LoginService();
     }
@@ -21,8 +23,6 @@ class LoginController extends Controller {
 
     public function loginForm()
     {
-        if (isLogedIn()) return redirect('mypage/index');
-        
         $data = [
             'css' => 'css/user/login/loginForm.css',
             'js' => 'js/user/login/loginForm.js',

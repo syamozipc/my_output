@@ -13,6 +13,8 @@ class MypageController extends Controller {
 
     public function __construct()
     {
+        if (!isLogedIn()) return redirect('login/loginForm');
+
         $this->userService = new UserService();
         
         $userId = $this->getSession('user_id');
