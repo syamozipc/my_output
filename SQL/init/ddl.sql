@@ -48,7 +48,7 @@ CREATE TABLE `users` (
     `api_token` VARCHAR(80),
     `remember_token` VARCHAR(80),
     `last_login_at` DATETIME,
-    `status_id` ENUM('tentative', 'publish', 'private', 'deleted') NOT NULL DEFAULT 'publish',
+    `status_id` ENUM('tentative', 'publish', 'private', 'deleted') NOT NULL DEFAULT 'tentative',
     `status_updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
