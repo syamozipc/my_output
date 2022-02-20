@@ -1,10 +1,11 @@
-DROP TABLE IF EXISTS regions;
-DROP TABLE IF EXISTS countries;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS follows;
-DROP TABLE IF EXISTS posts;
-DROP TABLE IF EXISTS post_details;
-DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS `password_resets`;
+DROP TABLE IF EXISTS `regions`;
+DROP TABLE IF EXISTS `countries`;
+DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `follows`;
+DROP TABLE IF EXISTS `posts`;
+DROP TABLE IF EXISTS `post_details`;
+DROP TABLE IF EXISTS `favorites`;
 
 CREATE TABLE `password_resets` (
   `email` varchar(50) PRIMARY KEY,
@@ -47,7 +48,8 @@ CREATE TABLE `users` (
     `api_token` VARCHAR(80),
     `remember_token` VARCHAR(80),
     `last_login_at` DATETIME,
-    `status_id` ENUM('publish', 'private', 'deleted') NOT NULL DEFAULT 'publish',
+    `status_id` ENUM('tentative', 'publish', 'private', 'deleted') NOT NULL DEFAULT 'publish',
+    `status_updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP  ON UPDATE CURRENT_TIMESTAMP
 );
