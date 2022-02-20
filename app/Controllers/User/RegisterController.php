@@ -16,6 +16,8 @@ class RegisterController extends Controller {
 
     public function __construct()
     {
+        parent::__construct();
+        
         $this->registerService = new RegisterService();
         $this->userService = new UserService();
         $this->loginService = new LoginService();

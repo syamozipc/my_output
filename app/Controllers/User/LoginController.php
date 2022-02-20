@@ -14,6 +14,8 @@ class LoginController extends Controller {
 
     public function __construct()
     {
+        parent::__construct();
+
         if (isLogedIn()) return redirect('mypage/index');
         
         $this->userModel = new User();

@@ -16,6 +16,8 @@ class PasswordResetController extends Controller {
 
     public function __construct()
     {
+        parent::__construct();
+        
         $this->passwordResetService = new PasswordResetService();
         $this->userService = new UserService();
         $this->loginService = new LoginService();

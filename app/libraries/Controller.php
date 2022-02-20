@@ -6,6 +6,12 @@ namespace App\Libraries;
  * modelとviewをloadする
  */
 class Controller {
+
+    public function __construct()
+    {
+        
+    }
+
     /**
      * viewを読み込む
      *
