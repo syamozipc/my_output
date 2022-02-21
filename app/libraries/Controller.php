@@ -16,10 +16,6 @@ class Controller {
     {
         $this->loginService = new LoginService();
 
-
-        // @todo ログイン済み or remember_token持ちでloginFormのURLを叩いた場合のみ、updateLastLoginが2回実行される
-        // ※このcontrollerが2度呼び出され、どちらでも処理が実行されるため
-
         // ログイン済みの場合、last_login_atを更新
         if (isLogedIn()) {
             $userId = $this->getSession('user_id');
