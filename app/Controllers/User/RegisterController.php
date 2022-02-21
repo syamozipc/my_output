@@ -2,7 +2,7 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
-use App\Services\{RegisterService, UserService, LoginService};
+use App\Services\{RegisterService, UserService};
 use App\Models\User;
 use App\Validators\User\{TemporaryRegisterValidator, RegisterValidator};
 
@@ -11,7 +11,6 @@ class RegisterController extends Controller {
 
     public RegisterService $registerService;
     public UserService $userService;
-    public LoginService $loginService;
     public user $userModel;
 
     public function __construct()
@@ -20,7 +19,6 @@ class RegisterController extends Controller {
         
         $this->registerService = new RegisterService();
         $this->userService = new UserService();
-        $this->loginService = new LoginService();
         $this->userModel = new User();
     }
 

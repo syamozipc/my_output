@@ -16,6 +16,35 @@ class LoginService {
     }
 
     /**
+     * ユーザーのログイン管理をする
+     * ・既にログイン済みなら、last_login_atの更新のみ
+     * ・未ログインでもremember_tokenがあれば、それを使ってログイン処理
+     *
+     * @return boolean
+     */
+    public function authenticateUser():bool
+    {
+        $authenticated = false;
+
+        // ログイン済みの場合、last_login_atを更新
+        if (isLogedIn()) {
+            $userId = $this->getSession('user_id');
+            $this->updateLastLogin(userId:$userId);
+
+            $authenticated = true;
+
+        // 未ログインかつremember_tokenがある場合、ログイン処理
+        } else if (isset($_COOKIE['remember_token'])) {
+            $rememberToken = $_COOKIE['remember_token'];
+            $this->loginByRememberToken(rememberToken:$rememberToken);
+
+            $authenticated = true;
+        }
+
+        return $authenticated;
+    }
+
+    /**
      * ログイン処理
      * 
      * ・emailとpasswordが正しいか確認
@@ -79,7 +108,7 @@ class LoginService {
      * @param string $userId
      * @return void
      */
-    public function setLoginSession($userId):void
+    private function setLoginSession($userId):void
     {
         $this->setSession(key:'user_id', param:$userId);
 

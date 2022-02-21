@@ -16,16 +16,7 @@ class Controller {
     {
         $this->loginService = new LoginService();
 
-        // ログイン済みの場合、last_login_atを更新
-        if (isLogedIn()) {
-            $userId = $this->getSession('user_id');
-            $this->loginService->updateLastLogin(userId:$userId);
-
-        // 未ログインかつremember_tokenがある場合、ログイン処理
-        } else if (isset($_COOKIE['remember_token'])) {
-            $rememberToken = $_COOKIE['remember_token'];
-            $this->loginService->loginByRememberToken(rememberToken:$rememberToken);
-        }
+        $this->loginService->authenticateUser();
     }
 
     /**

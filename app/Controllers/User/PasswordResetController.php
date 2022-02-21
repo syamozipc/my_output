@@ -2,7 +2,7 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
-use App\Services\{PasswordResetService, UserService, LoginService};
+use App\Services\{PasswordResetService, UserService};
 use App\Models\User;
 use App\Validators\User\{passwordResetRequestValidator, PasswordResetStoreValidator};
 
@@ -11,7 +11,6 @@ class PasswordResetController extends Controller {
 
     public PasswordResetService $passwordResetService;
     public UserService $userService;
-    public LoginService $loginService;
     public user $userModel;
 
     public function __construct()
@@ -20,7 +19,6 @@ class PasswordResetController extends Controller {
         
         $this->passwordResetService = new PasswordResetService();
         $this->userService = new UserService();
-        $this->loginService = new LoginService();
         $this->userModel = new User();
     }
 
