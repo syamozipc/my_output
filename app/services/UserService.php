@@ -93,8 +93,6 @@ class UserService {
     /**
      * emailからpublicステータスのユーザーを取得
      * 
-     * @todo 非公開/削除済みには未対応
-     *
      * @param string $email
      * @return boolean $userOrFalse
      */

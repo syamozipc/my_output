@@ -36,8 +36,7 @@ class LogoutService {
 
     /**
      * ログアウト時にuserIdをセッションから破棄する
-     * @todo session cookieの削除も必要（独習PHPを参照）
-
+     * 
      * @param string $userId
      * @return void
      */

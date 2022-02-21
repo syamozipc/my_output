@@ -213,34 +213,6 @@ class Validator {
         return false;
     }
 
-    /**
-     * 既に本登録済みのメールアドレスか
-     *
-     * @todo 使わないので削除？
-     * 
-     * @param string $key error時、sessionのkeyの1部を構成する
-     * @param string $email
-     * @return boolean 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る
-     */
-    public function isExistEmail($key, $email)
-    {
-        $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `password` IS NOT NULL';
-
-        $this->userModel->db
-            ->prepare(sql:$sql)
-            ->bindValue(param:':email', value:$email)
-            ->execute();
-
-        // 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る
-        $isExist = $this->userModel->db->rowCount();
-
-        if (!$isExist) return false;
-
-        $this->setFlashSession("error_{$key}", '登録済みのメールアドレスです。');
-
-        return true;
-    }
-
     // パスワードのバリデーション
 
     /**
