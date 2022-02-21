@@ -228,7 +228,7 @@ class Validator {
 
         $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(param:':email', value:$email)
+            ->bindValue(param:':email', value:$email)
             ->execute();
 
         // 本登録済みなら1（当てはまる桁数）、未登録もしくは仮登録（passwordがNULL）なら、0が返る

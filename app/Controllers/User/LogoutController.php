@@ -25,8 +25,8 @@ class LogoutController extends Controller {
 
         if (!$userId) return redirect('login/loginForm');
 
-        $this->logoutService->baseLogout(userId:$userId, model:$this->userModel);
+        $this->logoutService->baseLogout(userId:$userId);
 
-        return redirect('login/loginForm');
+        return redirect('home/index');
     }
 }

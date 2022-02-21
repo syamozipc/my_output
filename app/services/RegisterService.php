@@ -31,9 +31,9 @@ class RegisterService {
 
         $this->userModel->db
             ->prepare($sql)
-            ->bind(':email', $email)
-            ->bind(':register_token', $registerToken)
-            ->bind(':register_token_sent_at', $currentDateTime)
+            ->bindValue(':email', $email)
+            ->bindValue(':register_token', $registerToken)
+            ->bindValue(':register_token_sent_at', $currentDateTime)
             ->execute();
 
         return;
@@ -54,8 +54,8 @@ class RegisterService {
         // $userがいればobject、いなければfalseが返る
         $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(':email', $email)
-            ->bind(':status_id', ' tentative')
+            ->bindValue(':email', $email)
+            ->bindValue(':status_id', ' tentative')
             ->execute();
 
         // 仮登録済みなら1（当てはまる桁数）、未登録もしくは本登録なら、0が返る
@@ -78,7 +78,7 @@ class RegisterService {
         mb_internal_encoding("UTF-8");
 
         $url = route('register/verifyToken', "?token={$registerToken}");
-        $hour = Token_Valid_Period_Hour;
+        $hour = Email_Token_Valid_Period_Hour;
 
         $subject =  '【' . SITENAME . '】' . '仮登録が完了しました';
 
@@ -106,14 +106,14 @@ class RegisterService {
     {
         $sql = 'SELECT * FROM `users` WHERE `register_token` = :register_token AND `register_token_sent_at` >= :register_token_sent_at AND `status_id` = :status_id';
 
-        $hour = Token_Valid_Period_Hour;
+        $hour = Email_Token_Valid_Period_Hour;
         $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
-            ->bind(':register_token', $registerToken)
-            ->bind(':register_token_sent_at', $tokenValidPeriod)
-            ->bind(':status_id', 'tentative')
+            ->bindValue(':register_token', $registerToken)
+            ->bindValue(':register_token_sent_at', $tokenValidPeriod)
+            ->bindValue(':status_id', 'tentative')
             ->executeAndFetch();
 
             return $userOrFalse;
@@ -134,11 +134,11 @@ class RegisterService {
 
         $isRegistered = $this->userModel->db
             ->prepare($sql)
-            ->bind(':register_token_verified_at', $currentDateTime)
-            ->bind(':password', $hashedPassword)
-            ->bind(':status_id', 'public')
-            ->bind(':status_updated_at', $currentDateTime)
-            ->bind(':register_token', $request['register_token'])
+            ->bindValue(':register_token_verified_at', $currentDateTime)
+            ->bindValue(':password', $hashedPassword)
+            ->bindValue(':status_id', 'public')
+            ->bindValue(':status_updated_at', $currentDateTime)
+            ->bindValue(':register_token', $request['register_token'])
             ->execute();
 
         return $isRegistered;

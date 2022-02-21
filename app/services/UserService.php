@@ -24,8 +24,8 @@ class UserService {
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
-            ->bind(':id', $id)
-            ->bind(':status_id', 'public')
+            ->bindValue(':id', $id)
+            ->bindValue(':status_id', 'public')
             ->executeAndFetch();
 
         return $userOrFalse;
@@ -43,8 +43,8 @@ class UserService {
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
-            ->bind(':email', $email)
-            ->bind(':status_id', 'public')
+            ->bindValue(':email', $email)
+            ->bindValue(':status_id', 'public')
             ->executeAndFetch();
 
         return $userOrFalse;
@@ -54,7 +54,7 @@ class UserService {
      * registerTokenからユーザーを取得
      * 失敗時はfalseを返す
      * 
-     * @param int $id
+     * @param string $registerToken
      * @return object|false $user
      */
     public function getUserByRegisterToken(string $registerToken):object|false
@@ -63,8 +63,28 @@ class UserService {
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
-            ->bind(':register_token', $registerToken)
-            ->bind(':status_id', 'public')
+            ->bindValue(':register_token', $registerToken)
+            ->bindValue(':status_id', 'public')
+            ->executeAndFetch();
+
+        return $userOrFalse;
+    }
+
+    /**
+     * rememberTokenからユーザーを取得
+     * 失敗時はfalseを返す
+     * 
+     * @param string $rememberToken
+     * @return object|false $user
+     */
+    public function getUserByRememberToken(string $rememberToken):object|false
+    {
+        $sql = 'SELECT * FROM users WHERE `remember_token` = :remember_token AND `status_id` = :status_id';
+
+        $userOrFalse = $this->userModel->db
+            ->prepare($sql)
+            ->bindValue(':remember_token', md5($rememberToken))
+            ->bindValue(':status_id', 'public')
             ->executeAndFetch();
 
         return $userOrFalse;
@@ -84,8 +104,8 @@ class UserService {
 
         $this->userModel->db
             ->prepare($sql)
-            ->bind(':email', $email)
-            ->bind(':status_id', 'public')
+            ->bindValue(':email', $email)
+            ->bindValue(':status_id', 'public')
             ->execute();
 
         // 本登録済みなら1（当てはまる桁数）、そうでなければ0が返る
@@ -108,8 +128,8 @@ class UserService {
 
         $this->userModel->db
             ->prepare($sql)
-            ->bind(':last_login_at', $currentDateTime)
-            ->bind(':id', $userId)
+            ->bindValue(':last_login_at', $currentDateTime)
+            ->bindValue(':id', $userId)
             ->execute();
 
         return;
@@ -129,8 +149,8 @@ class UserService {
 
         $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(param:':password', value:$hashedPassword)
-            ->bind(param:':email', value:$email)
+            ->bindValue(param:':password', value:$hashedPassword)
+            ->bindValue(param:':email', value:$email)
             ->execute();
 
         return;

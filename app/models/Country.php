@@ -24,7 +24,7 @@ class Country extends Model{
         $sql = 'SELECT * FROM countries WHERE id = :id';
 
         $countriesList = $this->db->prepare($sql)
-            ->bind(':id', $id)
+            ->bindValue(':id', $id)
             ->executeAndFetch();
 
         return $countriesList;

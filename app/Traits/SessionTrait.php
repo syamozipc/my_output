@@ -10,7 +10,7 @@ trait SessionTrait {
 
     public function getSession(string $key)
     {
-        return $_SESSION[$key];
+        return $_SESSION[$key] ?? NULL;
     }
 
     public function unsetSession(string $key)

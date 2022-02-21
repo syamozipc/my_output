@@ -34,7 +34,7 @@ class Database {
         return $this;
     }
 
-    public function bind($param, $value, $type = null)
+    public function bindValue($param, $value, $type = null)
     {
         if (is_null($type)) {
             $type = match(true) {

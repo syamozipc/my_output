@@ -189,7 +189,7 @@ class PasswordResetController extends Controller {
         }
 
         // ログイン失敗は無い想定なので、失敗時の処理は書いていない
-        $this->loginService->baseLogin(email:$resetRequest->email, password:$request['password'], model:$this->userModel);
+        $this->loginService->baseLogin(email:$resetRequest->email, password:$request['password']);
 
         return redirect('mypage/index');
     }

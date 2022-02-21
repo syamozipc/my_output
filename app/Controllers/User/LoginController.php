@@ -7,7 +7,6 @@ use App\Services\LoginService;
 use App\Models\User;
 
 class LoginController extends Controller {
-    use \App\Traits\SessionTrait;
 
     public user $userModel;
     public LoginService $loginService;
@@ -42,7 +41,7 @@ class LoginController extends Controller {
 
         if (!$isValidated) return redirect('login/loginForm');
 
-        $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password'], model:$this->userModel);
+        $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password']);
 
         if (!$isLogedIn) {
             $this->setFlashSession(key:"error_status", param:'ログインに失敗しました。');

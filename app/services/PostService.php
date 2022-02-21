@@ -70,9 +70,9 @@ class PostService {
             $sql = 'INSERT INTO posts (user_id, country_id, description) VALUES (:user_id, :country_id, :description)';
 
             $this->postModel->db->prepare($sql)
-                ->bind(':user_id', $userId)
-                ->bind(':country_id', $post['country_id'])
-                ->bind(':description', $post['description'])
+                ->bindValue(':user_id', $userId)
+                ->bindValue(':country_id', $post['country_id'])
+                ->bindValue(':description', $post['description'])
                 ->execute();
 
             $id = $this->postModel->db->lastInsertId();
@@ -80,10 +80,10 @@ class PostService {
             $sql = 'INSERT INTO post_details (post_id, type, path, sort_number) VALUES (:post_id, :type, :path, :sort_number)';
 
             $this->postModel->db->prepare($sql)
-                ->bind(':post_id', $id)
-                ->bind(':type', 1)
-                ->bind(':path', basename($post['file_path']))
-                ->bind(':sort_number', 1)
+                ->bindValue(':post_id', $id)
+                ->bindValue(':type', 1)
+                ->bindValue(':path', basename($post['file_path']))
+                ->bindValue(':sort_number', 1)
                 ->execute();
 
             $this->postModel->db->commit();
@@ -120,7 +120,7 @@ class PostService {
         ';
 
          $post = $this->postModel->db->prepare($sql)
-            ->bind(':id', $id)
+            ->bindValue(':id', $id)
             ->executeAndFetch();
 
             return $post;
@@ -138,9 +138,9 @@ class PostService {
             $sql = 'UPDATE posts SET country_id = :country_id, description = :description WHERE id = :id';
 
             $this->postModel->db->prepare($sql)
-                ->bind(':country_id', $post['country_id'])
-                ->bind(':description', $post['description'])
-                ->bind(':id', $id)
+                ->bindValue(':country_id', $post['country_id'])
+                ->bindValue(':description', $post['description'])
+                ->bindValue(':id', $id)
                 ->execute();
     }
 
@@ -158,13 +158,13 @@ class PostService {
             // postを削除
             $sqlDeletePost = 'UPDATE posts SET status_id = "deleted" WHERE id = :id';
             $this->postModel->db->prepare($sqlDeletePost)
-                ->bind(':id', $id)
+                ->bindValue(':id', $id)
                 ->execute();
 
             // fileを削除
             $sqlGetPostDetail = 'SELECT * FROM post_details WHERE post_id = :post_id';
             $postDetail = $this->postModel->db->prepare($sqlGetPostDetail)
-                ->bind(':post_id', $id)
+                ->bindValue(':post_id', $id)
                 ->executeAndFetch();
 
             $filePath = $postDetail->path;
@@ -173,7 +173,7 @@ class PostService {
             // post_detailを削除
             $sqlDeletePostDetail = 'DELETE FROM post_details WHERE post_id = :post_id';
             $this->postModel->db->prepare($sqlDeletePostDetail)
-                ->bind(':post_id', $id)
+                ->bindValue(':post_id', $id)
                 ->execute();
 
             $this->postModel->db->commit();

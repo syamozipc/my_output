@@ -25,7 +25,7 @@ class PasswordResetService {
         // 期限切れ含め、既にパスワードリセットフロー中か（$userが取れればフロー中、取れなければfalseが返る）
         $user = $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(param:':email', value:$email)
+            ->bindValue(param:':email', value:$email)
             ->executeAndFetch();
         
         // レコードがあるかどうかで UPDATE/INSERT 分岐
@@ -37,9 +37,9 @@ class PasswordResetService {
 
         $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(param:':email', value:$email)
-            ->bind(param:':token', value:$passwordResetToken)
-            ->bind(param:':token_sent_at', value:$currentDateTime)
+            ->bindValue(param:':email', value:$email)
+            ->bindValue(param:':token', value:$passwordResetToken)
+            ->bindValue(param:':token_sent_at', value:$currentDateTime)
             ->execute();
 
         return;
@@ -58,7 +58,7 @@ class PasswordResetService {
         mb_internal_encoding("UTF-8");
 
         $url = route('passwordReset/verifyToken', "?token={$passwordResetToken}");
-        $hour = Token_Valid_Period_Hour;
+        $hour = Email_Token_Valid_Period_Hour;
 
         $subject = '【' . SITENAME . '】' . 'パスワードリセット用URLをお送りします。';
 
@@ -84,13 +84,13 @@ class PasswordResetService {
     {
         $sql = 'SELECT * FROM `password_resets` WHERE `token` = :token AND `token_sent_at` >= :token_sent_at';
 
-        $hour = Token_Valid_Period_Hour;
+        $hour = Email_Token_Valid_Period_Hour;
         $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
         $user = $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(param:':token', value:$passwordResetToken)
-            ->bind(param:':token_sent_at', value:$tokenValidPeriod)
+            ->bindValue(param:':token', value:$passwordResetToken)
+            ->bindValue(param:':token_sent_at', value:$tokenValidPeriod)
             ->executeAndFetch();
 
         return $user;
@@ -107,7 +107,7 @@ class PasswordResetService {
 
         $user = $this->userModel->db
             ->prepare(sql:$sql)
-            ->bind(param:':token', value:$passwordResetToken)
+            ->bindValue(param:':token', value:$passwordResetToken)
             ->executeAndFetch();
 
         return $user;

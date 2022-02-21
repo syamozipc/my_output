@@ -1,10 +1,17 @@
 <?php
 namespace App\Services;
 
-use App\Libraries\Model;
+use App\Models\User;
 
 class LogoutService {
     use \App\Traits\SessionTrait;
+
+    private User $userModel;
+
+    public function FunctionName()
+    {
+        $this->userModel = new User();
+    }
 
     /**
      * ログアウト処理
@@ -16,11 +23,13 @@ class LogoutService {
      * @param Model $model logout対象のテーブルのモデル
      * @return void
      */
-    public function baseLogout(string $userId, Model $model)
+    public function baseLogout(string $userId)
     {
-        $this->deleteApiToken(userId:$userId, model:$model);
+        $this->deleteApiTokenAndRememberToken(userId:$userId);
 
         $this->logoutSession();
+
+        setcookie('remember_token', '', time() - 6000, '/');
 
         return;
     }
@@ -45,12 +54,12 @@ class LogoutService {
      * @param string $userId
      * @return void
      */
-    private function deleteApiToken($userId, Model $model):void
+    private function deleteApiTokenAndRememberToken($userId):void
     {
-        $sql = 'UPDATE users SET `api_token` = NULL WHERE `id` = :id';
-        $model->db
+        $sql = 'UPDATE users SET `api_token` = NULL, `remember_token` = NULL WHERE `id` = :id';
+        $this->user->db
             ->prepare($sql)
-            ->bind(':id', $userId)
+            ->bindValue(':id', $userId)
             ->execute();
 
         return;
