@@ -26,7 +26,7 @@ class LoginService {
      * @param Model $model login対象のテーブルのモデル
      * @return boolean login成功でtrue、失敗でfalseを返す
      */
-    public function baseLogin(string $email, string $password, bool $rememberMe = true):bool
+    public function baseLogin(string $email, string $password, bool $rememberMe = false):bool
     {
         $sql = 'SELECT * FROM `users` WHERE `email` = :email';
 

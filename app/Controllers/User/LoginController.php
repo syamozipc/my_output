@@ -41,7 +41,9 @@ class LoginController extends Controller {
 
         if (!$isValidated) return redirect('login/loginForm');
 
-        $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password']);
+        $shouldRememberMe = isset($request['remember_me']);
+
+        $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password'], rememberMe:$shouldRememberMe);
 
         if (!$isLogedIn) {
             $this->setFlashSession(key:"error_status", param:'ログインに失敗しました。');
