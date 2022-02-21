@@ -8,7 +8,7 @@ class LogoutService {
 
     private User $userModel;
 
-    public function FunctionName()
+    public function __construct()
     {
         $this->userModel = new User();
     }
@@ -57,7 +57,7 @@ class LogoutService {
     private function deleteApiTokenAndRememberToken($userId):void
     {
         $sql = 'UPDATE users SET `api_token` = NULL, `remember_token` = NULL WHERE `id` = :id';
-        $this->user->db
+        $this->userModel->db
             ->prepare($sql)
             ->bindValue(':id', $userId)
             ->execute();
