@@ -67,7 +67,7 @@ class LoginService {
 
             if (!$user) return false;
 
-            $this->setLoginSession('user_id', $user->id);
+            $this->setLoginSession($user->id);
             $this->updateLastLogin(userId:$user->id);
 
             return true;
