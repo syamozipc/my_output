@@ -2,14 +2,17 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Services\UserService;
 
 class LoginService {
     use \App\Traits\SessionTrait;
-    private $userModel;
+    private User $userModel;
+    private UserService $userService;
 
     public function __construct()
     {
         $this->userModel = new User();
+        $this->userService = new UserService();
     }
 
     /**
@@ -45,22 +48,38 @@ class LoginService {
 
         $this->updateApiToken(userId:$user->id);
 
-        // updateLastLoginもここでやる？
-        // @todo updateApiToken,  allocateRememberTokenは一つのfunction, SQLにまとめたい
-
         if ($rememberMe) $this->allocateRememberToken(userId:$user->id);
 
         return true;
     }
 
     /**
+     * remember tokenに合致するuserに下記ログイン処理をする
+     * ・user_idをsessionに保存
+     * ・last_login_atを更新
+     * 
+     * @param string $rememberToken
+     * @return boolean
+     */
+    public function loginByRememberToken($rememberToken): bool
+    {
+            $user = $this->userService->getUserByRememberToken($rememberToken);
+
+            if (!$user) return false;
+
+            $this->setLoginSession('user_id', $user->id);
+            $this->updateLastLogin(userId:$user->id);
+
+            return true;
+    }
+
+    /**
      * ログイン時にuserIdをセッションに保存する
-     * @todo 有効期限設定やsession cookieを使う（ブラウザを閉じても破棄されないように）
      *
      * @param string $userId
      * @return void
      */
-    private function setLoginSession($userId):void
+    public function setLoginSession($userId):void
     {
         $this->setSession(key:'user_id', param:$userId);
 
@@ -91,12 +110,10 @@ class LoginService {
      * 1.remember_tokenを生成してcookieに持たせる
      * 2.そのtokenをhash化したものをusersテーブルに保存
      *
-     * @todo updateApiToken()と合わせて1つのSQLで済ませたい
-     * 
      * @param integer $userId
      * @return void
      */
-    public function allocateRememberToken(int $userId)
+    private function allocateRememberToken(int $userId)
     {
         $token = str_random(40);
         $digest = md5($token);
@@ -109,6 +126,27 @@ class LoginService {
         $this->userModel->db
             ->prepare($sql)
             ->bindValue(':remember_token', $digest)
+            ->bindValue(':id', $userId)
+            ->execute();
+
+        return;
+    }
+
+    /**
+     * ユーザーがログイン中、HTTPリクエストの都度、usersテーブルのlast_login_atを更新する
+     *
+     * @param integer $userId
+     * @return void
+     */
+    public function updateLastLogin(int $userId)
+    {
+        $sql = 'UPDATE users SET `last_login_at` = :last_login_at WHERE `id` = :id';
+
+        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
+
+        $this->userModel->db
+            ->prepare($sql)
+            ->bindValue(':last_login_at', $currentDateTime)
             ->bindValue(':id', $userId)
             ->execute();
 

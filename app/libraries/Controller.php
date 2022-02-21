@@ -1,7 +1,7 @@
 <?php
 namespace App\Libraries;
 
-use App\Services\UserService;
+use App\Services\LoginService;
 
 /**
  * base controller
@@ -10,52 +10,26 @@ use App\Services\UserService;
 class Controller {
     use \App\Traits\SessionTrait;
 
-    protected UserService $userService;
+    protected LoginService $loginService;
 
     public function __construct()
     {
-        $this->userService = new UserService();
+        $this->loginService = new LoginService();
 
-        // @todo 整理
-        /**
-         * setLoginSession
-         * updateApiToken
-         * allocateRememberToken
-         * updateLastLogin
-         * 
-         * user取得も必要？
-         */
 
-        /**
-         * ログイン済みの場合
-         * ・updateLastLogin
-         */
+        // @todo ログイン済み or remember_token持ちでloginFormのURLを叩いた場合のみ、updateLastLoginが2回実行される
+        // ※このcontrollerが2度呼び出され、どちらでも処理が実行されるため
+
+        // ログイン済みの場合、last_login_atを更新
         if (isLogedIn()) {
             $userId = $this->getSession('user_id');
-            $this->userService->updateLastLogin(userId:$userId);
+            $this->loginService->updateLastLogin(userId:$userId);
 
-            return;
+        // 未ログインかつremember_tokenがある場合、ログイン処理
+        } else if (isset($_COOKIE['remember_token'])) {
+            $rememberToken = $_COOKIE['remember_token'];
+            $this->loginService->loginByRememberToken(rememberToken:$rememberToken);
         }
-
-        $rememberToken = $_COOKIE['remember_token'] ?? NULL;
-        if ($rememberToken) {
-            // @todo ログインユーザー取得時、api_tokenの更新とlast_loginの更新もしたい（login servieでremember_token login用メソッドを作り、そちらで対応する）
-            $user = $this->userService->getUserByRememberToken($rememberToken);
-
-            /**
-             * remember_tokenの場合
-             * ・setLoginSession
-             * ・updateLastLogin
-             */
-            if ($user) {
-                $this->setSession('user_id', $user->id);
-                $this->userService->updateLastLogin(userId:$user->id);
-            }
-
-            return;
-        }
-
-        // sessionもremember_tokenもなければ、未ログインとする
     }
 
     /**
@@ -73,5 +47,4 @@ class Controller {
         
         require_once base_path('resources/views/user/template.php');
     }
-
 }

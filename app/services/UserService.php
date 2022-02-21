@@ -113,27 +113,6 @@ class UserService {
     }
 
     /**
-     * ユーザーがログイン中、HTTPリクエストの都度、usersテーブルのlast_login_atを更新する
-     *
-     * @param integer $userId
-     * @return void
-     */
-    public function updateLastLogin(int $userId)
-    {
-        $sql = 'UPDATE users SET `last_login_at` = :last_login_at WHERE `id` = :id';
-
-        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
-
-        $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':last_login_at', $currentDateTime)
-            ->bindValue(':id', $userId)
-            ->execute();
-
-        return;
-    }
-
-    /**
      * パスワードを変更
      *
      * @param integer $userId

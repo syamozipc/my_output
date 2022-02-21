@@ -35,6 +35,7 @@ https://github.com/syamozipc/my_output
     -   [ ] db から取ってきたデータは現状 stdClass だが、そのテーブルの model にしたい
     -   [ ] モデルオブジェクトに引数を渡し、save するだけでテーブルに入るようにしたい
     -   [ ] post モデルが post_detail モデルを持つよう、リレーションを作りたい
+-   [ ] try/catch使いerror log出力
 -   [ ] AWS 実装
     -   [ ] 画像・動画を S3 に cludfront 経由でアップロード
     -   [ ] EC2 動かす
