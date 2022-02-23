@@ -34,6 +34,8 @@ trait SessionTrait {
     {
         $_SESSION['_old'] = $_SESSION['_flash'];
 
-        return $this->unsetSession('_flash');
+        unset($_SESSION['_flash']);
+
+        return;
     }
 }   
