@@ -61,7 +61,7 @@ class Database {
      * @param string $className fetch結果をinstance化classの名前
      * @return array $className の配列（無ければ[]の配列）
      */
-    public function executeAndFetchAll($className): array
+    public function executeAndFetchAll($className = 'stdClass'): array
     {
         $this->execute();
 
@@ -76,7 +76,7 @@ class Database {
      * @param string $className fetch結果をinstance化classの名前
      * @return object|false $classNameに指定したクラスのinstance（失敗したらfalse）
      */
-    public function executeAndFetch($className): object|false
+    public function executeAndFetch($className = 'stdClass'): object|false
     {
         $this->execute();
 

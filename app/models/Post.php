@@ -4,16 +4,20 @@ namespace App\Models;
 use App\Libraries\Model;
 
 class Post extends Model {
-    public ?string $id;
-    public ?string $country_id;
-    public ?string $description;
+    public string $table = 'posts';
 
-    public function __construct($params = [])
+    public array $fillable = [
+        'id' => '',
+        'user_id' => '',
+        'country_id' => '',
+        'description' => '',
+        'status_id' => '',
+        'created_at' => '',
+        'updated_at' => ''
+    ];
+
+    public function __construct(array $params= [])
     {
-        parent::__construct();
-
-        $this->id = $params['id'] ?? null;
-        $this->country_id = $params['country_id'] ?? null;
-        $this->description = $params['description'] ?? null;
+        parent::__construct($params);
     }
 }

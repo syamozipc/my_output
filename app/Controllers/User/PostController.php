@@ -26,13 +26,13 @@ class PostController extends Controller {
     {
         $description = "投稿一覧";
 
-        $postsList = $this->postService->fetchPostsList();
+        $posts = $this->postService->fetchPostsList();
 
         $data = [
             'css' => 'css/user/post/index.css',
             'js' => 'js/user/post/index.js',
             'description' => $description,
-            'postsList' => $postsList,
+            'posts' => $posts,
         ];
 
         return $this->view(view:'user/post/index', data:$data);
@@ -43,14 +43,14 @@ class PostController extends Controller {
         $this->loginService->redirectToLoginFormIfNotLogedIn();
         
         // 国一覧を取得
-        $countriesList = $this->countryService->fetchCountriesList();
+        $countries = $this->countryService->fetchCountriesList();
 
-        $post = new Post(old() ?: filter_input_array(INPUT_POST));
+        $post = new Post(old() ?: filter_input_array(INPUT_POST) ?? []);
 
         $data = [
             'css' => 'css/user/post/create.css',
             'js' => 'js/user/post/create.js',
-            'countriesList' => $countriesList,
+            'countries' => $countries,
             'post' => $post
         ];
 
@@ -92,14 +92,8 @@ class PostController extends Controller {
         $request = filter_input_array(INPUT_POST);
         $userId = $this->getSession('user_id');
 
-        if (!$userId) {
-            $this->setFlashSession(key:"error_status", param:'ログインしてください。');
-
-            return redirect('login/loginForm');
-        }
-
         // path含めpost・post_detailsテーブルに保存
-        $this->postService->savePost(post:$request, userId:$userId);
+        $this->postService->savePost(request:$request, userId:$userId);
 
         return redirect('post/index');
     }

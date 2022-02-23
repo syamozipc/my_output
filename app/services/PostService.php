@@ -1,16 +1,19 @@
 <?php
 namespace App\Services;
 
+use App\Libraries\Database;
 use App\models\{Post, PostDetail};
 
 class PostService {
     public Post $postModel;
     public PostDetail $postDetailModel;
+    public Database $db;
 
     public function __construct()
     {
         $this->postModel = new Post();
         $this->postDetailModel = new PostDetail();
+        $this->db = new Database();
     }
 
     /**
@@ -27,7 +30,7 @@ class PostService {
 
         move_uploaded_file($tempPath, $filePath);
 
-        return $filePath;
+        return basename($filePath);
     }
 
     /**
@@ -66,34 +69,30 @@ class PostService {
      * @param array $post 投稿内容
      * @return void
      */
-    public function savePost(array $post, int $userId): void
+    public function savePost(array $request, int $userId): void
     {
         try {
-            $this->postModel->db->beginTransaction();
+            $this->db->beginTransaction();
 
-            $sql = 'INSERT INTO posts (user_id, country_id, description) VALUES (:user_id, :country_id, :description)';
+            // postsへinsert
+            $request['user_id'] = $userId;
+            $post = new Post($request);
+            $post->save();
 
-            $this->postModel->db->prepare($sql)
-                ->bindValue(':user_id', $userId)
-                ->bindValue(':country_id', $post['country_id'])
-                ->bindValue(':description', $post['description'])
-                ->execute();
+            // post_detailsへinsert
+            $postDetailParams = [
+                'post_id' => $post->db->lastInsertId(),
+                'type' => 1,
+                'path' => $request['file_path'],
+                'sort_number' => 1
+            ];
+            $postDetail = new PostDetail($postDetailParams);
+            $postDetail->save();
 
-            $id = $this->postModel->db->lastInsertId();
-
-            $sql = 'INSERT INTO post_details (post_id, type, path, sort_number) VALUES (:post_id, :type, :path, :sort_number)';
-
-            $this->postModel->db->prepare($sql)
-                ->bindValue(':post_id', $id)
-                ->bindValue(':type', 1)
-                ->bindValue(':path', basename($post['file_path']))
-                ->bindValue(':sort_number', 1)
-                ->execute();
-
-            $this->postModel->db->commit();
+            $this->db->commit();
 
         } catch (\Exception $e) {
-            $this->postModel->db->rollBack();
+            $this->db->rollBack();
             
              exit($e->getMessage());
         }

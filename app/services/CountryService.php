@@ -15,19 +15,19 @@ class CountryService {
     {
         $sql = 'SELECT * FROM countries';
 
-        $countriesList = $this->countryModel->db->prepare($sql)->executeAndFetchAll(get_class($this->countryModel));
+        $countries = $this->countryModel->db->prepare($sql)->executeAndFetchAll(get_class($this->countryModel));
 
-        return $countriesList;
+        return $countries;
     }
 
     public function fetchCountryByID($id)
     {
         $sql = 'SELECT * FROM countries WHERE id = :id';
 
-        $countriesList = $this->countryModel->db->prepare($sql)
+        $countries = $this->countryModel->db->prepare($sql)
             ->bindValue(':id', $id)
             ->executeAndFetch(get_class($this->countryModel));
 
-        return $countriesList;
+        return $countries;
     }
 }

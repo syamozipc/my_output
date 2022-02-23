@@ -28,6 +28,7 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] データのやり取りはモデルオブジェクトに引数を渡してインスタンス化した上で行、$model->save() するだけでテーブルに入るようにしたい
+-   [ ] 独習PHPの9,10章確認してもうちょっとうまく書けないか
 -   [ ] JSのapiリクエストとapi_token使う
 -   [ ] try/catchを各所に使いerror log出力
 -   [ ] AWS 実装
