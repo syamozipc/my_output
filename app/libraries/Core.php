@@ -29,7 +29,7 @@ class Core {
     public function initSession()
     {
         session_start();
-        // セキュリティ対策で、httpリクエストの都度session_idを変更
+        //セッションIDを変更（セッションハイジャック対策）
         session_regenerate_id();
 
         if (isset( $_SESSION['flash'])) {
