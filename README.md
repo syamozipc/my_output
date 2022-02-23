@@ -27,8 +27,6 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
--   [ ] 認証機能
-    -   [ ] SNS ログイン
 -   [ ] モデルにオブジェクト指向実装
     -   [ ] db から取ってきたデータは現状 stdClass だが、そのテーブルの model にしたい
     -   [ ] モデルオブジェクトに引数を渡し、save するだけでテーブルに入るようにしたい
@@ -38,6 +36,7 @@ https://github.com/syamozipc/my_output
     -   [ ] 画像・動画を S3 に cludfront 経由でアップロード
     -   [ ] EC2 動かす
     -   [ ] RDS 使う
+-   [ ] SNS ログイン
 -   [ ] TypeScript 実装
 -   [ ] 自己結合の多対多（フォロー機能）
 -   [ ] HTML/CSS 勉強後、マークアップ部分を改善
