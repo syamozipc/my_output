@@ -2,15 +2,16 @@
 namespace App\Controllers\User;
 
 use App\Libraries\Controller;
-use App\Services\{CountryService, PostService};
+use App\Services\{CountryService, PostService, LoginService};
 use App\Models\{Country, Post};
 use App\Validators\User\{PostCreateValidator, PostEditValidator, PostDeleteValidator};
 
 class PostController extends Controller {
     use \App\Traits\SessionTrait;
 
-    public $countryService;
-    public $postService;
+    public CountryService $countryService;
+    public PostService $postService;
+    public LoginService $loginService;
 
     public function __construct()
     {
@@ -18,6 +19,7 @@ class PostController extends Controller {
         
         $this->countryService = new CountryService();
         $this->postService = new PostService();
+        $this->loginService = new LoginService();
     }
 
     public function index()
@@ -38,6 +40,8 @@ class PostController extends Controller {
 
     public function create()
     {
+        $this->loginService->redirectToLoginFormIfNotLogedIn();
+        
         // 国一覧を取得
         $countriesList = $this->countryService->fetchCountriesList();
 
@@ -55,6 +59,8 @@ class PostController extends Controller {
 
     public function confirm()
     {
+        $this->loginService->redirectToLoginFormIfNotLogedIn();
+
         $request = filter_input_array(INPUT_POST);
 
         $validator = new PostCreateValidator();
@@ -81,6 +87,8 @@ class PostController extends Controller {
 
     public function save()
     {
+        $this->loginService->redirectToLoginFormIfNotLogedIn();
+
         $request = filter_input_array(INPUT_POST);
         $userId = $this->getSession('user_id');
 
@@ -111,6 +119,8 @@ class PostController extends Controller {
 
     public function edit(int $id)
     {
+        $this->loginService->redirectToLoginFormIfNotLogedIn();
+
         $post = $this->postService->fetchPostById($id);
 
         $request = filter_input_array(INPUT_POST);
@@ -134,6 +144,8 @@ class PostController extends Controller {
 
     public function editConfirm($id)
     {
+        $this->loginService->redirectToLoginFormIfNotLogedIn();
+
         $request = filter_input_array(INPUT_POST);
 
         $validator = new PostEditValidator();
@@ -160,6 +172,8 @@ class PostController extends Controller {
 
     public function update(int $id)
     {
+        $this->loginService->redirectToLoginFormIfNotLogedIn();
+
         // path含めpost・post_detailsテーブルに保存
         $this->postService->updatePost(post:filter_input_array(INPUT_POST), id:$id);
 
@@ -168,6 +182,8 @@ class PostController extends Controller {
 
     public function delete(int $id)
     {
+        $this->loginService->redirectToLoginFormIfNotLogedIn();
+
         $validator = new PostDeleteValidator();
         $isValidated = $validator->validate($id);
 

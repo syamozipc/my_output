@@ -181,4 +181,18 @@ class LoginService {
 
         return;
     }
+
+    /**
+     * ユーザーがログインしていなかったら、ログインページへ遷移する
+     *
+     * @return void
+     */
+    public function redirectToLoginFormIfNotLogedIn()
+    {
+        if (isLogedIn()) return;
+
+        $this->setFlashSession(key:'error_status', param:'ログインしてください');
+
+        return redirect('login/loginForm');
+    }
 }
