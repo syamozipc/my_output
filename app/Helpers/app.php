@@ -12,8 +12,8 @@
 function old(string $key = null): string|int|array|null
 {
     return !$key 
-        ? $_SESSION['old'] ?? null
-        : $_SESSION['old'][$key] ?? null;
+        ? $_SESSION['_old'] ?? null
+        : $_SESSION['_old'][$key] ?? null;
 }
 
 /**
@@ -59,7 +59,7 @@ function isLogedIn(): bool
  */
 function csrf(): string
 {
-    $csrfToken = $_SESSION['csrf_token'];
-    return "<input type='hidden' name='csrf_token' value='{$csrfToken}'>";
+    $csrfToken = $_SESSION['_csrf_token'];
+    return "<input type='hidden' name='_csrf_token' value='{$csrfToken}'>";
 }
 ?>

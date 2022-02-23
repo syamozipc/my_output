@@ -51,10 +51,10 @@ class Core {
         // post以外はcheck不要
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
         
-        $csrfToken = filter_input(INPUT_POST, 'csrf_token');
+        $csrfToken = filter_input(INPUT_POST, '_csrf_token');
 
         // csrf tokenが正しければOK
-        if (isset($csrfToken) && $csrfToken === $_SESSION['csrf_token']) return;
+        if ($csrfToken && $csrfToken === $this->getSession('_csrf_token')) return;
 
         $this->setFlashSession(key:"error_status", param:'正規の画面からご利用ください。');
 
@@ -73,9 +73,10 @@ class Core {
      */
     public function initCSRF()
     {   
-        if (empty($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        }
+        if ($this->getSession('_csrf_token')) return;
+
+        $csrfToken = bin2hex(random_bytes(32));
+        $this->setSession('_csrf_token', $csrfToken);
     }
 
      /**
