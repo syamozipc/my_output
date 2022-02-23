@@ -35,6 +35,8 @@ class Core {
         // フラッシュセッションがあれば_oldへ移動し、フラッシュセッションは削除
         if ($this->getSession('_flash')) {
             $this->moveFlashSessionToOld();
+        } else {
+            $this->unsetSession('_old');
         }
     }
 
