@@ -16,8 +16,9 @@ class LogoutService {
     /**
      * ログアウト処理
      * 
-     * ・api_tokenを削除
-     * ・sessionを削除
+     * ・api_token、remember_tokenの値をテーブルカラムから削除
+     * ・remember_tokenのcookieを削除
+     * ・ログインsessionの初期化・削除処理
      *
      * @param string $userId
      * @param Model $model logout対象のテーブルのモデル
@@ -25,30 +26,24 @@ class LogoutService {
      */
     public function baseLogout(string $userId)
     {
+        // api_token, remember_tokenの値をテーブルカラムから削除
         $this->deleteApiTokenAndRememberToken(userId:$userId);
 
-        $this->logoutSession();
-
+        // remeber_tokenをcookieから削除
         setcookie('remember_token', '', time() - 6000, '/');
 
-        return;
-    }
-
-    /**
-     * ログアウト時にuserIdをセッションから破棄する
-     * 
-     * @param string $userId
-     * @return void
-     */
-    private function logoutSession():void
-    {
-        $this->unsetSession(key:'user_id');
+        // session変数を初期化（メモリから削除するため）
+        $this->unsetAllSession();
+        // session cookieを削除
+        setcookie('PHPSESSID', '', time() - 6000, '/');
+        // sessionファイル（sessionの実データ）を削除
+        session_destroy();
 
         return;
     }
 
     /**
-     * ログイン時にapi_tokenを更新する
+     * ログアウト時にapi_token、remember_tokenを更新する
      *
      * @param string $userId
      * @return void

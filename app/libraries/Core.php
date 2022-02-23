@@ -30,13 +30,11 @@ class Core {
     {
         session_start();
         //セッションIDを変更（セッションハイジャック対策）
-        session_regenerate_id();
+        session_regenerate_id(true);
 
-        if (isset( $_SESSION['flash'])) {
-            $_SESSION['old'] = $_SESSION['flash'];
-            unset($_SESSION['flash']);
-        } else {
-            $_SESSION['old'] = [];
+        // フラッシュセッションがあれば_oldへ移動し、フラッシュセッションは削除
+        if ($this->getSession('_flash')) {
+            $this->moveFlashSessionToOld();
         }
     }
 

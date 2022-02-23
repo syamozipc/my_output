@@ -16,10 +16,24 @@ trait SessionTrait {
     public function unsetSession(string $key)
     {
         unset($_SESSION[$key]);
+
+        return;
+    }
+
+    public function unsetAllSession()
+    {
+        return $_SESSION = [];
     }
 
     public function setFlashSession(string $key, int|string|array $param)
     {
-        $_SESSION['flash'][$key] = $param;
+        return $_SESSION['_flash'][$key] = $param;
+    }
+
+    public function moveFlashSessionToOld()
+    {
+        $_SESSION['_old'] = $_SESSION['_flash'];
+
+        return $this->unsetSession('_flash');
     }
 }   
