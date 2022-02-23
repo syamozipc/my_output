@@ -1,15 +1,16 @@
 <?php
 namespace App\Services;
 
-use App\models\User;
-use DateTime;
+use App\models\{User, PasswordReset};
 
 class PasswordResetService {
-    public object $userModel;
+    public User $userModel;
+    public PasswordReset $passwordResetModel;
 
     public function __construct()
     {
         $this->userModel = new User();
+        $this->passwordResetModel = new PasswordReset();
     }
 
     /**
@@ -26,16 +27,16 @@ class PasswordResetService {
         $user = $this->userModel->db
             ->prepare(sql:$sql)
             ->bindValue(param:':email', value:$email)
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->userModel));
         
         // レコードがあるかどうかで UPDATE/INSERT 分岐
         $sql = $user
             ? 'UPDATE `password_resets` SET `token` = :token, `token_sent_at` = :token_sent_at WHERE `email` = :email'
             : 'INSERT INTO `password_resets` (`email`, `token`, `token_sent_at`) VALUES (:email, :token, :token_sent_at)';
 
-        $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
+        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
 
-        $this->userModel->db
+        $this->passwordResetModel->db
             ->prepare(sql:$sql)
             ->bindValue(param:':email', value:$email)
             ->bindValue(param:':token', value:$passwordResetToken)
@@ -78,22 +79,22 @@ class PasswordResetService {
      * トークンが一致しないもしくは期限切れの場合、falseをリターン
      *
      * @param string $token
-     * @return object|false
+     * @return PasswordReset|false
      */
-    public function getValidRequestByToken(string $passwordResetToken):object|false
+    public function getValidRequestByToken(string $passwordResetToken):PasswordReset|false
     {
         $sql = 'SELECT * FROM `password_resets` WHERE `token` = :token AND `token_sent_at` >= :token_sent_at';
 
         $hour = Email_Token_Valid_Period_Hour;
-        $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
+        $tokenValidPeriod = (new \DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
-        $user = $this->userModel->db
+        $passwordReset = $this->passwordResetModel->db
             ->prepare(sql:$sql)
             ->bindValue(param:':token', value:$passwordResetToken)
             ->bindValue(param:':token_sent_at', value:$tokenValidPeriod)
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->passwordResetModel));
 
-        return $user;
+        return $passwordReset;
     }
 
     /**
@@ -105,11 +106,11 @@ class PasswordResetService {
     {
         $sql = 'DELETE FROM `password_resets` WHERE `token` = :token';
 
-        $user = $this->userModel->db
+        $this->userModel->db
             ->prepare(sql:$sql)
             ->bindValue(param:':token', value:$passwordResetToken)
-            ->executeAndFetch();
+            ->execute();
 
-        return $user;
+        return;
     }
 }

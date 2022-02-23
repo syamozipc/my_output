@@ -55,18 +55,36 @@ class Database {
         return $this->pdoStatement->execute();
     }
 
-    public function executeAndFetchAll()
+    /**
+     * execute→fetchAll後、$clasNameのinstanceの配列として結果を取得
+     *
+     * @param string $className fetch結果をinstance化classの名前
+     * @return array $className の配列（無ければ[]の配列）
+     */
+    public function executeAndFetchAll($className): array
     {
         $this->execute();
 
-        return $this->pdoStatement->fetchAll(\PDO::FETCH_OBJ);
+        $this->pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $className);
+        
+        return $this->pdoStatement->fetchAll();
     }
 
-    public function executeAndFetch()
+    /**
+     * execute→fetch後、$clasNameのinstanceとして結果を取得
+     *
+     * @param string $className fetch結果をinstance化classの名前
+     * @return object|false $classNameに指定したクラスのinstance（失敗したらfalse）
+     */
+    public function executeAndFetch($className): object|false
     {
         $this->execute();
 
-        return $this->pdoStatement->fetch(\PDO::FETCH_OBJ);
+        // 任意のクラスのインスタンスとして取得。コンストラクタ → propertyをセットの順になる
+        $this->pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $className);
+
+        // fetchObject にすると \PDO::FETCH_PROPS_LATE を指定できずpropertyのセット→コンストラクタ実行 という逆順になるので、上でモードを定義
+        return $this->pdoStatement->fetch();
     }
 
     public function rowCount()

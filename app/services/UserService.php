@@ -16,9 +16,9 @@ class UserService {
      * idからユーザーを取得
      *
      * @param int $id
-     * @return object|false $userOrFalse
+     * @return User|false $userOrFalse
      */
-    public function getUserById(int $id): object|false
+    public function getUserById(int $id): User|false
     {
         $sql = 'SELECT * FROM users WHERE `id` = :id AND `status_id` = :status_id';
 
@@ -26,7 +26,7 @@ class UserService {
             ->prepare($sql)
             ->bindValue(':id', $id)
             ->bindValue(':status_id', 'public')
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->userModel));
 
         return $userOrFalse;
     }
@@ -35,9 +35,9 @@ class UserService {
      * emailからユーザーを取得
      *
      * @param string $email
-     * @return object|false $userOrFalse
+     * @return user|false $userOrFalse
      */
-    public function getUserByEmail(string $email): object|false
+    public function getUserByEmail(string $email): user|false
     {
         $sql = 'SELECT * FROM users WHERE `email` = :email AND `status_id` = :status_id';
 
@@ -55,9 +55,9 @@ class UserService {
      * 失敗時はfalseを返す
      * 
      * @param string $registerToken
-     * @return object|false $user
+     * @return User|false $user
      */
-    public function getUserByRegisterToken(string $registerToken):object|false
+    public function getUserByRegisterToken(string $registerToken): User|false
     {
         $sql = 'SELECT * FROM users WHERE `register_token` = :register_token AND `status_id` = :status_id';
 
@@ -65,7 +65,7 @@ class UserService {
             ->prepare($sql)
             ->bindValue(':register_token', $registerToken)
             ->bindValue(':status_id', 'public')
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->userModel));
 
         return $userOrFalse;
     }
@@ -75,9 +75,9 @@ class UserService {
      * 失敗時はfalseを返す
      * 
      * @param string $rememberToken
-     * @return object|false $user
+     * @return User|false $user
      */
-    public function getUserByRememberToken(string $rememberToken):object|false
+    public function getUserByRememberToken(string $rememberToken): User|false
     {
         $sql = 'SELECT * FROM users WHERE `remember_token` = :remember_token AND `status_id` = :status_id';
 
@@ -85,7 +85,7 @@ class UserService {
             ->prepare($sql)
             ->bindValue(':remember_token', md5($rememberToken))
             ->bindValue(':status_id', 'public')
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this));
 
         return $userOrFalse;
     }

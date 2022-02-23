@@ -55,7 +55,6 @@ class LoginService {
      *
      * @param string $email
      * @param string $password
-     * @param Model $model login対象のテーブルのモデル
      * @return boolean login成功でtrue、失敗でfalseを返す
      */
     public function baseLogin(string $email, string $password, bool $rememberMe = false):bool
@@ -65,7 +64,7 @@ class LoginService {
         $user = $this->userModel->db
             ->prepare($sql)
             ->bindValue(':email', $email)
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->userModel));
 
         if (!$user) return false;
 
@@ -73,11 +72,11 @@ class LoginService {
 
         if (!password_verify($password, $hashedPassword)) return false;
 
-        $this->setLoginSession(userId:$user->id);
+        $this->setLoginSession(user:$user);
 
-        $this->updateApiToken(userId:$user->id);
+        $this->updateApiToken(user:$user);
 
-        if ($rememberMe) $this->allocateRememberToken(userId:$user->id);
+        if ($rememberMe) $this->allocateRememberToken(user:$user);
 
         return true;
     }
@@ -105,12 +104,12 @@ class LoginService {
     /**
      * ログイン時にuserIdをセッションに保存する
      *
-     * @param string $userId
+     * @param User $user
      * @return void
      */
-    private function setLoginSession($userId):void
+    private function setLoginSession(User $user):void
     {
-        $this->setSession(key:'user_id', param:$userId);
+        $this->setSession(key:'user_id', param:$user->id);
 
         return;
     }
@@ -118,16 +117,16 @@ class LoginService {
     /**
      * ログイン時にapi_tokenを更新する
      *
-     * @param string $userId
+     * @param User $user
      * @return void
      */
-    private function updateApiToken($userId):void
+    private function updateApiToken(User $user):void
     {
         $sql = 'UPDATE users SET `api_token` = :api_token WHERE `id` = :id';
         $this->userModel->db
             ->prepare($sql)
             ->bindValue(':api_token', str_random(length:80))
-            ->bindValue(':id', $userId)
+            ->bindValue(':id', $user->id)
             ->execute();
 
         return;
@@ -139,10 +138,10 @@ class LoginService {
      * 1.remember_tokenを生成してcookieに持たせる
      * 2.そのtokenをhash化したものをusersテーブルに保存
      *
-     * @param integer $userId
+     * @param User $user
      * @return void
      */
-    private function allocateRememberToken(int $userId)
+    private function allocateRememberToken(User $user)
     {
         $token = str_random(40);
         $digest = md5($token);
@@ -152,10 +151,10 @@ class LoginService {
 
         $sql = 'UPDATE users SET `remember_token` = :remember_token WHERE `id` = :id';
 
-        $this->userModel->db
+        $user->db
             ->prepare($sql)
             ->bindValue(':remember_token', $digest)
-            ->bindValue(':id', $userId)
+            ->bindValue(':id', $user->id)
             ->execute();
 
         return;

@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use App\models\User;
-use DateTime;
 
 class RegisterService {
     public object $userModel;
@@ -27,7 +26,7 @@ class RegisterService {
             $sql = 'INSERT INTO `users` (`email`, `register_token`, `register_token_sent_at`) VALUES (:email, :register_token, :register_token_sent_at)';
         }
         
-        $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
+        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
 
         $this->userModel->db
             ->prepare($sql)
@@ -100,21 +99,21 @@ class RegisterService {
      * トークンが一致しないもしくは期限切れの場合、falseをリターン
      *
      * @param string $token
-     * @return object|false
+     * @return User|false
      */
-    public function getValidTemporarilyRegisteredUser(string $registerToken):object|false
+    public function getValidTemporarilyRegisteredUser(string $registerToken):User|false
     {
         $sql = 'SELECT * FROM `users` WHERE `register_token` = :register_token AND `register_token_sent_at` >= :register_token_sent_at AND `status_id` = :status_id';
 
         $hour = Email_Token_Valid_Period_Hour;
-        $tokenValidPeriod = (new DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
+        $tokenValidPeriod = (new \DateTime())->modify("-{$hour} hour")->format(DateTime_Default_Format);
 
         $userOrFalse = $this->userModel->db
             ->prepare($sql)
             ->bindValue(':register_token', $registerToken)
             ->bindValue(':register_token_sent_at', $tokenValidPeriod)
             ->bindValue(':status_id', 'tentative')
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->userModel));
 
             return $userOrFalse;
     }
@@ -129,7 +128,7 @@ class RegisterService {
     {
         $sql = 'UPDATE users SET `register_token_verified_at` = :register_token_verified_at, `password` = :password, `status_id` = :status_id, `status_updated_at` = :status_updated_at WHERE `register_token` = :register_token';
 
-        $currentDateTime = (new DateTime())->format(DateTime_Default_Format);
+        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
         $hashedPassword = password_hash($request['password'], PASSWORD_BCRYPT);
 
         $isRegistered = $this->userModel->db

@@ -110,9 +110,9 @@ class PasswordResetController extends Controller {
         $token = filter_input(INPUT_GET, 'token');
 
         // tokenからpassword_resetsテーブルのレコードを取得
-        $resetRequest = $this->passwordResetService->getValidRequestByToken(passwordResetToken:$token);
+        $passwordReset = $this->passwordResetService->getValidRequestByToken(passwordResetToken:$token);
 
-        if (!$resetRequest) {
+        if (!$passwordReset) {
             $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
 
             return redirect('passwordReset/resetRequest');
@@ -159,10 +159,10 @@ class PasswordResetController extends Controller {
         if (!$isValidated) return redirect("passwordReset/verifyToken?token={$request['password_reset_token']}");
 
         // tokenからpassword_resetsテーブルのレコードを取得
-        $resetRequest = $this->passwordResetService->getValidRequestByToken(passwordResetToken:$request['password_reset_token']);
+        $passwordReset = $this->passwordResetService->getValidRequestByToken(passwordResetToken:$request['password_reset_token']);
 
         // 一致レコードがなければ、リクエスト画面へ戻す
-        if (!$resetRequest) {
+        if (!$passwordReset) {
             $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
 
             return redirect('passwordReset/resetRequest');
@@ -174,7 +174,7 @@ class PasswordResetController extends Controller {
              */
             $this->userModel->db->beginTransaction();
 
-            $this->userService->updatePassword(email:$resetRequest->email, password:$request['password']);
+            $this->userService->updatePassword(email:$passwordReset->email, password:$request['password']);
 
             $this->passwordResetService->delete(passwordResetToken:$request['password_reset_token']);
 
@@ -187,7 +187,7 @@ class PasswordResetController extends Controller {
         }
 
         // ログイン失敗は無い想定なので、失敗時の処理は書いていない
-        $this->loginService->baseLogin(email:$resetRequest->email, password:$request['password']);
+        $this->loginService->baseLogin(email:$passwordReset->email, password:$request['password']);
 
         return redirect('mypage/index');
     }
