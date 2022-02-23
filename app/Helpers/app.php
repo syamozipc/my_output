@@ -12,7 +12,7 @@
 function old(string $key = null): string|int|array|null
 {
     return !$key 
-        ? $_SESSION['old']
+        ? $_SESSION['old'] ?? null
         : $_SESSION['old'][$key] ?? null;
 }
 
