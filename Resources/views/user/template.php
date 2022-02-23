@@ -12,7 +12,7 @@
 <body>
     <?php require_once(base_path('resources/views/components/errors/status.php')) ?>
     <?php if (isLogedIn()) : ?>
-        <p>ようこそ、（仮。名前出したい）さん</p>
+        <?php require_once(base_path('resources/views/components/headers/headerNav.php')) ?>
     <?php endif; ?>
     <main class="main">
         <?php require_once($viewFile) ?>

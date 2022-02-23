@@ -16,5 +16,4 @@ class Post extends Model {
         $this->country_id = $params['country_id'] ?? null;
         $this->description = $params['description'] ?? null;
     }
-
 }

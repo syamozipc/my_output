@@ -1,14 +1,16 @@
 <?php
 namespace App\Services;
 
-use App\models\Post;
+use App\models\{Post, PostDetail};
 
 class PostService {
-    public object $postModel;
+    public Post $postModel;
+    public PostDetail $postDetailModel;
 
     public function __construct()
     {
         $this->postModel = new Post();
+        $this->postDetailModel = new PostDetail();
     }
 
     /**
@@ -51,9 +53,11 @@ class PostService {
             WHERE posts.status_id = "public"
         ';
 
-        $postsList = $this->postModel->db->prepare($sql)->executeAndFetchAll();
+        $posts = $this->postModel->db
+            ->prepare($sql)
+            ->executeAndFetchAll(get_class($this->postModel));
 
-        return $postsList;
+        return $posts;
     }
 
     /**
@@ -119,9 +123,10 @@ class PostService {
             WHERE posts.id = :id
         ';
 
-         $post = $this->postModel->db->prepare($sql)
+         $post = $this->postModel->db
+            ->prepare($sql)
             ->bindValue(':id', $id)
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->postModel));
 
             return $post;
     }
@@ -162,11 +167,13 @@ class PostService {
                 ->execute();
 
             // fileを削除
+            // @todo 現状、同一post_idを複数のpost_detailが持つことはないため、loop等はしない
             $sqlGetPostDetail = 'SELECT * FROM post_details WHERE post_id = :post_id';
             $postDetail = $this->postModel->db->prepare($sqlGetPostDetail)
                 ->bindValue(':post_id', $id)
-                ->executeAndFetch();
+                ->executeAndFetch(get_class($this->postDetailModel));
 
+            // @todo 現状、post_detailに複数の値が入ることはないため、loop等はしない
             $filePath = $postDetail->path;
             if (!unlink(public_path('upload/' . $filePath))) throw new \Exception(('ファイルがありません'));
 
@@ -177,8 +184,10 @@ class PostService {
                 ->execute();
 
             $this->postModel->db->commit();
+
         } catch (\Exception $e) {
             $this->postModel->db->rollBack();
+
              exit($e->getMessage());
         }
     }

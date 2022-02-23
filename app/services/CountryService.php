@@ -15,7 +15,7 @@ class CountryService {
     {
         $sql = 'SELECT * FROM countries';
 
-        $countriesList = $this->countryModel->db->prepare($sql)->executeAndFetchAll();
+        $countriesList = $this->countryModel->db->prepare($sql)->executeAndFetchAll(get_class($this->countryModel));
 
         return $countriesList;
     }
@@ -26,7 +26,7 @@ class CountryService {
 
         $countriesList = $this->countryModel->db->prepare($sql)
             ->bindValue(':id', $id)
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->countryModel));
 
         return $countriesList;
     }
