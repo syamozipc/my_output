@@ -29,6 +29,8 @@ class Core {
     public function initSession()
     {
         session_start();
+        // セキュリティ対策で、httpリクエストの都度session_idを変更
+        session_regenerate_id();
 
         if (isset( $_SESSION['flash'])) {
             $_SESSION['old'] = $_SESSION['flash'];
