@@ -58,10 +58,9 @@ class Model {
     public function insert()
     {
         $sql = "INSERT INTO `{$this->table}` (";
-
         $sqlValues = "VALUES (";
-
         $existProperties = [];
+
         foreach ($this as $key => $_) {
             if (!isset($this->fillable[$key])) continue;
 
@@ -75,13 +74,17 @@ class Model {
         $sql = rtrim($sql, ',');
         $sqlValues = rtrim($sqlValues, ',');
 
+        // insert文を合体
         $sql = "{$sql}) {$sqlValues})";
   
+        // sqlをprepare
         $this->db->prepare(sql:$sql);
 
+        // 名前付きプレースホルダーに値を入れる
         foreach ($existProperties as $property) {
             $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
+
         $this->db->execute();
     }
 
@@ -93,8 +96,9 @@ class Model {
     public function update()
     {
         $sql = "UPDATE `{$this->table}` SET";
-
         $existProperties = [];
+
+        // where句以外のSQL文を生成
         foreach ($this as $key => $_) {
             if (!isset($this->fillable[$key])) continue;
 
@@ -104,14 +108,18 @@ class Model {
         }
 
         $sql = rtrim($sql, ',');
+        // 更新対象のレコードを指定
         $sql .= " WHERE `{$this->primaryKey}` = :{$this->primaryKey}";
 
+        // sqlをprepare
         $this->db->prepare(sql:$sql);
 
+        // 名前付きプレースホルダーに値を入れる
         foreach ($existProperties as $property) {
             $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
 
+        // WHERE句のプレースホルダーに値を入れ、実行
         $this->db
             ->bindValue(":{$this->primaryKey}", $this->{$this->primaryKey})
             ->execute();
