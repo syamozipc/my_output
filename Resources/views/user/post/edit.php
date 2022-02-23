@@ -26,8 +26,8 @@
             <?php endforeach; ?>
         </datalist>
 
-        <?php if (old('error_country_id')) : ?>
-            <p class="error__message">※<?= old('error_country_id') ?></p>
+        <?php if (error('country_id')) : ?>
+            <p class="error__message">※<?= error('country_id') ?></p>
         <?php endif; ?>
 
         <p>画像・動画は編集できません</p>
@@ -43,8 +43,8 @@
 
         <textarea name="description" cols="70" rows="10"><?= e($data['post']->description) ?></textarea>
 
-        <?php if (old('error_description')) : ?>
-            <p class="error__message">※<?= old('error_description') ?></p>
+        <?php if (error('description')) : ?>
+            <p class="error__message">※<?= error('description') ?></p>
         <?php endif; ?>
 
         <br>

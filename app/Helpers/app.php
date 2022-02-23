@@ -12,8 +12,21 @@
 function old(string $key = null): string|int|array|null
 {
     return !$key 
-        ? $_SESSION['_old'] ?? null
+        ? $_SESSION['_old']
         : $_SESSION['_old'][$key] ?? null;
+}
+
+/**
+ * flash error sessionを取得
+ *
+ * @param string|null $key sessionのkey名
+ * @return string|int|array|null value
+ */
+function error(string $key = null): string|int|array|null
+{
+    return !$key 
+        ? $_SESSION['_old_error']
+        : $_SESSION['_old_error'][$key] ?? null;
 }
 
 /**

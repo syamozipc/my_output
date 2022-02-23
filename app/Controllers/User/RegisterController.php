@@ -108,7 +108,7 @@ class RegisterController extends Controller {
         $user = $this->registerService->getValidTemporarilyRegisteredUser(registerToken:$token);
 
         if (!$user) {
-            $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
+            $this->setFlashErrorSession(key:'status', param:'無効なURLです。再度メールアドレスを入力してください。');
 
             return redirect('register/tmpRegisterForm');
         }

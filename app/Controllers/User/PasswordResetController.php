@@ -113,7 +113,7 @@ class PasswordResetController extends Controller {
         $passwordReset = $this->passwordResetService->getValidRequestByToken(passwordResetToken:$token);
 
         if (!$passwordReset) {
-            $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
+            $this->setFlashErrorSession(key:'status', param:'無効なURLです。再度メールアドレスを入力してください。');
 
             return redirect('passwordReset/resetRequest');
         }
@@ -163,7 +163,7 @@ class PasswordResetController extends Controller {
 
         // 一致レコードがなければ、リクエスト画面へ戻す
         if (!$passwordReset) {
-            $this->setFlashSession(key:"error_status", param:'無効なURLです。再度メールアドレスを入力してください。');
+            $this->setFlashErrorSession(key:'status', param:'無効なURLです。再度メールアドレスを入力してください。');
 
             return redirect('passwordReset/resetRequest');
         }

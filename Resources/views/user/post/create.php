@@ -4,7 +4,7 @@
         <?= csrf() ?>
         <select name="country_id" class="js-countriesSelect">
             <option value="">選択してください</option>
-            <?php foreach ($data['countriesList'] as $country) : ?>
+            <?php foreach ($data['countries'] as $country) : ?>
                 <option
                     value="<?= $country->id ?>"
                     <?php if (($data['post']->country_id ?? null) === $country->id) echo 'selected'; ?>
@@ -22,13 +22,13 @@
         />
 
         <datalist id="countriesSuggest">
-            <?php foreach ($data['countriesList'] as $country) : ?>
+            <?php foreach ($data['countries'] as $country) : ?>
                 <option value="<?= $country->name ?>" data-country-id="<?= $country->id ?>"></option>
             <?php endforeach; ?>
         </datalist>
 
-        <?php if (old('error_country_id')) : ?>
-            <p class="error__message">※<?= old('error_country_id') ?></p>
+        <?php if (error('country_id')) : ?>
+            <p class="error__message">※<?= error('country_id') ?></p>
         <?php endif; ?>
 
         <br>
@@ -37,8 +37,8 @@
         <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
         <input type="file" name="upload" class="js-inputImg">
 
-        <?php if (old('error_upload')) : ?>
-            <p class="error__message">※<?= old('error_upload') ?></p>
+        <?php if (error('upload')) : ?>
+            <p class="error__message">※<?= error('upload') ?></p>
         <?php endif; ?>
 
         <img width="400" height="400" class="is-hidden js-displayImg">
@@ -47,8 +47,8 @@
         <br>
 
         <textarea name="description" cols="70" rows="10"><?= $data['post']->description ?? null ?></textarea>
-        <?php if (old('error_description')) : ?>
-            <p class="error__message">※<?= old('error_description') ?></p>
+        <?php if (error('description')) : ?>
+            <p class="error__message">※<?= error('description') ?></p>
         <?php endif; ?>
 
         <br>

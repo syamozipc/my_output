@@ -26,7 +26,7 @@ class Validator {
     {
         if (!($param === "" || is_null($param))) return true;
 
-        $this->setFlashSession(key:"error_{$key}", param:'入力必須項目です。');
+        $this->setFlashErrorSession(key:$key, param:'入力必須項目です。');
 
         return false;
     }
@@ -42,7 +42,7 @@ class Validator {
     {
         if (is_string($param)) return true;
 
-        $this->setFlashSession(key:"error_{$key}", param:'文字列で入力してください');
+        $this->setFlashErrorSession(key:$key, param:'文字列で入力してください');
 
         return false;
     }
@@ -58,7 +58,7 @@ class Validator {
     {
         if (is_numeric($param)) return true;
 
-        $this->setFlashSession(key:"error_{$key}", param:'数字で入力してください');
+        $this->setFlashErrorSession(key:$key, param:'数字で入力してください');
 
         return false;
     }
@@ -74,7 +74,7 @@ class Validator {
     {
         if (Counrty['min_id'] <= $param && $param <= Counrty['max_id']) return true;
 
-        $this->setFlashSession(key:"error_{$key}", param:'登録されていない国です。');
+        $this->setFlashErrorSession(key:$key, param:'登録されていない国です。');
 
         return false;
     }
@@ -95,7 +95,7 @@ class Validator {
 
         if ($minLength <= $charLength && $charLength <= $maxLength) return true;
 
-        $this->setFlashSession(key:"error_{$key}", param:"文字数は{$minLength}〜${$maxLength}字以内に収めてください。");
+        $this->setFlashErrorSession(key:$key, param:"文字数は{$minLength}〜${$maxLength}字以内に収めてください。");
 
         return false;
     }
@@ -112,7 +112,7 @@ class Validator {
     {
         if ($param1 === $param2) return true;
 
-        $this->setFlashSession("error_{$key}", "{$compareKey}と同じ値を入力してください。");
+        $this->setFlashErrorSession($key, "{$compareKey}と同じ値を入力してください。");
 
         return false;
     }
@@ -143,7 +143,7 @@ class Validator {
             UPLOAD_ERR_EXTENSION => '拡張モジュールによってアップロードが中断されました。'
         ];
 
-        $this->setFlashSession("error_{$key}", $errorMessage[$errorNumber]);
+        $this->setFlashErrorSession($key, $errorMessage[$errorNumber]);
 
         return true;
     }
@@ -168,7 +168,7 @@ class Validator {
 
         if ($isValidExt) return true;
 
-        $this->setFlashSession("error_{$key}", '有効な拡張子はgif, jpg, jpeg, pngのみです。');
+        $this->setFlashErrorSession($key, '有効な拡張子はgif, jpg, jpeg, pngのみです。');
 
         return false;
     }
@@ -190,7 +190,7 @@ class Validator {
 
         if ($isImgContent) return true;
 
-        $this->setFlashSession("error_{$key}", 'ファイルの内容が画像ではありません。');
+        $this->setFlashErrorSession($key, 'ファイルの内容が画像ではありません。');
 
         return false;
     }
@@ -208,7 +208,7 @@ class Validator {
     {
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) return true;
 
-        $this->setFlashSession("error_{$key}", '有効なメールアドレスの形式ではありません。');
+        $this->setFlashErrorSession($key, '有効なメールアドレスの形式ではありません。');
 
         return false;
     }
@@ -226,7 +226,7 @@ class Validator {
     {
         if (preg_match('/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,12}+\z/i', $password)) return true;
 
-        $this->setFlashSession("error_{$key}", 'パスワードは英数字をそれぞれ1文字以上含む、8〜12字で指定してください。');
+        $this->setFlashErrorSession($key, 'パスワードは英数字をそれぞれ1文字以上含む、8〜12字で指定してください。');
 
         return false;
     }

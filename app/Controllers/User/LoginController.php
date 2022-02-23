@@ -43,7 +43,7 @@ class LoginController extends Controller {
         $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password'], rememberMe:$shouldRememberMe);
 
         if (!$isLogedIn) {
-            $this->setFlashSession(key:"error_status", param:'ログインに失敗しました。');
+            $this->setFlashErrorSession(key:'status', param:'ログインに失敗しました。');
 
             return redirect('login/loginForm');
         }

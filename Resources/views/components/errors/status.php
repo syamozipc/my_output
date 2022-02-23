@@ -1,3 +1,3 @@
-<?php if (old('error_status')) : ?>
-    <p class="error__status"><?= old('error_status') ?></p>
+<?php if (error('status')) : ?>
+    <p class="error__status"><?= error('status') ?></p>
 <?php endif; ?>

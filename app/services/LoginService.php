@@ -190,7 +190,7 @@ class LoginService {
     {
         if (isLogedIn()) return;
 
-        $this->setFlashSession(key:'error_status', param:'ログインしてください');
+        $this->setFlashErrorSession(key:'status', param:'ログインしてください');
 
         return redirect('login/loginForm');
     }

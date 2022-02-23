@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data['postsList'] as $post) : ?>
+            <?php foreach ($data['posts'] as $post) : ?>
                 <tr>
                     <td>
                         <a href="<?= route('post/show', $post->id); ?>">

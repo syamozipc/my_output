@@ -30,11 +30,18 @@ trait SessionTrait {
         return $_SESSION['_flash'][$key] = $param;
     }
 
+    public function setFlashErrorSession(string $key, int|string|array $param)
+    {
+        return $_SESSION['_flash_error'][$key] = $param;
+    }
+
     public function moveFlashSessionToOld()
     {
         $_SESSION['_old'] = $_SESSION['_flash'];
+        $_SESSION['_old_error'] = $_SESSION['_flash_error'];
 
-        unset($_SESSION['_flash']);
+        $_SESSION['_flash'] = [];
+        $_SESSION['_flash_error'] = [];
 
         return;
     }

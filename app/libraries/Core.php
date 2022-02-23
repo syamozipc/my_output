@@ -33,10 +33,11 @@ class Core {
         session_regenerate_id(true);
 
         // フラッシュセッションがあれば_oldへ移動し、フラッシュセッションは削除
-        if ($this->getSession('_flash')) {
+        if ($this->getSession('_flash') || $this->getSession('_flash_error')) {
             $this->moveFlashSessionToOld();
         } else {
-            $this->unsetSession('_old');
+            $this->setSession('_old', []);
+            $this->setSession('_old_error', []);
         }
     }
 
@@ -58,7 +59,7 @@ class Core {
         // csrf tokenが正しければOK
         if ($csrfToken && $csrfToken === $this->getSession('_csrf_token')) return;
 
-        $this->setFlashSession(key:"error_status", param:'正規の画面からご利用ください。');
+        $this->setFlashErrorSession(key:'status', param:'正規の画面からご利用ください。');
 
         // 直前のリクエストから必要部分を取得
         preg_match('|my_output/(.*)$|', $_SERVER['HTTP_REFERER'], $matches);

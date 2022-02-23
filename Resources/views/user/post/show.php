@@ -1,5 +1,5 @@
-<?php if (old('error_message')) : ?>
-        <p class="error__message">※<?= old('error_message') ?></p>
+<?php if (error('message')) : ?>
+        <p class="error__message">※<?= error('message') ?></p>
     <?php endif; ?>
 <section class="section">
     <div>

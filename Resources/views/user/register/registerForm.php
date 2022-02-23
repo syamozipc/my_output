@@ -3,16 +3,16 @@
     <form action="<?= route('register/register') ?>" method="POST">
         <?= csrf() ?>
         <input type="hidden" name="register_token" value="<?= $data['registerToken'] ?>">
-        <?php if (old('error_register_token')) : ?>
-            <p class="error__message">※<?= old('error_register_token') ?></p>
+        <?php if (error('register_token')) : ?>
+            <p class="error__message">※<?= error('register_token') ?></p>
         <?php endif; ?>
 
         <label>パスワード
             <br>
             <input type="password" name="password">
         </label>
-        <?php if (old('error_password')) : ?>
-            <p class="error__message">※<?= old('error_password') ?></p>
+        <?php if (error('password')) : ?>
+            <p class="error__message">※<?= error('password') ?></p>
         <?php endif; ?>
         <br>
         ※8〜12文字
@@ -23,8 +23,8 @@
             <br>
             <input type="password" name="password_confirmation">
         </label>
-        <?php if (old('error_password_confirmation')) : ?>
-            <p class="error__message">※<?= old('error_password_confirmation') ?></p>
+        <?php if (error('password_confirmation')) : ?>
+            <p class="error__message">※<?= error('password_confirmation') ?></p>
         <?php endif; ?>
         <br>
         <br>
