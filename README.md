@@ -28,7 +28,6 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] 認証機能
-    -   [ ] session（特に削除周り） と cookie について調べまとめる（独習 PHP も参照する）
     -   [ ] SNS ログイン
 -   [ ] モデルにオブジェクト指向実装
     -   [ ] db から取ってきたデータは現状 stdClass だが、そのテーブルの model にしたい
