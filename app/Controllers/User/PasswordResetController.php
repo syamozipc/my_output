@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers\User;
 
-use App\Libraries\Controller;
+use App\Libraries\{Controller, Database};
 use App\Services\{PasswordResetService, UserService};
 use App\Models\User;
 use App\Validators\User\{passwordResetRequestValidator, PasswordResetStoreValidator};
@@ -12,6 +12,7 @@ class PasswordResetController extends Controller {
     public PasswordResetService $passwordResetService;
     public UserService $userService;
     public user $userModel;
+    public Database $db;
 
     public function __construct()
     {
@@ -20,6 +21,7 @@ class PasswordResetController extends Controller {
         $this->passwordResetService = new PasswordResetService();
         $this->userService = new UserService();
         $this->userModel = new User();
+        $this->db = new Database();
     }
 
     /**
@@ -64,10 +66,7 @@ class PasswordResetController extends Controller {
         if (!$isExist) return $this->view(view:'user/passwordReset/acceptRequest', data:['email' => $request['email']]); 
 
         try {
-            /**
-             * @todo user modelからdb呼ぶのも微妙？
-             */
-            $this->userModel->db->beginTransaction();
+            $this->db->beginTransaction();
 
             // 業務で使っているlaravelのtokenも60字だった（ただし生成メソッドはLaravelの方が複雑）
             $passwordResetToken = str_random(60);
@@ -80,10 +79,10 @@ class PasswordResetController extends Controller {
 
             if (!$isSent) throw new \Exception('メール送信に失敗しました。');
 
-            $this->userModel->db->commit();
+            $this->db->commit();
 
         } catch (\Exception $e) {
-            $this->userModel->db->rollBack();
+            $this->db->rollBack();
 
             exit($e->getMessage());
         }
@@ -169,19 +168,16 @@ class PasswordResetController extends Controller {
         }
 
         try {
-            /**
-             * @todo user modelからdb呼ぶのも微妙？
-             */
-            $this->userModel->db->beginTransaction();
+            $this->db->beginTransaction();
 
             $this->userService->updatePassword(email:$passwordReset->email, password:$request['password']);
 
             $this->passwordResetService->delete(passwordResetToken:$request['password_reset_token']);
 
-            $this->userModel->db->commit();
+            $this->db->commit();
 
         } catch (\Exception $e) {
-            $this->userModel->db->rollBack();
+            $this->db->rollBack();
 
             exit($e->getMessage());
         }

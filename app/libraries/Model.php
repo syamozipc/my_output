@@ -61,7 +61,10 @@ class Model {
         $sqlValues = "VALUES (";
         $existProperties = [];
 
+        
+        // @todo iterateraggregaterとかでもっとスマートに
         foreach ($this as $key => $_) {
+            // @todo そのプロパティが存在するか、みたいな判定をつける
             if (!isset($this->fillable[$key])) continue;
 
             $existProperties[] = $key;
@@ -99,7 +102,9 @@ class Model {
         $existProperties = [];
 
         // where句以外のSQL文を生成
+        // @todo iterateraggregaterとかでもっとスマートに
         foreach ($this as $key => $_) {
+            // @todo そのプロパティが存在するか、みたいな判定をつける
             if (!isset($this->fillable[$key])) continue;
 
             $existProperties[] = $key;
