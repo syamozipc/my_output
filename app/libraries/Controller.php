@@ -28,7 +28,7 @@ class Controller {
      * @param array $data
      * @return void
      */
-    public function view($view, $data = [])
+    public function view($view, $data = []):void
     {
         $viewFile = base_path("resources/views/{$view}.php");
         
