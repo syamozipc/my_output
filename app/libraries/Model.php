@@ -129,4 +129,19 @@ class Model {
             ->bindValue(":{$this->primaryKey}", $this->{$this->primaryKey})
             ->execute();
     }
+
+    /**
+     * 対応するmodelのレコードを削除
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        $sql = "DELETE FROM `{$this->table}` WHERE `{$this->primaryKey}` = :{$this->primaryKey}";
+        
+        $this->db
+            ->prepare(sql:$sql)
+            ->bindValue(param:":{$this->primaryKey}", value:$this->id)
+            ->execute();
+    }
 }

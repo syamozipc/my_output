@@ -64,6 +64,55 @@ class PostService {
     }
 
     /**
+     * 主キー指定で投稿を取得
+     *
+     * @param integer $id
+     * @return Post|false
+     */
+    public function fetchPostById(int $id): Post|false
+    {
+        $sql = '
+            SELECT
+                posts.id,
+                posts.user_id,
+                posts.country_id,
+                posts.description,
+                countries.name AS country_name,
+                post_details.path,
+                users.name AS user_name
+            FROM posts
+            JOIN post_details ON posts.id = post_details.post_id
+            JOIN countries ON posts.country_id = countries.id
+            JOIN users ON posts.user_id = users.id
+            WHERE posts.id = :id
+        ';
+
+         $postOrFalse = $this->postModel->db
+            ->prepare($sql)
+            ->bindValue(':id', $id)
+            ->executeAndFetch(get_class($this->postModel));
+
+            return $postOrFalse;
+    }
+
+    /**
+     * 該当のpostIdを持つpostDetail classの配列を取得
+     *
+     * @param integer $postId
+     * @return array
+     */
+    public function fetchPostDetailByPostId(int $postId):array
+    {
+        $sql = 'SELECT * FROM post_details WHERE post_id = :post_id';
+
+        $postDetailsOrFalse = $this->postDetailModel->db->prepare(sql:$sql)
+            ->bindValue(param:':post_id', value:$postId)
+            ->executeAndFetchAll(className:get_class($this->postDetailModel));
+
+        return $postDetailsOrFalse;
+    }
+
+    /**
      * 新規投稿を保存
      *
      * @param array $post 投稿内容
@@ -99,75 +148,34 @@ class PostService {
     }
 
     /**
-     * 主キー指定で投稿を取得
-     *
-     * @param integer $id
-     * @return Post|false
-     */
-    public function fetchPostById(int $id): Post|false
-    {
-        $sql = '
-            SELECT
-                posts.id,
-                posts.user_id,
-                posts.country_id,
-                posts.description,
-                countries.name AS country_name,
-                post_details.path,
-                users.name AS user_name
-            FROM posts
-            JOIN post_details ON posts.id = post_details.post_id
-            JOIN countries ON posts.country_id = countries.id
-            JOIN users ON posts.user_id = users.id
-            WHERE posts.id = :id
-        ';
-
-         $postOrFalse = $this->postModel->db
-            ->prepare($sql)
-            ->bindValue(':id', $id)
-            ->executeAndFetch(get_class($this->postModel));
-
-            return $postOrFalse;
-    }
-
-    /**
      * 投稿を削除→画像を削除→投稿詳細を削除
      *
-     * @param integer $id
+     * @param Post $id
      * @return void
      */
-    public function deletePost(int $id): void
+    public function deletePost(Post $post): void
     {
         try {
-            $this->postModel->db->beginTransaction();
+            $this->db->beginTransaction();
 
-            // postを削除
-            $sqlDeletePost = 'UPDATE posts SET status_id = "deleted" WHERE id = :id';
-            $this->postModel->db->prepare($sqlDeletePost)
-                ->bindValue(':id', $id)
-                ->execute();
+            // postを論理削除
+            $post->status_id = 'deleted';
+            $post->save();
 
-            // fileを削除
-            // @todo 現状、同一post_idを複数のpost_detailが持つことはないため、loop等はしない
-            $sqlGetPostDetail = 'SELECT * FROM post_details WHERE post_id = :post_id';
-            $postDetail = $this->postModel->db->prepare($sqlGetPostDetail)
-                ->bindValue(':post_id', $id)
-                ->executeAndFetch(get_class($this->postDetailModel));
+            $postDetails = $this->fetchPostDetailByPostId(postId:$post->id);
 
-            // @todo 現状、post_detailに複数の値が入ることはないため、loop等はしない
-            $filePath = $postDetail->path;
-            if (!unlink(public_path('upload/' . $filePath))) throw new \Exception(('ファイルがありません'));
+            foreach ($postDetails as $postDetail) {
+                // postDetailのfileを削除
+                if (!unlink(public_path('upload/' . $postDetail->path))) throw new \Exception(('ファイルがありません'));
+                
+                // post_detailを物理削除
+                $postDetail->delete();
+            }
 
-            // post_detailを削除
-            $sqlDeletePostDetail = 'DELETE FROM post_details WHERE post_id = :post_id';
-            $this->postModel->db->prepare($sqlDeletePostDetail)
-                ->bindValue(':post_id', $id)
-                ->execute();
-
-            $this->postModel->db->commit();
+            $this->db->commit();
 
         } catch (\Exception $e) {
-            $this->postModel->db->rollBack();
+            $this->db->rollBack();
 
              exit($e->getMessage());
         }

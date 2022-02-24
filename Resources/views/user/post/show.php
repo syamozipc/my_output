@@ -1,6 +1,6 @@
 <?php if (error('message')) : ?>
-        <p class="error__message">※<?= error('message') ?></p>
-    <?php endif; ?>
+    <p class="error__message">※<?= error('message') ?></p>
+<?php endif; ?>
 <section class="section">
     <div>
         <table>
