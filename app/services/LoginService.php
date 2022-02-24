@@ -24,24 +24,24 @@ class LoginService {
      */
     public function authenticateUser():bool
     {
-        $authenticated = false;
+        $isAuthenticated = false;
 
         // ログイン済みの場合、last_login_atを更新
         if (isLogedIn()) {
             $userId = $this->getSession('user_id');
             $this->updateLastLogin(userId:$userId);
 
-            $authenticated = true;
+            $isAuthenticated = true;
 
         // 未ログインかつremember_tokenがある場合、ログイン処理
         } else if (isset($_COOKIE['remember_token'])) {
             $rememberToken = $_COOKIE['remember_token'];
             $this->loginByRememberToken(rememberToken:$rememberToken);
 
-            $authenticated = true;
+            $isAuthenticated = true;
         }
 
-        return $authenticated;
+        return $isAuthenticated;
     }
 
     /**

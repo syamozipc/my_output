@@ -18,17 +18,17 @@ class Model {
     {
         $this->db = new Database;
 
-        if (count($params) > 0) $this->initProperty($params);
+        if (count($params) > 0) $this->fill($params);
     }
 
     /**
-     * constructorで渡された連想配列を、keyをproperty名、valueをpropertyの値としてセットする
+     * 引数で渡された連想配列を、keyをproperty名、valueをpropertyの値としてセットする
      * ただし$ignoreKeysに含まれるkeyはセットしない
      *
      * @param array $params
      * @return void
      */
-    public function initProperty($params)
+    public function fill($params)
     {
         foreach ($params as $key => $param) {
             if (isset($this->ignorekeys[$key])) continue;

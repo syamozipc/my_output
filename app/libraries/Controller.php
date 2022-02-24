@@ -16,7 +16,9 @@ class Controller {
     {
         $this->loginService = new LoginService();
 
-        $this->loginService->authenticateUser();
+        $isAuthenticated = $this->loginService->authenticateUser();
+
+        if ($isAuthenticated) $this->userId = $this->getSession('user_id');
     }
 
     /**

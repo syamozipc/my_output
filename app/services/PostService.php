@@ -102,9 +102,9 @@ class PostService {
      * 主キー指定で投稿を取得
      *
      * @param integer $id
-     * @return object
+     * @return Post|false
      */
-    public function fetchPostById(int $id): object
+    public function fetchPostById(int $id): Post|false
     {
         $sql = '
             SELECT
@@ -122,30 +122,12 @@ class PostService {
             WHERE posts.id = :id
         ';
 
-         $post = $this->postModel->db
+         $postOrFalse = $this->postModel->db
             ->prepare($sql)
             ->bindValue(':id', $id)
             ->executeAndFetch(get_class($this->postModel));
 
-            return $post;
-    }
-
-    /**
-     * 主キー指定で投稿を更新
-     *
-     * @param array $post 投稿内容
-     * @param integer $id
-     * @return void
-     */
-    public function updatePost(array $post, int $id): void
-    {
-            $sql = 'UPDATE posts SET country_id = :country_id, description = :description WHERE id = :id';
-
-            $this->postModel->db->prepare($sql)
-                ->bindValue(':country_id', $post['country_id'])
-                ->bindValue(':description', $post['description'])
-                ->bindValue(':id', $id)
-                ->execute();
+            return $postOrFalse;
     }
 
     /**
