@@ -1,12 +1,12 @@
 <p>編集フォーム</p>
 <div>
-    <form action="<?= route('post/editConfirm', $data['post']->id); ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?= route('post/editConfirm', $post->id); ?>" method="POST" enctype="multipart/form-data">
         <?= csrf() ?>
         <select name="country_id" class="js-countriesSelect">
-            <?php foreach ($data['countries'] as $country) : ?>
+            <?php foreach ($countries as $country) : ?>
                 <option
                     value="<?= $country->id ?>"
-                    <?php if ((int)$country->id === (int)$data['post']->country_id) echo 'selected' ?> 
+                    <?php if ((int)$country->id === (int)$post->country_id) echo 'selected' ?> 
                 >
                     <?= $country->name ?>
                 </option>
@@ -21,7 +21,7 @@
         />
 
         <datalist id="countriesSuggest">
-            <?php foreach ($data['countries'] as $country) : ?>
+            <?php foreach ($countries as $country) : ?>
                 <option value="<?= $country->name ?>" data-country-id="<?= $country->id ?>"></option>
             <?php endforeach; ?>
         </datalist>
@@ -32,7 +32,7 @@
 
         <p>画像・動画は編集できません</p>
         <img 
-            src="<?= public_url('upload/' . $data['post']->path); ?>"
+            src="<?= public_url('upload/' . $post->path); ?>"
             alt="アップロードファイル"
             width="400"
             height="400"
@@ -41,7 +41,7 @@
         <br>
         <br>
 
-        <textarea name="description" cols="70" rows="10"><?= e($data['post']->description) ?></textarea>
+        <textarea name="description" cols="70" rows="10"><?= e($post->description) ?></textarea>
 
         <?php if (error('description')) : ?>
             <p class="error__message">※<?= error('description') ?></p>

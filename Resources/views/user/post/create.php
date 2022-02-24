@@ -4,10 +4,10 @@
         <?= csrf() ?>
         <select name="country_id" class="js-countriesSelect">
             <option value="">選択してください</option>
-            <?php foreach ($data['countries'] as $country) : ?>
+            <?php foreach ($countries as $country) : ?>
                 <option
                     value="<?= $country->id ?>"
-                    <?php if (($data['post']->country_id ?? null) === $country->id) echo 'selected'; ?>
+                    <?php if (($post->country_id ?? null) === $country->id) echo 'selected'; ?>
                 >
                     <?= $country->name ?>
                 </option>
@@ -22,7 +22,7 @@
         />
 
         <datalist id="countriesSuggest">
-            <?php foreach ($data['countries'] as $country) : ?>
+            <?php foreach ($countries as $country) : ?>
                 <option value="<?= $country->name ?>" data-country-id="<?= $country->id ?>"></option>
             <?php endforeach; ?>
         </datalist>
@@ -46,7 +46,7 @@
         <br>
         <br>
 
-        <textarea name="description" cols="70" rows="10"><?= $data['post']->description ?? null ?></textarea>
+        <textarea name="description" cols="70" rows="10"><?= $post->description ?? null ?></textarea>
         <?php if (error('description')) : ?>
             <p class="error__message">※<?= error('description') ?></p>
         <?php endif; ?>

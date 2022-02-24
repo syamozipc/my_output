@@ -1,7 +1,7 @@
 <p><a href="<?= route('home/index'); ?>">TOPへ</a></p>
 <br>
 <div>
-    <p><?= $data['description']; ?></p>
+    <p><?= $description; ?></p>
     <a href='<?= route('post/create'); ?>'>新規投稿はこちら</a>
 </div>
 
@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data['posts'] as $post) : ?>
+            <?php foreach ($posts as $post) : ?>
                 <tr>
                     <td>
                         <a href="<?= route('post/show', $post->id); ?>">

@@ -31,8 +31,15 @@ class Controller {
     public function view($view, $data = [])
     {
         $viewFile = base_path("resources/views/{$view}.php");
-
+        
         if (!file_exists($viewFile)) die('View does not exist');
+
+        // 渡ってきた配列のkeyを変数名に、valueを変数の値にする
+        foreach ($data as $key => $value) {
+            ${$key} = $value;
+        }
+
+        unset($data);
         
         require_once base_path('resources/views/user/template.php');
     }

@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= SITENAME ?></title>
-    <?php if (isset($data['css'])) : ?>
-        <link rel="stylesheet" href="<?= public_url($data['css']); ?>">
+    <?php if (isset($css)) : ?>
+        <link rel="stylesheet" href="<?= public_url($css); ?>">
     <?php endif; ?>
 </head>
 <body>
@@ -16,8 +16,8 @@
     <?php endif; ?>
     <main class="main">
         <?php require_once($viewFile) ?>
-        <?php if (isset($data['js'])) : ?>
-            <script src="<?= public_url($data['js']); ?>"></script>
+        <?php if (isset($js)) : ?>
+            <script src="<?= public_url($js); ?>"></script>
         <?php endif; ?>
     </main>
 </body>

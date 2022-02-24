@@ -27,7 +27,6 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
--   [ ] $data['post']ではなく、$post->idのようにしたい
 -   [ ] 独習PHPの9,10章確認してモデル周りもうちょっとうまく書けないか
 -   [ ] JSのapiリクエストとapi_token使う
 -   [ ] try/catchを各所に使いerror log出力

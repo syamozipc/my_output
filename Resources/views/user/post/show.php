@@ -16,25 +16,25 @@
                 <tr>
                     <td>
                         <img 
-                            src="<?= public_url('upload/' . $data['post']->path); ?>"
+                            src="<?= public_url('upload/' . $post->path); ?>"
                             alt="アップロードファイル"
                             width="400"
                             height="400"
                             class="js-imgContent"
                         >
                     </td>
-                    <td class="js-description"><?= bre($data['post']->description) ?></td>
-                    <td><?= $data['post']->country_name ?></td>
-                    <td><?= $data['post']->user_name ?></td>
+                    <td class="js-description"><?= bre($post->description) ?></td>
+                    <td><?= $post->country_name ?></td>
+                    <td><?= $post->user_name ?></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <div>
-        <a href="<?= route('post/edit', $data['post']->id); ?>">編集</a>
+        <a href="<?= route('post/edit', $post->id); ?>">編集</a>
         &nbsp;
-        <form action="<?= route('post/delete', $data['post']->id); ?>" method="POST" class="js-delete-form">
+        <form action="<?= route('post/delete', $post->id); ?>" method="POST" class="js-delete-form">
             <?= csrf() ?>
             <input type="submit" value="削除" class="btn-open-modal js-btn-open-modal">
         </form>

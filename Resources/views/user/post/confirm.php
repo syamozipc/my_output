@@ -2,19 +2,19 @@
 <div>
     <form action="<?= route('post/save'); ?>" method="POST" enctype="multipart/form-data">
         <?= csrf() ?>
-        <p><?= $data['country']->name ?></p>
+        <p><?= $country->name ?></p>
         <img
-            src="<?=  public_url('upload/' . basename($data['filePath'])); ?>"
+            src="<?=  public_url('upload/' . basename($filePath)); ?>"
             alt="アップロードファイル"
             width="400"
             height="400"
         >
-        <p><?= bre($data['post']->description) ?></p>
+        <p><?= bre($post->description) ?></p>
 
 
-        <input type="hidden" name="country_id" value="<?= $data['post']->country_id ?>">
-        <input type="hidden" name="description" value="<?= e($data['post']->description) ?>">
-        <input type="hidden" name="file_path" value="<?= $data['filePath'] ?>">
+        <input type="hidden" name="country_id" value="<?= $post->country_id ?>">
+        <input type="hidden" name="description" value="<?= e($post->description) ?>">
+        <input type="hidden" name="file_path" value="<?= $filePath ?>">
 
 
         <button type="submit">送信</button>
@@ -24,8 +24,8 @@
 <div>
     <form action="<?= route('post/create'); ?>" method="POST">
         <?= csrf() ?>
-        <input type="hidden" name="country_id" value="<?= $data['post']->country_id ?>">
-        <input type="hidden" name="description" value="<?= e($data['post']->description) ?>">
+        <input type="hidden" name="country_id" value="<?= $post->country_id ?>">
+        <input type="hidden" name="description" value="<?= e($post->description) ?>">
 
         <button type="submit">修正する</button>
     </form>
