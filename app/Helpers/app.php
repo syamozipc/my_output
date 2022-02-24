@@ -75,4 +75,17 @@ function csrf(): string
     $csrfToken = $_SESSION['_csrf_token'];
     return "<input type='hidden' name='_csrf_token' value='{$csrfToken}'>";
 }
+
+/**
+ * debug & dump
+ *
+ * @param mixed
+ * @return void
+ */
+function dd($dump): void
+{
+    echo '<pre>';
+    var_dump($dump);
+    die;
+}
 ?>
