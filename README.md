@@ -28,11 +28,12 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] ORM & OOP
+    -   [ ] API/LOGIN周りのorm化
     -   [ ] property_exists使う
     -   [ ] itelatoraggrigate使う
     -   [ ] マジックメソッド使う（__get,__set）
     -   [ ] 独習PHPの9,10章確認してモデル周りもうちょっとうまく書けないか
-    -   [ ] 最初からプロパティ全部書いてnull挿入されないか
+    -   [ ] 最初からプロパティ全部書いてnull挿入されないか（大丈夫っぽい？）
     -   [ ] fuelでやっていた頃のように、プロパティはプライベートで行くか
 -   [ ] JSのapiリクエストとapi_token使う
 -   [ ] try/catchを各所に使いerror log出力
