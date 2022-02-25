@@ -30,6 +30,7 @@ https://github.com/syamozipc/my_output
 -   [ ] ORM & OOP
     -   [ ] モデルのinsert/updateもう少し上手く書く（property_exists, itelatoraggrigate）
     -   [ ] プロパティはprivateで（__callか、__get, __set使う）（pdoのfetchでもアクセス修飾子は有効）
+    -   [ ] インターフェイスとポリモーフィズム
     -   [ ] 独習PHPの9,10章確認して何か導入したい
     -   [ ] 最初からプロパティ全部書いてnull挿入されないか（大丈夫っぽいのでやる）
 -   [ ] JSのapiリクエストとapi_token使う
