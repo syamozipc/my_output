@@ -31,7 +31,6 @@ https://github.com/syamozipc/my_output
     -   [ ] property_exists使う
     -   [ ] itelatoraggrigate使う
     -   [ ] マジックメソッド使う（__get,__set）
-    -   [ ] Databaseクラスはシングルトンに
     -   [ ] 独習PHPの9,10章確認してモデル周りもうちょっとうまく書けないか
     -   [ ] 最初からプロパティ全部書いてnull挿入されないか
     -   [ ] fuelでやっていた頃のように、プロパティはプライベートで行くか
