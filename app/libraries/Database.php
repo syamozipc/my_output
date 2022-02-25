@@ -1,17 +1,22 @@
 <?php
 namespace App\Libraries;
 
+/**
+ * PDOを直接扱う唯一のクラス
+ * singleton化することで、1リクエスト中は1つのDatabase instance（pdo instance）を使い回す
+ */
 class Database {
     private $host = DB_HOST;
     private $user = DB_USER;
     private $pass = DB_PASS;
     private $dbname = DB_NAME;
 
+    private static self $dababase;
     private $pdo;
     private $pdoStatement;
     private $error;
 
-    public function __construct()
+    private function __construct()
     {
         $dsn = "mysql:host={$this->host};dbname={$this->dbname}";
         $options = [
@@ -25,6 +30,11 @@ class Database {
             $this->error = $e->getMessage();
             echo $this->error;
         }
+    }
+
+    public static function getSingleton(): self
+    {
+        return self::$dababase ?? self::$dababase = new self();
     }
 
     public function prepare($sql)
@@ -110,5 +120,10 @@ class Database {
     public function rollBack()
     {
         return $this->pdo->rollBack();
+    }
+
+    public function inTransaction()
+    {
+        return $this->pdo->inTransaction();
     }
 }

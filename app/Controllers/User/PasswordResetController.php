@@ -3,16 +3,14 @@ namespace App\Controllers\User;
 
 use App\Libraries\{Controller, Database};
 use App\Services\{PasswordResetService, UserService};
-use App\Models\User;
 use App\Validators\User\{passwordResetRequestValidator, PasswordResetStoreValidator};
 
 class PasswordResetController extends Controller {
     use \App\Traits\SessionTrait;
 
-    public PasswordResetService $passwordResetService;
-    public UserService $userService;
-    public user $userModel;
-    public Database $db;
+    private PasswordResetService $passwordResetService;
+    private UserService $userService;
+    private Database $db;
 
     public function __construct()
     {
@@ -20,8 +18,7 @@ class PasswordResetController extends Controller {
         
         $this->passwordResetService = new PasswordResetService();
         $this->userService = new UserService();
-        $this->userModel = new User();
-        $this->db = new Database();
+        $this->db = Database::getSingleton();
     }
 
     /**
@@ -67,10 +64,10 @@ class PasswordResetController extends Controller {
 
         try {
             $this->db->beginTransaction();
-
+            
             // 業務で使っているlaravelのtokenも60字だった（ただし生成メソッドはLaravelの方が複雑）
             $passwordResetToken = str_random(60);
-
+            
             // password_resetsテーブルに保存
             $this->passwordResetService->saveRequest(email:$request['email'], passwordResetToken:$passwordResetToken);
 
@@ -170,9 +167,15 @@ class PasswordResetController extends Controller {
         try {
             $this->db->beginTransaction();
 
-            $this->userService->updatePassword(email:$passwordReset->email, password:$request['password']);
+            // 対象のユーザーを取得
+            $user = $this->userService->getUserByEmail(email:$passwordReset->email);
 
-            $this->passwordResetService->delete(passwordResetToken:$request['password_reset_token']);
+            // パスワードをアップデート
+            $user->password = password_hash(password:$request['password'], algo:PASSWORD_BCRYPT);
+            $user->save();
+
+            // パスワードリセットは物理削除
+            $passwordReset->delete();
 
             $this->db->commit();
 

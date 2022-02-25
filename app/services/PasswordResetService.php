@@ -21,27 +21,22 @@ class PasswordResetService {
      */
     public function saveRequest(string $email, string $passwordResetToken)
     {
-        $sql = 'SELECT * FROM `password_resets` WHERE `email` = :email';
-
         // 期限切れ含め、既にパスワードリセットフロー中か（$userが取れればフロー中、取れなければfalseが返る）
-        $user = $this->userModel->db
+        $sql = 'SELECT * FROM `password_resets` WHERE `email` = :email';
+        $passwordResetObj = $this->passwordResetModel->db
             ->prepare(sql:$sql)
             ->bindValue(param:':email', value:$email)
-            ->executeAndFetch(get_class($this->userModel));
+            ->executeAndFetch(get_class($this->passwordResetModel));
+
+        $params = [
+            'email' => $email,
+            'token' => $passwordResetToken,
+            'currentDateTime' => (new \DateTime())->format(DateTime_Default_Format),
+        ];
         
-        // レコードがあるかどうかで UPDATE/INSERT 分岐
-        $sql = $user
-            ? 'UPDATE `password_resets` SET `token` = :token, `token_sent_at` = :token_sent_at WHERE `email` = :email'
-            : 'INSERT INTO `password_resets` (`email`, `token`, `token_sent_at`) VALUES (:email, :token, :token_sent_at)';
-
-        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
-
-        $this->passwordResetModel->db
-            ->prepare(sql:$sql)
-            ->bindValue(param:':email', value:$email)
-            ->bindValue(param:':token', value:$passwordResetToken)
-            ->bindValue(param:':token_sent_at', value:$currentDateTime)
-            ->execute();
+        // レコードがあるかどうかで内部で UPDATE/INSERT を分岐している
+        if (!$passwordResetObj) $passwordResetObj = new PasswordReset();
+        $passwordResetObj->fill($params)->save();
 
         return;
     }
@@ -95,22 +90,5 @@ class PasswordResetService {
             ->executeAndFetch(get_class($this->passwordResetModel));
 
         return $passwordReset;
-    }
-
-    /**
-     * パスワード変更が完了し、不要になったレコードを削除する
-     *
-     * @return void
-     */
-    public function delete($passwordResetToken)
-    {
-        $sql = 'DELETE FROM `password_resets` WHERE `token` = :token';
-
-        $this->userModel->db
-            ->prepare(sql:$sql)
-            ->bindValue(param:':token', value:$passwordResetToken)
-            ->execute();
-
-        return;
     }
 }

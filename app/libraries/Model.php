@@ -4,7 +4,7 @@ namespace App\Libraries;
 use App\Libraries\Database;
 
 class Model {
-    public object $db;
+    public Database $db;
 
     // 遅いin_arrayでは無く高速なissetを使うため、連想配列にする
     protected $ignorekeys = [
@@ -16,8 +16,9 @@ class Model {
 
     public function __construct(array $params = [])
     {
-        $this->db = new Database;
+        $this->db = Database::getSingleton();
 
+        // @todo pdoから取得する時、自動挿入とここで合計2回入ってる？
         if (count($params) > 0) $this->fill($params);
     }
 
@@ -26,15 +27,17 @@ class Model {
      * ただし$ignoreKeysに含まれるkeyはセットしない
      *
      * @param array $params
-     * @return void
+     * @return self $this
      */
-    public function fill($params)
+    public function fill($params):self
     {
         foreach ($params as $key => $param) {
             if (isset($this->ignorekeys[$key])) continue;
 
             $this->{$key} = $param;
         }
+
+        return $this;
     }
 
     /**
@@ -141,7 +144,7 @@ class Model {
         
         $this->db
             ->prepare(sql:$sql)
-            ->bindValue(param:":{$this->primaryKey}", value:$this->id)
+            ->bindValue(param:":{$this->primaryKey}", value:$this->{$this->primaryKey})
             ->execute();
     }
 }

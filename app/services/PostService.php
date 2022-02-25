@@ -13,7 +13,7 @@ class PostService {
     {
         $this->postModel = new Post();
         $this->postDetailModel = new PostDetail();
-        $this->db = new Database();
+        $this->db = Database::getSingleton();
     }
 
     /**

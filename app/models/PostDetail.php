@@ -7,7 +7,6 @@ class PostDetail extends Model{
     public string $table = 'post_details';
 
     public array $fillable = [
-        'id' => '',
         'post_id' => '',
         'type' => '',
         'path' => '',

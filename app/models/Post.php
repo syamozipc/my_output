@@ -7,7 +7,6 @@ class Post extends Model {
     public string $table = 'posts';
 
     public array $fillable = [
-        'id' => '',
         'user_id' => '',
         'country_id' => '',
         'description' => '',

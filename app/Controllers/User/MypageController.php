@@ -21,7 +21,7 @@ class MypageController extends Controller {
     public function index()
     {
         $description = 'My Page';
-        $user = $this->userService->getUserById($this->getSession('user_id'));
+        $user = $this->userService->getUserById($this->userId);
 
         $data = [   
             'css' => 'css/user/mypage/index.css',

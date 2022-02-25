@@ -3,21 +3,15 @@ namespace App\Controllers\User;
 
 use App\Libraries\Controller;
 use App\Validators\User\LoginValidator;
-use App\Models\User;
 
 class LoginController extends Controller {
-
-    public user $userModel;
 
     public function __construct()
     {
         parent::__construct();
 
         if (isLogedIn()) return redirect('mypage/index');
-        
-        $this->userModel = new User();
     }
-
 
     public function loginForm()
     {

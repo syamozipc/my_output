@@ -11,6 +11,7 @@ class Controller {
     use \App\Traits\SessionTrait;
 
     protected LoginService $loginService;
+    protected int $userId;
 
     public function __construct()
     {

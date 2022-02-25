@@ -21,7 +21,7 @@ class RegisterController extends Controller {
         $this->registerService = new RegisterService();
         $this->userService = new UserService();
         $this->userModel = new User();
-        $this->db = new Database();
+        $this->db = Database::getSingleton();
     }
 
     /**

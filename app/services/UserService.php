@@ -45,7 +45,7 @@ class UserService {
             ->prepare($sql)
             ->bindValue(':email', $email)
             ->bindValue(':status_id', 'public')
-            ->executeAndFetch();
+            ->executeAndFetch(get_class($this->userModel));
 
         return $userOrFalse;
     }
@@ -112,24 +112,24 @@ class UserService {
         return $isExist;
     }
 
-    /**
-     * パスワードを変更
-     *
-     * @param integer $userId
-     * @return void
-     */
-    public function updatePassword(string $email, string $password)
-    {
-        $sql = 'UPDATE users SET `password` = :password WHERE `email` = :email';
+    // /**
+    //  * パスワードを変更
+    //  *
+    //  * @param integer $userId
+    //  * @return void
+    //  */
+    // public function updatePassword(string $email, string $password)
+    // {
+    //     $sql = 'UPDATE users SET `password` = :password WHERE `email` = :email';
         
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    //     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        $this->userModel->db
-            ->prepare(sql:$sql)
-            ->bindValue(param:':password', value:$hashedPassword)
-            ->bindValue(param:':email', value:$email)
-            ->execute();
+    //     $this->userModel->db
+    //         ->prepare(sql:$sql)
+    //         ->bindValue(param:':password', value:$hashedPassword)
+    //         ->bindValue(param:':email', value:$email)
+    //         ->execute();
 
-        return;
-    }
+    //     return;
+    // }
 }
