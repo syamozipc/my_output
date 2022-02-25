@@ -59,24 +59,31 @@ class LoginService {
      */
     public function baseLogin(string $email, string $password, bool $rememberMe = false):bool
     {
-        $sql = 'SELECT * FROM `users` WHERE `email` = :email';
+        $user = $this->userService->getUserByEmail($email);
 
-        $user = $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':email', $email)
-            ->executeAndFetch(get_class($this->userModel));
-
+        // emailが登録されていなければ失敗
         if (!$user) return false;
 
+        // パスワードが一致しなければ失敗
         $hashedPassword = $user->password;
-
         if (!password_verify($password, $hashedPassword)) return false;
 
-        $this->setLoginSession(user:$user);
+        // 以降ログイン処理
+        $this->setLoginSession(userId:$user->id);
 
-        $this->updateApiToken(user:$user);
+        $user->api_token = str_random(length:80);
 
-        if ($rememberMe) $this->allocateRememberToken(user:$user);
+        // 「ログイン情報を記憶するがチェックされたら、
+        // tokenを生成してcookieに持たせ、tokenをhash化したものをusersテーブルに保存
+        if ($rememberMe) {
+            $token = str_random(40);
+            $user->remember_token = md5($token);
+    
+            // optionsの連想配列は名前付き引数をサポートしていない
+            setcookie('remember_token', $token, Cookie_Default_Options);
+        }
+
+        $user->save();
 
         return true;
     }
@@ -95,7 +102,7 @@ class LoginService {
 
             if (!$user) return false;
 
-            $this->setLoginSession($user->id);
+            $this->setLoginSession(userId:$user->id);
             $this->updateLastLogin(userId:$user->id);
 
             return true;
@@ -107,55 +114,9 @@ class LoginService {
      * @param User $user
      * @return void
      */
-    private function setLoginSession(User $user):void
+    private function setLoginSession(int $userId):void
     {
-        $this->setSession(key:'user_id', param:$user->id);
-
-        return;
-    }
-
-    /**
-     * ログイン時にapi_tokenを更新する
-     *
-     * @param User $user
-     * @return void
-     */
-    private function updateApiToken(User $user):void
-    {
-        $sql = 'UPDATE users SET `api_token` = :api_token WHERE `id` = :id';
-        $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':api_token', str_random(length:80))
-            ->bindValue(':id', $user->id)
-            ->execute();
-
-        return;
-    }
-
-    /**
-     * remember meがチェックされたら、その仕組みを提供する
-     * 
-     * 1.remember_tokenを生成してcookieに持たせる
-     * 2.そのtokenをhash化したものをusersテーブルに保存
-     *
-     * @param User $user
-     * @return void
-     */
-    private function allocateRememberToken(User $user)
-    {
-        $token = str_random(40);
-        $digest = md5($token);
-
-        // optionsの連想配列は名前付き引数をサポートしていない
-        setcookie('remember_token', $token, Cookie_Default_Options);
-
-        $sql = 'UPDATE users SET `remember_token` = :remember_token WHERE `id` = :id';
-
-        $user->db
-            ->prepare($sql)
-            ->bindValue(':remember_token', $digest)
-            ->bindValue(':id', $user->id)
-            ->execute();
+        $this->setSession(key:'user_id', param:$userId);
 
         return;
     }
@@ -168,15 +129,13 @@ class LoginService {
      */
     public function updateLastLogin(int $userId)
     {
-        $sql = 'UPDATE users SET `last_login_at` = :last_login_at WHERE `id` = :id';
+        $user = $this->userService->getUserById($userId);
 
         $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
 
-        $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':last_login_at', $currentDateTime)
-            ->bindValue(':id', $userId)
-            ->execute();
+        $user->last_login_at = $currentDateTime;
+
+        $user->save();
 
         return;
     }

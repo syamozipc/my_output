@@ -2,15 +2,18 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Services\UserService;
 
 class LogoutService {
     use \App\Traits\SessionTrait;
 
     private User $userModel;
+    private UserService $userService;
 
     public function __construct()
     {
         $this->userModel = new User();
+        $this->userService = new UserService();
     }
 
     /**
@@ -26,8 +29,12 @@ class LogoutService {
      */
     public function baseLogout(string $userId)
     {
-        // api_token, remember_tokenの値をテーブルカラムから削除
-        $this->deleteApiTokenAndRememberToken(userId:$userId);
+        $user = $this->userService->getUserById(id:$userId);
+
+        // api_token、remember_tokenの値を削除
+        $user->api_token = null;
+        $user->remember_token = null;
+        $user->save();
 
         // remeber_tokenをcookieから削除
         setcookie('remember_token', '', time() - 6000, '/');
@@ -38,23 +45,6 @@ class LogoutService {
         setcookie('PHPSESSID', '', time() - 6000, '/');
         // sessionファイル（sessionの実データ）を削除
         session_destroy();
-
-        return;
-    }
-
-    /**
-     * ログアウト時にapi_token、remember_tokenを更新する
-     *
-     * @param string $userId
-     * @return void
-     */
-    private function deleteApiTokenAndRememberToken($userId):void
-    {
-        $sql = 'UPDATE users SET `api_token` = NULL, `remember_token` = NULL WHERE `id` = :id';
-        $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':id', $userId)
-            ->execute();
 
         return;
     }

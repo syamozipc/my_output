@@ -28,7 +28,6 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] ORM & OOP
-    -   [ ] API/LOGIN周りのorm化
     -   [ ] property_exists使う
     -   [ ] itelatoraggrigate使う
     -   [ ] マジックメソッド使う（__get,__set）
