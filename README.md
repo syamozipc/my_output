@@ -30,10 +30,10 @@ https://github.com/syamozipc/my_output
 -   [ ] ORM & OOP
     -   [ ] property_exists使う
     -   [ ] itelatoraggrigate使う
+    -   [ ] プロパティはprivateで
     -   [ ] マジックメソッド使う（__get,__set）
     -   [ ] 独習PHPの9,10章確認してモデル周りもうちょっとうまく書けないか
     -   [ ] 最初からプロパティ全部書いてnull挿入されないか（大丈夫っぽい？）
-    -   [ ] fuelでやっていた頃のように、プロパティはプライベートで行くか
 -   [ ] JSのapiリクエストとapi_token使う
 -   [ ] try/catchを各所に使いerror log出力
 -   [ ] AWS 実装
