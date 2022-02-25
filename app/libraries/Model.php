@@ -18,7 +18,6 @@ class Model {
     {
         $this->db = Database::getSingleton();
 
-        // @todo pdoから取得する時、自動挿入とここで合計2回入ってる？
         if (count($params) > 0) $this->fill($params);
     }
 
