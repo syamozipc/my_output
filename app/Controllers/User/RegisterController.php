@@ -104,7 +104,7 @@ class RegisterController extends Controller {
     {
         $token = filter_input(INPUT_GET, 'token');
 
-        $user = $this->registerService->getValidTemporarilyRegisteredUser(registerToken:$token);
+        $user = $this->registerService->fetchValidTemporarilyRegisteredUser(registerToken:$token);
 
         if (!$user) {
             $this->setFlashErrorSession(key:'status', param:'無効なURLです。再度メールアドレスを入力してください。');
@@ -147,11 +147,18 @@ class RegisterController extends Controller {
 
         // sendRegisterMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 
-        // usersテーブルの該当レコードを本登録させる
-        $this->registerService->regsterUser(request:$request);
+        $user = $this->registerService->fetchValidTemporarilyRegisteredUser(registerToken:$request['register_token']);
 
-        // tokenの値で、先ほど登録したuserを取得
-        $user = $this->userService->getUserByRegisterToken(registerToken:$request['register_token']);
+        // 取得できなかった場合は、verifyToken()後に期限が切れたと考える
+        if (!$user) {
+            $this->setFlashErrorSession(key:'status', param:'tokenの有効期限が切れました。再度メールアドレスを入力してください。');
+
+            return redirect('register/tmpRegisterForm');
+        }
+
+        // usersテーブルの該当レコードを本登録させる
+        // このfunction内で$user->save()をしているが、objectは既定で参照渡しなので、こちらの$userも更新されている
+        $this->registerService->regsterUser(user:$user, password:$request['password']);
 
         // 本登録完了メール送信
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);

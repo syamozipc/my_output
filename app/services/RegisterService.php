@@ -20,47 +20,41 @@ class RegisterService {
     public function temporarilyRegister(string $email, string $registerToken)
     {
         // 仮登録済みかどうかで UPDATE/INSERT を分岐
-        if ($this->isTemporarilyRegistered(email:$email)) {
-            $sql = 'UPDATE `users` SET `register_token` = :register_token, `register_token_sent_at` = :register_token_sent_at WHERE `email` = :email';
-        } else {
-            $sql = 'INSERT INTO `users` (`email`, `register_token`, `register_token_sent_at`) VALUES (:email, :register_token, :register_token_sent_at)';
-        }
-        
-        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
+        $user = $this->fetchTemporarilyRegisteredUser(email:$email);
 
-        $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':email', $email)
-            ->bindValue(':register_token', $registerToken)
-            ->bindValue(':register_token_sent_at', $currentDateTime)
-            ->execute();
+        if (!$user) $user = new User();
+
+        $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
+        $params = [
+            'email' => $email,
+            'register_token' => $registerToken,
+            'register_token_sent_at' => $currentDateTime
+        ];
+
+        $user->fill($params)->save();
 
         return;
     }
 
     /**
-     * ユーザーが仮登録状態かどうか
+     * 仮登録状態のユーザーを取得
+     * ・期限切れの有無に影響されない
      *
      * @param string $email
-     * @return boolean
+     * @return User|false
      */
-    public function isTemporarilyRegistered(string $email): bool
+    public function fetchTemporarilyRegisteredUser(string $email): User|false
     {
-        // 仮登録済みかどうか
-        // $userが取れれば仮登録済み、いなければ未登録
         $sql = 'SELECT * FROM `users` WHERE `email` = :email AND `status_id` = :status_id';
 
         // $userがいればobject、いなければfalseが返る
-        $this->userModel->db
+        $userOrFalse = $this->userModel->db
             ->prepare(sql:$sql)
             ->bindValue(':email', $email)
             ->bindValue(':status_id', ' tentative')
-            ->execute();
+            ->executeAndFetch(get_class($this->userModel));
 
-        // 仮登録済みなら1（当てはまる桁数）、未登録もしくは本登録なら、0が返る
-        $isExist = $this->userModel->db->rowCount();
-
-        return $isExist;
+        return $userOrFalse;
     }
 
     /**
@@ -101,7 +95,7 @@ class RegisterService {
      * @param string $token
      * @return User|false
      */
-    public function getValidTemporarilyRegisteredUser(string $registerToken):User|false
+    public function fetchValidTemporarilyRegisteredUser(string $registerToken):User|false
     {
         $sql = 'SELECT * FROM `users` WHERE `register_token` = :register_token AND `register_token_sent_at` >= :register_token_sent_at AND `status_id` = :status_id';
 
@@ -121,26 +115,27 @@ class RegisterService {
     /**
      * userを本登録する
      *
-     * @param array $request
+     * @param User $user
      * @return void
      */
-    public function regsterUser($request)
+    public function regsterUser(User $user, string $password):void
     {
         $sql = 'UPDATE users SET `register_token_verified_at` = :register_token_verified_at, `password` = :password, `status_id` = :status_id, `status_updated_at` = :status_updated_at WHERE `register_token` = :register_token';
 
         $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
-        $hashedPassword = password_hash($request['password'], PASSWORD_BCRYPT);
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        $isRegistered = $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':register_token_verified_at', $currentDateTime)
-            ->bindValue(':password', $hashedPassword)
-            ->bindValue(':status_id', 'public')
-            ->bindValue(':status_updated_at', $currentDateTime)
-            ->bindValue(':register_token', $request['register_token'])
-            ->execute();
+        $params = [
+            'register_token_verified_at' => $currentDateTime,
+            'password' => $hashedPassword,
+            'status_id' => 'public',
+            'status_updated_at' => $currentDateTime,
+            'register_token' => $user->register_token,
+        ];
 
-        return $isRegistered;
+        $user->fill($params)->save();
+
+        return;
     }
 
     public function sendRegisteredEmail(string $to):bool

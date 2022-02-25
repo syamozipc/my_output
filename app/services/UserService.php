@@ -49,27 +49,7 @@ class UserService {
 
         return $userOrFalse;
     }
-
-    /**
-     * registerTokenからユーザーを取得
-     * 失敗時はfalseを返す
-     * 
-     * @param string $registerToken
-     * @return User|false $user
-     */
-    public function getUserByRegisterToken(string $registerToken): User|false
-    {
-        $sql = 'SELECT * FROM users WHERE `register_token` = :register_token AND `status_id` = :status_id';
-
-        $userOrFalse = $this->userModel->db
-            ->prepare($sql)
-            ->bindValue(':register_token', $registerToken)
-            ->bindValue(':status_id', 'public')
-            ->executeAndFetch(get_class($this->userModel));
-
-        return $userOrFalse;
-    }
-
+    
     /**
      * rememberTokenからユーザーを取得
      * 失敗時はfalseを返す

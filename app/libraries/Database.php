@@ -71,11 +71,11 @@ class Database {
      * @param string $className fetch結果をinstance化classの名前
      * @return array $className の配列（無ければ[]の配列）
      */
-    public function executeAndFetchAll($className = 'stdClass'): array
+    public function executeAndFetchAll($className = 'stdClass', ...$args): array
     {
         $this->execute();
 
-        $this->pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $className);
+        $this->pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $className, $args);
         
         return $this->pdoStatement->fetchAll();
     }
@@ -86,12 +86,12 @@ class Database {
      * @param string $className fetch結果をinstance化classの名前
      * @return object|false $classNameに指定したクラスのinstance（失敗したらfalse）
      */
-    public function executeAndFetch($className = 'stdClass'): object|false
+    public function executeAndFetch($className = 'stdClass', ...$args): object|false
     {
         $this->execute();
 
         // 任意のクラスのインスタンスとして取得。コンストラクタ → propertyをセットの順になる
-        $this->pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $className);
+        $this->pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $className, $args);
 
         // fetchObject にすると \PDO::FETCH_PROPS_LATE を指定できずpropertyのセット→コンストラクタ実行 という逆順になるので、上でモードを定義
         return $this->pdoStatement->fetch();
