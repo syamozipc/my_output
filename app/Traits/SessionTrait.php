@@ -37,8 +37,8 @@ trait SessionTrait {
 
     public function moveFlashSessionToOld()
     {
-        $_SESSION['_old'] = $_SESSION['_flash'];
-        $_SESSION['_old_error'] = $_SESSION['_flash_error'];
+        $_SESSION['_old'] = $_SESSION['_flash'] ?? [];
+        $_SESSION['_old_error'] = $_SESSION['_flash_error'] ?? [];
 
         $_SESSION['_flash'] = [];
         $_SESSION['_flash_error'] = [];
