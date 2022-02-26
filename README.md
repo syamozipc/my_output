@@ -28,11 +28,9 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] ORM & OOP
-    -   [ ] プロパティはprivateで（__callか、__get, __set使う）（pdoのfetchでもアクセス修飾子は有効）
-        ※private propertyは未定義扱いなので、__set/__getが使えるっぽい
+    -   [ ] モデルのsaveとproperty部分もっと綺麗にしたい
     -   [ ] インターフェイスとポリモーフィズム
     -   [ ] 独習PHPの9,10章確認して何か導入したい
-    -   [ ] 最初からプロパティ全部書いてnull挿入されないか（大丈夫っぽいのでやる）
 -   [ ] JSのapiリクエストとapi_token使う
 -   [ ] try/catchを各所に使いerror log出力（静的クラスとして生成）
 -   [ ] AWS 実装
