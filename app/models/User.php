@@ -7,25 +7,24 @@ class User extends Model{
 
     protected string $table = 'users';
 
-    protected int $id;
-    protected ?int $country_id;
-    protected ?string $name;
-    protected ?string $tel;
-    protected ?string $date_of_birth;
-    protected ?string $profile_image_path;
-    protected ?string $introduction;
-    protected string $email;
-    protected string $register_token;
-    protected string $register_token_sent_at;
-    protected ?string $register_token_verified_at;
-    protected ?string $password;
-    protected ?string $api_token;
-    protected ?string $remember_token;
-    protected ?string $last_login_at;
-    protected string $status_id;
-    protected string $status_updated_at;
-    protected string $created_at;
-    protected string $updated_at;
+    protected $fillable = [
+        'country_id',
+        'name',
+        'tel',
+        'date_of_birth',
+        'profile_image_path',
+        'introduction',
+        'email',
+        'register_token',
+        'register_token_sent_at',
+        'register_token_verified_at',
+        'password',
+        'api_token',
+        'remember_token',
+        'last_login_at',
+        'status_id',
+        'status_updated_at',
+    ];
 
     public function __construct()
     {

@@ -8,13 +8,12 @@ class PostDetail extends Model{
     protected string $table = 'post_details';
 
     // テーブルカラム
-    protected int $id;
-    protected int $post_id;
-    protected string $type;
-    protected string $path;
-    protected int $sort_number;
-    protected string $created_at;
-    protected string $updated_at;
+    protected $fillable = [
+        'post_id',
+        'type',
+        'path',
+        'sort_number',
+    ];    
     
     public function __construct(array $params = [])
     {

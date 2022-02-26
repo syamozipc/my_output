@@ -3,28 +3,18 @@ namespace App\Libraries;
 
 use App\Libraries\Database;
 
-class Model /* implements \IteratorAggregate */ {
-    use \App\Traits\MagicMethodTrait;
-
+class Model implements \IteratorAggregate {
     public Database $db;
 
     // 遅いin_arrayでは無く高速なissetを使うため、連想配列にする
     protected array $ignoreKeys = [
-        '_csrf_token' => '',
-        'MAX_FILE_SIZE' => '',
-        'loopProperties',
-        'table' => '',
-        'primaryKey' => '',
-        'db' => '',
-        'ignoreKeys' => '',
-        'params' => '',
+        '_csrf_token',
+        'MAX_FILE_SIZE',
     ];
 
     protected string $primaryKey = 'id';
 
-    protected array $params = [];
-
-    // private array $loopProperties = [];
+    private array $loopProperties = [];
 
     public function __construct(array $params = [])
     {
@@ -34,7 +24,7 @@ class Model /* implements \IteratorAggregate */ {
     }
 
     /**
-     * 引数で渡された連想配列を、keyをproperty名、valueをpropertyの値としてセットする
+     * 引数で渡された連想配列を、keyをproperty名、valueをそのの値としてセットする
      * ただし$ignoreKeysに含まれるkeyはセットしない
      *
      * @param array $params
@@ -43,7 +33,7 @@ class Model /* implements \IteratorAggregate */ {
     public function fill($params):self
     {
         foreach ($params as $key => $param) {
-            if (isset($this->ignoreKeys[$key])) continue;
+            if (in_array($key, $this->ignoreKeys, true)) continue;
 
             $this->{$key} = $param;
         }
@@ -57,18 +47,18 @@ class Model /* implements \IteratorAggregate */ {
      *
      * @return \Traversable
      */
-    // public function getIterator(): \Traversable
-    // {
-    //     if ($this->loopProperties) return new \ArrayIterator($this->loopProperties);
+    public function getIterator(): \Traversable
+    {
+        if ($this->loopProperties) return new \ArrayIterator($this->loopProperties);
 
-    //     foreach ($this as $property) {
-    //         if (!property_exists($this, $property)) continue;
+        foreach ($this as $property) {
+            if (!property_exists($this, $property)) continue;
 
-    //         $this->loopProperties[] = $property;
-    //     }
+            $this->loopProperties[] = $property;
+        }
 
-    //     return new \ArrayIterator($this->loopProperties);
-    // }
+        return new \ArrayIterator($this->loopProperties);
+    }
 
     /**
      * modelに対応するテーブルに保存される
@@ -93,12 +83,11 @@ class Model /* implements \IteratorAggregate */ {
         $sql = "INSERT INTO `{$this->table}` (";
         $sqlValues = ") VALUES (";
 
+        // カラム名指定部分、VALUES以後の部分をそれぞれ作成
         // getIterator()が呼び出される
-        foreach ($this as $key => $_) {
-            if (isset($this->ignoreKeys[$key])) continue;
-
-            $sql .= "`{$key}`,";
-            $sqlValues .= ":{$key},";
+        foreach ($this as $property) {
+            $sql .= "`{$property}`,";
+            $sqlValues .= ":{$property},";
         }
 
         // 最後の,を除去
@@ -113,10 +102,8 @@ class Model /* implements \IteratorAggregate */ {
 
         // 名前付きプレースホルダーに値を入れる
         // getIterator()が呼び出される
-        foreach ($this as $key => $_) {
-            if (isset($this->ignoreKeys[$key])) continue;
-
-            $this->db->bindValue(param:":{$key}", value:$this->{$key});
+        foreach ($this->fillable as $property) {
+            $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
 
         $this->db->execute();
@@ -131,12 +118,10 @@ class Model /* implements \IteratorAggregate */ {
     {
         $sql = "UPDATE `{$this->table}` SET";
 
-        // where句以外のSQL文を生成
+        // SET句のSQL文を生成
         // getIterator()が呼び出される
-        foreach ($this as $key => $_) {
-            if (isset($this->ignoreKeys[$key])) continue;
-
-            $sql .= " `{$key}` = :{$key},";
+        foreach ($this->fillable as $property) {
+            $sql .= " `{$property}` = :{$property},";
         }
 
         $sql = rtrim($sql, ',');
@@ -148,10 +133,8 @@ class Model /* implements \IteratorAggregate */ {
 
         // 名前付きプレースホルダーに値を入れる
         // getIterator()が呼び出される
-        foreach ($this as $key => $_) {
-            if (isset($this->ignoreKeys[$key])) continue;
-
-            $this->db->bindValue(param:":{$key}", value:$this->{$key});
+        foreach ($this as $property) {
+            $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
 
         // WHERE句のプレースホルダーに値を入れ、実行

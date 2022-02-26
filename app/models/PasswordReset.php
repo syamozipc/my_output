@@ -11,9 +11,11 @@ class PasswordReset extends Model{
     protected string $primaryKey = 'email';
 
     // テーブルカラム
-    protected string $email;
-    protected string $token;
-    protected string $token_sent_at;
+    protected $fillable = [
+        'email',
+        'token',
+        'token_sent_at',
+    ];
 
     public function __construct()
     {
