@@ -6,12 +6,11 @@ use App\Libraries\Model;
 class Post extends Model {
     public string $table = 'posts';
 
-    public array $fillable = [
-        'user_id',
-        'country_id',
-        'description',
-        'status_id'
-    ];
+    // テーブルカラム
+    private int $user_id;
+    private int $country_id;
+    private string $description;
+    private string $status_id;
 
     public function __construct(array $params= [])
     {
