@@ -4,8 +4,9 @@ namespace App\Controllers\User;
 use App\Libraries\{Controller, Database};
 use App\Services\{PasswordResetService, UserService};
 use App\Validators\User\{passwordResetRequestValidator, PasswordResetStoreValidator};
+use App\interface\EmailTokenInterface;
 
-class PasswordResetController extends Controller {
+class PasswordResetController extends Controller implements EmailTokenInterface {
     use \App\Traits\SessionTrait;
 
     private PasswordResetService $passwordResetService;
@@ -47,7 +48,7 @@ class PasswordResetController extends Controller {
      *
      * @return void
      */
-    public function sendResetMail()
+    public function sendEmail():void
     {
         $request = filter_input_array(INPUT_POST);
 
@@ -101,7 +102,7 @@ class PasswordResetController extends Controller {
      *
      * @return void
      */
-    public function verifyToken()
+    public function verifyToken():void
     {
         $token = filter_input(INPUT_GET, 'token');
 

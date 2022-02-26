@@ -5,8 +5,9 @@ use App\Libraries\{Controller, Database};
 use App\Services\{RegisterService, UserService};
 use App\Models\User;
 use App\Validators\User\{TemporaryRegisterValidator, RegisterValidator};
+use App\interface\EmailTokenInterface;
 
-class RegisterController extends Controller {
+class RegisterController extends Controller  implements EmailTokenInterface{
     use \App\Traits\SessionTrait;
 
     public RegisterService $registerService;
@@ -49,7 +50,7 @@ class RegisterController extends Controller {
      *
      * @return void
      */
-    public function sendRegisterMail()
+    public function sendEmail():void
     {
         $request = filter_input_array(INPUT_POST);
 
@@ -100,7 +101,7 @@ class RegisterController extends Controller {
      *
      * @return void
      */
-    public function verifyToken()
+    public function verifyToken():void
     {
         $token = filter_input(INPUT_GET, 'token');
 
@@ -145,7 +146,7 @@ class RegisterController extends Controller {
 
         if (!$isValidated) return redirect("register/verifyToken?token={$request['register_token']}");
 
-        // sendRegisterMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
+        // sendEMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 
         $user = $this->registerService->fetchValidTemporarilyRegisteredUser(registerToken:$request['register_token']);
 
