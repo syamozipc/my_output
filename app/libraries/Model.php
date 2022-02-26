@@ -3,7 +3,7 @@ namespace App\Libraries;
 
 use App\Libraries\Database;
 
-class Model/*  implements \IteratorAggregate */ {
+class Model implements \IteratorAggregate {
     public Database $db;
 
     // 遅いin_arrayでは無く高速なissetを使うため、連想配列にする
@@ -45,27 +45,27 @@ class Model/*  implements \IteratorAggregate */ {
         return $this;
     }
 
-    // /**
-    //  * IteratorAggregate実装method の override
-    //  * $thisをループ時、これが呼び出される
-    //  *
-    //  * @return \Traversable
-    //  */
-    // public function getIterator(): \Traversable
-    // {
-    //     // 値をセットしない限りはpropery名だけあってもfalse
-    //     // ※issetも同様。ただしissetはnullをセットしてもfalseになる
-    //     if (property_Exists($this, 'loopProperties')) return new \ArrayIterator($this->loopProperties);
+    /**
+     * IteratorAggregate実装method の override
+     * $thisをループ時、これが呼び出される
+     *
+     * @return \Traversable
+     */
+    public function getIterator(): \Traversable
+    {
+        // 値をセットしない限りはpropery名だけあってもfalse
+        // ※issetも同様。ただしissetはnullをセットしてもfalseになる
+        if (property_Exists($this, 'loopProperties')) return new \ArrayIterator($this->loopProperties);
 
-    //     foreach ($this as $property) {
-    //         // dd($property);
-    //         if (!property_exists($this, $property)) continue;
+        foreach ($this as $property) {
+            // dd($property);
+            if (!property_exists($this, $property)) continue;
 
-    //         $this->loopProperties[] = $property;
-    //     }
+            $this->loopProperties[] = $property;
+        }
 
-    //     return new \ArrayIterator($this->loopProperties);
-    // }
+        return new \ArrayIterator($this->loopProperties);
+    }
 
     /**
      * modelに対応するテーブルに保存される
@@ -164,8 +164,20 @@ class Model/*  implements \IteratorAggregate */ {
             ->execute();
     }
 
-    public function __set($name, $value)
-    {
-        // dd($name, $value);
-    }
+    // public function __set($name, $value)
+    // {
+    //     // dd($name, $value);
+    // }
+
+    // public function __get($name)
+    // {
+    //     return $this->{"get{$name}"}();
+    // }
+
+    // public function __call($name, $arguments)
+    // {
+    //     echo '<pre>';var_dump($name, $this->{$name});die;
+    //     echo '<pre>';var_dump($this->{$name});die;
+    //     return $this->{$name};
+    // }
 }
