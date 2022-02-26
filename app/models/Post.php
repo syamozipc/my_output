@@ -7,10 +7,10 @@ class Post extends Model {
     public string $table = 'posts';
 
     public array $fillable = [
-        'user_id' => '',
-        'country_id' => '',
-        'description' => '',
-        'status_id' => ''
+        'user_id',
+        'country_id',
+        'description',
+        'status_id'
     ];
 
     public function __construct(array $params= [])

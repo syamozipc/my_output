@@ -3,22 +3,45 @@ namespace App\Libraries;
 
 use App\Libraries\Database;
 
-class Model {
+class Model implements \IteratorAggregate {
     public Database $db;
 
     // 遅いin_arrayでは無く高速なissetを使うため、連想配列にする
-    protected $ignorekeys = [
+    protected array $ignorekeys = [
         '_csrf_token' => '',
         'MAX_FILE_SIZE' => ''
     ];
 
-    protected $primaryKey = 'id';
+    protected string $primaryKey = 'id';
+
+    private array $loopProperties;
 
     public function __construct(array $params = [])
     {
         $this->db = Database::getSingleton();
 
         if (count($params) > 0) $this->fill($params);
+    }
+
+    /**
+     * IteratorAggregate実装method の override
+     * $thisをループ時、これが呼び出される
+     *
+     * @return \Traversable
+     */
+    public function getIterator(): \Traversable
+    {
+        // 値をセットしない限りはpropery名だけあってもfalse
+        // ※issetも同様。ただしissetはnullをセットしてもfalseになる
+        if (property_Exists($this, 'loopProperties')) return new \ArrayIterator($this->loopProperties);
+
+        foreach ($this->fillable as $property) {
+            if (!property_exists($this, $property)) continue;
+
+            $this->loopProperties[] = $property;
+        }
+
+        return new \ArrayIterator($this->loopProperties);
     }
 
     /**
@@ -61,12 +84,11 @@ class Model {
     {
         $sql = "INSERT INTO `{$this->table}` (";
         $sqlValues = ") VALUES (";
-        
-        foreach ($this->fillable as $key => $_) {
-            if (!property_exists($this, $key)) continue;
 
-            $sql .= "`{$key}`,";
-            $sqlValues .= ":{$key},";
+        // getIterator()が呼び出される
+        foreach ($this as $property) {
+            $sql .= "`{$property}`,";
+            $sqlValues .= ":{$property},";
         }
 
         // 最後の,を除去
@@ -80,10 +102,9 @@ class Model {
         $this->db->prepare(sql:$sql);
 
         // 名前付きプレースホルダーに値を入れる
-        foreach ($this->fillable as $key => $_) {
-            if (!property_exists($this, $key)) continue;
-
-            $this->db->bindValue(param:":{$key}", value:$this->{$key});
+        // getIterator()が呼び出される
+        foreach ($this as $property) {
+            $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
 
         $this->db->execute();
@@ -97,11 +118,11 @@ class Model {
     public function update()
     {
         $sql = "UPDATE `{$this->table}` SET";
-        $existProperties = [];
 
         // where句以外のSQL文を生成
-        foreach ($this->fillable as $key => $_) {
-            $sql .= " `{$key}` = :{$key},";
+        // getIterator()が呼び出される
+        foreach ($this as $property) {
+            $sql .= " `{$property}` = :{$property},";
         }
 
         $sql = rtrim($sql, ',');
@@ -112,8 +133,9 @@ class Model {
         $this->db->prepare(sql:$sql);
 
         // 名前付きプレースホルダーに値を入れる
-        foreach ($this->fillable as $key => $_) {
-            $this->db->bindValue(param:":{$key}", value:$this->{$key});
+        // getIterator()が呼び出される
+        foreach ($this as $property) {
+            $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
 
         // WHERE句のプレースホルダーに値を入れ、実行

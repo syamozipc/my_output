@@ -6,12 +6,13 @@ use App\Libraries\Model;
 class PasswordReset extends Model{
     public string $table = 'password_resets';
 
-    protected $primaryKey = 'email';
+    // modelのdefaultを上書き
+    protected string $primaryKey = 'email';
 
     public array $fillable = [
-        'email' => '',
-        'token' => '',
-        'token_sent_at' => '',
+        'email',
+        'token',
+        'token_sent_at',
     ];
 
     public function __construct()

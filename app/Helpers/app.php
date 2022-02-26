@@ -82,10 +82,10 @@ function csrf(): string
  * @param mixed
  * @return void
  */
-function dd($dump): void
+function dd(...$dump): void
 {
     echo '<pre>';
-    var_dump($dump);
+    var_dump(...$dump);
     die;
 }
 ?>

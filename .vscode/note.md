@@ -1,6 +1,6 @@
 # リファクタ
-1. fillableの方を回し、property_existsでチェック
-2. iterater method実装
+<!-- 1. fillableの方を回し、property_existsでチェック -->
+<!-- 2. iterater method実装 -->
 3. プロパティをprivate化し、テーブルにないカラムは一つのプロパティにまとめ、それは回さないようにする
 4. primary keyは回さないようにする
 

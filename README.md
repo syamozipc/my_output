@@ -28,13 +28,13 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] ORM & OOP
-    -   [ ] モデルのinsert/updateもう少し上手く書く（property_exists, itelatoraggrigate）
     -   [ ] プロパティはprivateで（__callか、__get, __set使う）（pdoのfetchでもアクセス修飾子は有効）
+        ※private propertyは未定義扱いなので、__set/__getが使えるっぽい
     -   [ ] インターフェイスとポリモーフィズム
     -   [ ] 独習PHPの9,10章確認して何か導入したい
     -   [ ] 最初からプロパティ全部書いてnull挿入されないか（大丈夫っぽいのでやる）
 -   [ ] JSのapiリクエストとapi_token使う
--   [ ] try/catchを各所に使いerror log出力
+-   [ ] try/catchを各所に使いerror log出力（静的クラスとして生成）
 -   [ ] AWS 実装
     -   [ ] 画像・動画を S3 に cludfront 経由でアップロード
     -   [ ] EC2 動かす
