@@ -18,7 +18,7 @@ class Model implements \IteratorAggregate {
 
     protected string $primaryKey = 'id';
 
-    private array $loopProperties;
+    private array $loopProperties = [];
 
     public function __construct(array $params = [])
     {
@@ -53,9 +53,7 @@ class Model implements \IteratorAggregate {
      */
     public function getIterator(): \Traversable
     {
-        // 値をセットしない限りはpropery名だけあってもfalse
-        // ※issetも同様。ただしissetはnullをセットしてもfalseになる
-        if (property_Exists($this, 'loopProperties')) return new \ArrayIterator($this->loopProperties);
+        if ($this->loopProperties) return new \ArrayIterator($this->loopProperties);
 
         foreach ($this as $property) {
             // dd($property);
@@ -171,6 +169,7 @@ class Model implements \IteratorAggregate {
 
     // public function __get($name)
     // {
+    //     echo '<pre>';var_dump($name);die;
     //     return $this->{"get{$name}"}();
     // }
 
