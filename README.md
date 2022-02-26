@@ -28,7 +28,6 @@ https://github.com/syamozipc/my_output
 ## 実装したい機能
 
 -   [ ] ORM & OOP
-    -   [ ] モデルのsaveとproperty部分もっと綺麗にしたい
     -   [ ] インターフェイスとポリモーフィズム
     -   [ ] 独習PHPの9,10章確認して何か導入したい
 -   [ ] JSのapiリクエストとapi_token使う
