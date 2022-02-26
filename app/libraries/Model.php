@@ -3,7 +3,7 @@ namespace App\Libraries;
 
 use App\Libraries\Database;
 
-class Model implements \IteratorAggregate {
+class Model {
     public Database $db;
 
     // 遅いin_arrayでは無く高速なissetを使うため、連想配列にする
@@ -13,8 +13,6 @@ class Model implements \IteratorAggregate {
     ];
 
     protected string $primaryKey = 'id';
-
-    private array $loopProperties = [];
 
     public function __construct(array $params = [])
     {
@@ -42,25 +40,6 @@ class Model implements \IteratorAggregate {
     }
 
     /**
-     * IteratorAggregate実装method の override
-     * $thisをループ時、これが呼び出される
-     *
-     * @return \Traversable
-     */
-    public function getIterator(): \Traversable
-    {
-        if ($this->loopProperties) return new \ArrayIterator($this->loopProperties);
-
-        foreach ($this as $property) {
-            if (!property_exists($this, $property)) continue;
-
-            $this->loopProperties[] = $property;
-        }
-
-        return new \ArrayIterator($this->loopProperties);
-    }
-
-    /**
      * modelに対応するテーブルに保存される
      *
      * @return void
@@ -84,8 +63,9 @@ class Model implements \IteratorAggregate {
         $sqlValues = ") VALUES (";
 
         // カラム名指定部分、VALUES以後の部分をそれぞれ作成
-        // getIterator()が呼び出される
-        foreach ($this as $property) {
+        foreach ($this->fillable as $property) {
+            if (!property_exists($this, $property)) continue;
+
             $sql .= "`{$property}`,";
             $sqlValues .= ":{$property},";
         }
@@ -101,8 +81,9 @@ class Model implements \IteratorAggregate {
         $this->db->prepare(sql:$sql);
 
         // 名前付きプレースホルダーに値を入れる
-        // getIterator()が呼び出される
         foreach ($this->fillable as $property) {
+            if (!property_exists($this, $property)) continue;
+
             $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
 
@@ -119,8 +100,9 @@ class Model implements \IteratorAggregate {
         $sql = "UPDATE `{$this->table}` SET";
 
         // SET句のSQL文を生成
-        // getIterator()が呼び出される
         foreach ($this->fillable as $property) {
+            if (!property_exists($this, $property)) continue;
+
             $sql .= " `{$property}` = :{$property},";
         }
 
@@ -132,8 +114,9 @@ class Model implements \IteratorAggregate {
         $this->db->prepare(sql:$sql);
 
         // 名前付きプレースホルダーに値を入れる
-        // getIterator()が呼び出される
-        foreach ($this as $property) {
+        foreach ($this->fillable as $property) {
+            if (!property_exists($this, $property)) continue;
+
             $this->db->bindValue(param:":{$property}", value:$this->{$property});
         }
 
