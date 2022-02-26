@@ -10,8 +10,8 @@ class Post extends Model {
     // テーブルカラム
     protected int $id;
     protected int $user_id;
-    protected int $country_id;
-    protected ?string $description;
+    protected ?int $country_id = null;
+    protected ?string $description = null;
     protected string $status_id;
     protected string $created_at;
     protected string $updated_at;

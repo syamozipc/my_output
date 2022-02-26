@@ -17,9 +17,12 @@ class Model /* implements \IteratorAggregate */ {
         'primaryKey' => '',
         'db' => '',
         'ignoreKeys' => '',
+        'params' => '',
     ];
 
     protected string $primaryKey = 'id';
+
+    protected array $params = [];
 
     // private array $loopProperties = [];
 
@@ -59,7 +62,6 @@ class Model /* implements \IteratorAggregate */ {
     //     if ($this->loopProperties) return new \ArrayIterator($this->loopProperties);
 
     //     foreach ($this as $property) {
-    //         // dd($property);
     //         if (!property_exists($this, $property)) continue;
 
     //         $this->loopProperties[] = $property;
