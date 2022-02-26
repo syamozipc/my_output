@@ -60,16 +60,10 @@ class Model {
     public function insert()
     {
         $sql = "INSERT INTO `{$this->table}` (";
-        $sqlValues = "VALUES (";
-        $existProperties = [];
-
+        $sqlValues = ") VALUES (";
         
-        // @todo iterateraggregaterとかでもっとスマートに
-        foreach ($this as $key => $_) {
-            // @todo そのプロパティが存在するか、みたいな判定をつける
-            if (!isset($this->fillable[$key])) continue;
-
-            $existProperties[] = $key;
+        foreach ($this->fillable as $key => $_) {
+            if (!property_exists($this, $key)) continue;
 
             $sql .= "`{$key}`,";
             $sqlValues .= ":{$key},";
@@ -80,14 +74,16 @@ class Model {
         $sqlValues = rtrim($sqlValues, ',');
 
         // insert文を合体
-        $sql = "{$sql}) {$sqlValues})";
+        $sql = "{$sql} {$sqlValues})";
   
         // sqlをprepare
         $this->db->prepare(sql:$sql);
 
         // 名前付きプレースホルダーに値を入れる
-        foreach ($existProperties as $property) {
-            $this->db->bindValue(param:":{$property}", value:$this->{$property});
+        foreach ($this->fillable as $key => $_) {
+            if (!property_exists($this, $key)) continue;
+
+            $this->db->bindValue(param:":{$key}", value:$this->{$key});
         }
 
         $this->db->execute();
@@ -104,13 +100,7 @@ class Model {
         $existProperties = [];
 
         // where句以外のSQL文を生成
-        // @todo iterateraggregaterとかでもっとスマートに
-        foreach ($this as $key => $_) {
-            // @todo そのプロパティが存在するか、みたいな判定をつける
-            if (!isset($this->fillable[$key])) continue;
-
-            $existProperties[] = $key;
-
+        foreach ($this->fillable as $key => $_) {
             $sql .= " `{$key}` = :{$key},";
         }
 
@@ -122,8 +112,8 @@ class Model {
         $this->db->prepare(sql:$sql);
 
         // 名前付きプレースホルダーに値を入れる
-        foreach ($existProperties as $property) {
-            $this->db->bindValue(param:":{$property}", value:$this->{$property});
+        foreach ($this->fillable as $key => $_) {
+            $this->db->bindValue(param:":{$key}", value:$this->{$key});
         }
 
         // WHERE句のプレースホルダーに値を入れ、実行
