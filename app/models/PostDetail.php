@@ -7,6 +7,7 @@ class PostDetail extends Model{
     public string $table = 'post_details';
 
     // テーブルカラム
+    private int $id;
     private ?int $post_id;
     private ?string $type;
     private ?string $path;

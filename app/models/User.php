@@ -6,6 +6,7 @@ use App\Libraries\Model;
 class User extends Model{
     public string $table = 'users';
 
+    private int $id;
     private ?int $country_id;
     private ?string $name;
     private ?string $tel;

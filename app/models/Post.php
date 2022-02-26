@@ -7,6 +7,7 @@ class Post extends Model {
     public string $table = 'posts';
 
     // テーブルカラム
+    private int $id;
     private int $user_id;
     private int $country_id;
     private ?string $description;
