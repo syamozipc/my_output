@@ -29,7 +29,7 @@ https://github.com/syamozipc/my_output
 
 -   [ ] ORM & OOP
     -   [ ] 独習PHPの9,10章確認して何か導入したい
--   [ ] JSのapiリクエストとapi_token使う
+-   [ ] JSのapiリクエストとapi_token使う（core controllerの書き換えが必要）
 -   [ ] try/catchを各所に使いerror log出力（静的クラスとして生成）
 -   [ ] AWS 実装
     -   [ ] 画像・動画を S3 に cludfront 経由でアップロード
