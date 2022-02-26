@@ -9,7 +9,7 @@ class Post extends Model {
     // テーブルカラム
     private int $user_id;
     private int $country_id;
-    private string $description;
+    private ?string $description;
     private string $status_id;
 
     public function __construct(array $params= [])

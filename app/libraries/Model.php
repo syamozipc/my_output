@@ -9,7 +9,7 @@ class Model implements \IteratorAggregate {
     // 遅いin_arrayでは無く高速なissetを使うため、連想配列にする
     protected array $ignorekeys = [
         '_csrf_token' => '',
-        'MAX_FILE_SIZE' => ''
+        'MAX_FILE_SIZE' => '',
     ];
 
     protected string $primaryKey = 'id';
@@ -21,6 +21,24 @@ class Model implements \IteratorAggregate {
         $this->db = Database::getSingleton();
 
         if (count($params) > 0) $this->fill($params);
+    }
+
+    /**
+     * 引数で渡された連想配列を、keyをproperty名、valueをpropertyの値としてセットする
+     * ただし$ignoreKeysに含まれるkeyはセットしない
+     *
+     * @param array $params
+     * @return self $this
+     */
+    public function fill($params):self
+    {
+        foreach ($params as $key => $param) {
+            if (isset($this->ignorekeys[$key])) continue;
+
+            $this->{$key} = $param;
+        }
+
+        return $this;
     }
 
     /**
@@ -42,24 +60,6 @@ class Model implements \IteratorAggregate {
         }
 
         return new \ArrayIterator($this->loopProperties);
-    }
-
-    /**
-     * 引数で渡された連想配列を、keyをproperty名、valueをpropertyの値としてセットする
-     * ただし$ignoreKeysに含まれるkeyはセットしない
-     *
-     * @param array $params
-     * @return self $this
-     */
-    public function fill($params):self
-    {
-        foreach ($params as $key => $param) {
-            if (isset($this->ignorekeys[$key])) continue;
-
-            $this->{$key} = $param;
-        }
-
-        return $this;
     }
 
     /**
@@ -157,5 +157,10 @@ class Model implements \IteratorAggregate {
             ->prepare(sql:$sql)
             ->bindValue(param:":{$this->primaryKey}", value:$this->{$this->primaryKey})
             ->execute();
+    }
+
+    public function __set($name, $value)
+    {
+        // dd($name, $value);
     }
 }
