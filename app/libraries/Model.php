@@ -161,22 +161,4 @@ class Model implements \IteratorAggregate {
             ->bindValue(param:":{$this->primaryKey}", value:$this->{$this->primaryKey})
             ->execute();
     }
-
-    // public function __set($name, $value)
-    // {
-    //     // dd($name, $value);
-    // }
-
-    // public function __get($name)
-    // {
-    //     echo '<pre>';var_dump($name);die;
-    //     return $this->{"get{$name}"}();
-    // }
-
-    // public function __call($name, $arguments)
-    // {
-    //     echo '<pre>';var_dump($name, $this->{$name});die;
-    //     echo '<pre>';var_dump($this->{$name});die;
-    //     return $this->{$name};
-    // }
 }

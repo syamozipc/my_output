@@ -4,7 +4,9 @@ namespace App\Models;
 use App\Libraries\Model;
 
 class User extends Model{
-    public string $table = 'users';
+    use \App\Traits\MagicMethodTrait;
+
+    private string $table = 'users';
 
     private int $id;
     private ?int $country_id;

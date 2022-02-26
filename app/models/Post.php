@@ -4,6 +4,8 @@ namespace App\Models;
 use App\Libraries\Model;
 
 class Post extends Model {
+    use \App\Traits\MagicMethodTrait;
+
     public string $table = 'posts';
 
     // テーブルカラム

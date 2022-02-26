@@ -134,7 +134,7 @@ class LoginService {
         $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
 
         $user->last_login_at = $currentDateTime;
-
+        
         $user->save();
 
         return;

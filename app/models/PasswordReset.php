@@ -4,6 +4,8 @@ namespace App\Models;
 use App\Libraries\Model;
 
 class PasswordReset extends Model{
+    use \App\Traits\MagicMethodTrait;
+
     public string $table = 'password_resets';
 
     // modelのdefaultを上書き
