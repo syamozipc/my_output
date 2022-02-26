@@ -12,7 +12,9 @@ class PostDetail extends Model{
     private ?string $type;
     private ?string $path;
     private ?int $sort_number;
-
+    private string $created_at;
+    private string $updated_at;
+    
     public function __construct(array $params = [])
     {
         parent::__construct($params);

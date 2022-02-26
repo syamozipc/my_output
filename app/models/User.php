@@ -23,6 +23,8 @@ class User extends Model{
     private ?string $last_login_at;
     private string $status_id;
     private string $status_updated_at;
+    private string $created_at;
+    private string $updated_at;
 
     public function __construct()
     {

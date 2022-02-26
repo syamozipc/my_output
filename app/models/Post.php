@@ -12,6 +12,8 @@ class Post extends Model {
     private int $country_id;
     private ?string $description;
     private string $status_id;
+    private string $created_at;
+    private string $updated_at;
 
     public function __construct(array $params= [])
     {
