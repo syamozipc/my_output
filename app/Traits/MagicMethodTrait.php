@@ -17,7 +17,8 @@ trait MagicMethodTrait {
     public function __get($name)
     {
         if (property_exists($this, $name)) {
-            return $this->{$name};
+            // 値が設定されていない場合はエラーになるので、null合体演算子でエラーを防ぐ
+            return $this->{$name} ?? null;
         } else {
             return $this->params[$name];
         }

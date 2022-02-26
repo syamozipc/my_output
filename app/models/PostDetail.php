@@ -9,10 +9,10 @@ class PostDetail extends Model{
 
     // テーブルカラム
     protected int $id;
-    protected ?int $post_id = null;
-    protected ?string $type = null;
-    protected ?string $path = null;
-    protected ?int $sort_number = null;
+    protected int $post_id;
+    protected string $type;
+    protected string $path;
+    protected int $sort_number;
     protected string $created_at;
     protected string $updated_at;
     
