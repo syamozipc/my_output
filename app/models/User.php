@@ -23,8 +23,6 @@ class User extends Model{
         'last_login_at' => '',
         'status_id' => '',
         'status_updated_at' => '',
-        'created_at' => '',
-        'updated_at' => ''
     ];
 
     public function __construct()

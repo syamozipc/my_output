@@ -10,9 +10,7 @@ class Post extends Model {
         'user_id' => '',
         'country_id' => '',
         'description' => '',
-        'status_id' => '',
-        'created_at' => '',
-        'updated_at' => ''
+        'status_id' => ''
     ];
 
     public function __construct(array $params= [])

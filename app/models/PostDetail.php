@@ -10,9 +10,7 @@ class PostDetail extends Model{
         'post_id' => '',
         'type' => '',
         'path' => '',
-        'sort_number' => '',
-        'created_at' => '',
-        'updated_at' => ''
+        'sort_number' => ''
     ];
 
     public function __construct(array $params = [])
