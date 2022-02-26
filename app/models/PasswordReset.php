@@ -4,17 +4,16 @@ namespace App\Models;
 use App\Libraries\Model;
 
 class PasswordReset extends Model{
-    use \App\Traits\MagicMethodTrait;
 
-    public string $table = 'password_resets';
+    protected string $table = 'password_resets';
 
     // modelのdefaultを上書き
     protected string $primaryKey = 'email';
 
     // テーブルカラム
-    private string $email;
-    private string $token;
-    private string $token_sent_at;
+    protected string $email;
+    protected string $token;
+    protected string $token_sent_at;
 
     public function __construct()
     {

@@ -4,18 +4,17 @@ namespace App\Models;
 use App\Libraries\Model;
 
 class PostDetail extends Model{
-    use \App\Traits\MagicMethodTrait;
 
-    public string $table = 'post_details';
+    protected string $table = 'post_details';
 
     // テーブルカラム
-    private int $id;
-    private ?int $post_id;
-    private ?string $type;
-    private ?string $path;
-    private ?int $sort_number;
-    private string $created_at;
-    private string $updated_at;
+    protected int $id;
+    protected ?int $post_id;
+    protected ?string $type;
+    protected ?string $path;
+    protected ?int $sort_number;
+    protected string $created_at;
+    protected string $updated_at;
     
     public function __construct(array $params = [])
     {

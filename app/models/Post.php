@@ -4,18 +4,17 @@ namespace App\Models;
 use App\Libraries\Model;
 
 class Post extends Model {
-    use \App\Traits\MagicMethodTrait;
 
-    public string $table = 'posts';
+    protected string $table = 'posts';
 
     // テーブルカラム
-    private int $id;
-    private int $user_id;
-    private int $country_id;
-    private ?string $description;
-    private string $status_id;
-    private string $created_at;
-    private string $updated_at;
+    protected int $id;
+    protected int $user_id;
+    protected int $country_id;
+    protected ?string $description;
+    protected string $status_id;
+    protected string $created_at;
+    protected string $updated_at;
 
     public function __construct(array $params= [])
     {

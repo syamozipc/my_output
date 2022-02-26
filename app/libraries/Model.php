@@ -3,22 +3,25 @@ namespace App\Libraries;
 
 use App\Libraries\Database;
 
-class Model implements \IteratorAggregate {
+class Model /* implements \IteratorAggregate */ {
+    use \App\Traits\MagicMethodTrait;
+
     public Database $db;
 
     // 遅いin_arrayでは無く高速なissetを使うため、連想配列にする
-    protected array $ignorekeys = [
+    protected array $ignoreKeys = [
         '_csrf_token' => '',
         'MAX_FILE_SIZE' => '',
         'loopProperties',
         'table' => '',
         'primaryKey' => '',
         'db' => '',
+        'ignoreKeys' => '',
     ];
 
     protected string $primaryKey = 'id';
 
-    private array $loopProperties = [];
+    // private array $loopProperties = [];
 
     public function __construct(array $params = [])
     {
@@ -37,7 +40,7 @@ class Model implements \IteratorAggregate {
     public function fill($params):self
     {
         foreach ($params as $key => $param) {
-            if (isset($this->ignorekeys[$key])) continue;
+            if (isset($this->ignoreKeys[$key])) continue;
 
             $this->{$key} = $param;
         }
@@ -51,19 +54,19 @@ class Model implements \IteratorAggregate {
      *
      * @return \Traversable
      */
-    public function getIterator(): \Traversable
-    {
-        if ($this->loopProperties) return new \ArrayIterator($this->loopProperties);
+    // public function getIterator(): \Traversable
+    // {
+    //     if ($this->loopProperties) return new \ArrayIterator($this->loopProperties);
 
-        foreach ($this as $property) {
-            // dd($property);
-            if (!property_exists($this, $property)) continue;
+    //     foreach ($this as $property) {
+    //         // dd($property);
+    //         if (!property_exists($this, $property)) continue;
 
-            $this->loopProperties[] = $property;
-        }
+    //         $this->loopProperties[] = $property;
+    //     }
 
-        return new \ArrayIterator($this->loopProperties);
-    }
+    //     return new \ArrayIterator($this->loopProperties);
+    // }
 
     /**
      * modelに対応するテーブルに保存される
@@ -89,9 +92,11 @@ class Model implements \IteratorAggregate {
         $sqlValues = ") VALUES (";
 
         // getIterator()が呼び出される
-        foreach ($this as $property) {
-            $sql .= "`{$property}`,";
-            $sqlValues .= ":{$property},";
+        foreach ($this as $key => $_) {
+            if (isset($this->ignoreKeys[$key])) continue;
+
+            $sql .= "`{$key}`,";
+            $sqlValues .= ":{$key},";
         }
 
         // 最後の,を除去
@@ -100,14 +105,16 @@ class Model implements \IteratorAggregate {
 
         // insert文を合体
         $sql = "{$sql} {$sqlValues})";
-  
+
         // sqlをprepare
         $this->db->prepare(sql:$sql);
 
         // 名前付きプレースホルダーに値を入れる
         // getIterator()が呼び出される
-        foreach ($this as $property) {
-            $this->db->bindValue(param:":{$property}", value:$this->{$property});
+        foreach ($this as $key => $_) {
+            if (isset($this->ignoreKeys[$key])) continue;
+
+            $this->db->bindValue(param:":{$key}", value:$this->{$key});
         }
 
         $this->db->execute();
@@ -124,8 +131,10 @@ class Model implements \IteratorAggregate {
 
         // where句以外のSQL文を生成
         // getIterator()が呼び出される
-        foreach ($this as $property) {
-            $sql .= " `{$property}` = :{$property},";
+        foreach ($this as $key => $_) {
+            if (isset($this->ignoreKeys[$key])) continue;
+
+            $sql .= " `{$key}` = :{$key},";
         }
 
         $sql = rtrim($sql, ',');
@@ -137,8 +146,10 @@ class Model implements \IteratorAggregate {
 
         // 名前付きプレースホルダーに値を入れる
         // getIterator()が呼び出される
-        foreach ($this as $property) {
-            $this->db->bindValue(param:":{$property}", value:$this->{$property});
+        foreach ($this as $key => $_) {
+            if (isset($this->ignoreKeys[$key])) continue;
+
+            $this->db->bindValue(param:":{$key}", value:$this->{$key});
         }
 
         // WHERE句のプレースホルダーに値を入れ、実行
