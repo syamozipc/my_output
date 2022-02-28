@@ -4,6 +4,6 @@ namespace App\interface;
 
 interface EmailTokenInterface
 {
-    public function sendEmail():void;
-    public function verifyToken():void;
+    public function sendEmail();
+    public function verifyToken();
 }

@@ -105,6 +105,8 @@ class PostController extends Controller {
     public function show(int $id)
     {
         $post = $this->postService->fetchPostById($id);
+        
+        if (!$post) return redirect('error/response404');
 
         $data = [
             'css' => 'css/user/post/show.css',
@@ -120,6 +122,8 @@ class PostController extends Controller {
         $this->loginService->redirectToLoginFormIfNotLogedIn();
 
         $post = $this->postService->fetchPostById($id);
+
+        if (!$post) return redirect('error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
         if ((int)$post->user_id !== $this->userId) return redirect('post/index');
@@ -156,6 +160,8 @@ class PostController extends Controller {
 
         $post = $this->postService->fetchPostById($id);
 
+        if (!$post) return redirect('error/response404');
+
         // 投稿者とログインユーザーが別であれば、処理実行不可
         if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
 
@@ -186,6 +192,8 @@ class PostController extends Controller {
 
         $post = $this->postService->fetchPostById($id);
 
+        if (!$post) return redirect('error/response404');
+
         // 投稿者とログインユーザーが別であれば、処理実行不可
         if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
 
@@ -207,6 +215,8 @@ class PostController extends Controller {
         if (!$isValidated) return redirect("post/show/{$id}");
 
         $post = $this->postService->fetchPostById($id);
+
+        if (!$post) return redirect('error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
         if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");

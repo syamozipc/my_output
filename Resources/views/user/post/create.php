@@ -27,6 +27,11 @@
             <?php endforeach; ?>
         </datalist>
 
+        <!-- apiリクエスト形式 -->
+        <label class="js-apiSuggest" data-suggest-url="<?= route('api/suggest/getMatchedCountries') ?>">
+            <input type="text">
+        </label>
+
         <?php if (error('country_id')) : ?>
             <p class="error__message">※<?= error('country_id') ?></p>
         <?php endif; ?>

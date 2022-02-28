@@ -33,12 +33,12 @@ class LoginController extends Controller {
         if (!$isValidated) return redirect('login/loginForm');
 
         $shouldRememberMe = isset($request['remember_me']);
-
+        
         $isLogedIn = $this->loginService->baseLogin(email:$request['email'], password:$request['password'], rememberMe:$shouldRememberMe);
-
+        
         if (!$isLogedIn) {
             $this->setFlashErrorSession(key:'status', param:'ログインに失敗しました。');
-
+            
             return redirect('login/loginForm');
         }
 

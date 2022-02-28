@@ -48,7 +48,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
      *
      * @return void
      */
-    public function sendEmail():void
+    public function sendEmail()
     {
         $request = filter_input_array(INPUT_POST);
 
@@ -102,7 +102,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
      *
      * @return void
      */
-    public function verifyToken():void
+    public function verifyToken()
     {
         $token = filter_input(INPUT_GET, 'token');
 
