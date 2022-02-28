@@ -57,7 +57,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         $validator = new TemporaryRegisterValidator();
         $isValidated = $validator->validate(post:$request);
 
-        if (!$isValidated) return redirect('register/tmpRegisterForm');
+        if (!$isValidated) return redirect('/register/tmpRegisterForm');
 
         // 本登録済みでも、その旨のエラーを出すと登録済みとバレる（情報を与える）ので良くない
         // 本登録済みの場合は即座にメール送信完了画面にする
@@ -110,7 +110,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         if (!$user) {
             $this->setFlashErrorSession(key:'status', param:'無効なURLです。再度メールアドレスを入力してください。');
 
-            return redirect('register/tmpRegisterForm');
+            return redirect('/register/tmpRegisterForm');
         }
 
         return $this->registerForm(registerToken:$user->register_token);
@@ -154,7 +154,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         if (!$user) {
             $this->setFlashErrorSession(key:'status', param:'tokenの有効期限が切れました。再度メールアドレスを入力してください。');
 
-            return redirect('register/tmpRegisterForm');
+            return redirect('/register/tmpRegisterForm');
         }
 
         // usersテーブルの該当レコードを本登録させる
@@ -170,6 +170,6 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         // ログイン失敗は無い想定なので、失敗時の処理は書いていない
         $this->loginService->baseLogin(email:$user->email, password:$request['password']);
 
-        return redirect('mypage/index');
+        return redirect('/mypage/index');
     }
 }

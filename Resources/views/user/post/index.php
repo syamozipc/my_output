@@ -1,8 +1,8 @@
-<p><a href="<?= route('home/index'); ?>">TOPへ</a></p>
+<p><a href="<?= route('/home/index'); ?>">TOPへ</a></p>
 <br>
 <div>
     <p><?= $description; ?></p>
-    <a href='<?= route('post/create'); ?>'>新規投稿はこちら</a>
+    <a href='<?= route('/post/create'); ?>'>新規投稿はこちら</a>
 </div>
 
 <div>
@@ -19,7 +19,7 @@
             <?php foreach ($posts as $post) : ?>
                 <tr>
                     <td>
-                        <a href="<?= route('post/show', $post->id); ?>">
+                        <a href="<?= route('/post/show', $post->id); ?>">
                             <img 
                             src="<?= public_url('upload/' . $post->path); ?>"
                             alt="アップロードファイル"

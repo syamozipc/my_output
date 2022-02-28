@@ -56,7 +56,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
         $validator = new passwordResetRequestValidator();
         $isValidated = $validator->validate(request:$request);
 
-        if (!$isValidated) return redirect('passwordReset/resetRequest');
+        if (!$isValidated) return redirect('/passwordReset/resetRequest');
 
         // 未登録のメールアドレスでも、その旨のエラーを出すと未登録とバレる（情報を与える）ので良くない
         // 未登録の場合は即座にメール送信完了画面にする
@@ -112,7 +112,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
         if (!$passwordReset) {
             $this->setFlashErrorSession(key:'status', param:'無効なURLです。再度メールアドレスを入力してください。');
 
-            return redirect('passwordReset/resetRequest');
+            return redirect('/passwordReset/resetRequest');
         }
 
         // password変更フォームを表示
@@ -162,7 +162,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
         if (!$passwordReset) {
             $this->setFlashErrorSession(key:'status', param:'無効なURLです。再度メールアドレスを入力してください。');
 
-            return redirect('passwordReset/resetRequest');
+            return redirect('/passwordReset/resetRequest');
         }
 
         try {
@@ -189,6 +189,6 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
         // ログイン失敗は無い想定なので、失敗時の処理は書いていない
         $this->loginService->baseLogin(email:$passwordReset->email, password:$request['password']);
 
-        return redirect('mypage/index');
+        return redirect('/mypage/index');
     }
 }

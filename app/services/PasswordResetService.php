@@ -53,7 +53,7 @@ class PasswordResetService {
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $url = route('passwordReset/verifyToken', "?token={$passwordResetToken}");
+        $url = route('/passwordReset/verifyToken', "?token={$passwordResetToken}");
         $hour = Email_Token_Valid_Period_Hour;
 
         $subject = '【' . SITENAME . '】' . 'パスワードリセット用URLをお送りします。';

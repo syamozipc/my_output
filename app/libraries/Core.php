@@ -9,7 +9,7 @@ namespace App\Libraries;
 class Core {
     use \App\Traits\SessionTrait;
 
-    protected $currentController = 'Error';
+    protected $currentController = "App\\Controllers\\User\\ErrorController";
     protected $currentMethod = 'response404';
     protected $params = [];
     protected $isApi = false;
@@ -25,7 +25,7 @@ class Core {
         if ($url) $url = $this->formatAndSanitizeUrl($url);
 
         // URLによって呼び出すコントローラを特定
-        $this->brunchCallback($url);
+        if (!$this->brunchCallback($url)) $this->currentController = new $this->currentController;
 
         if (!$this->isApi) {
             $this->initFlashSession();
@@ -36,28 +36,43 @@ class Core {
         call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
     }
 
+    /**
+     * 1.URL末尾の/を削除
+     * 2.値をサニタイズ（例えば日本語など、無効な文字を取り除く）
+     * 3.配列に分割（[0] => controller名, [1] => method名, [2] => parameter）
+     *
+     * @return array
+     */
+    public function formatAndSanitizeUrl($url)
+    {
+        $url = rtrim($url, '/');
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+        $url = explode('/', $url);
+
+        return $url;
+    }
+
      /**
      * URLを取得し、対応するclassのmethodを呼び出す基幹処理
      * 
-     * apiとかuserのnamespaceに対応する
-     * $urlが空なら、homeページへ
-     * 存在しないurlなら、404を表示
+     * ・namespace（現状apiのみ）にも対応
+     * ・$urlが空なら、homeページへ
+     * ・存在しないurlなら、404を表示
      */
     public function brunchCallback($url)
     {
-        
         // $urlがなければTOPページをリターン
         if (!$url) {
             $this->currentController = new ("App\\Controllers\\User\\homeController");
             $this->currentMethod = 'index';
 
-            return;
+            return true;
         }
 
         // amespaceがあるかをチェック
         if (in_array($url[0], ['api'], true)) {
             // namespaceだけなら 404 error
-            if (count($url) === 1) return $this->setErrorController();
+            if (count($url) === 1) return false;
 
             if ($url[0] === 'api') $this->isApi = true;
 
@@ -65,7 +80,6 @@ class Core {
             $controller = ucwords($url[1]) . 'Controller';
             $method = $url[2] ?? 'index';;
             $params = array_slice($url, 3);
-            $fp = fopen("sample.txt", "a");fwrite($fp, print_r([$namespace,$controller,$method ], true));fclose($fp);
         } else {
             $namespace = 'User';
             $controller = ucwords($url[0]) . 'Controller';
@@ -75,30 +89,17 @@ class Core {
 
         // fileが存在しなければ 404 error
         $fileName = base_path("App/Controllers/{$namespace}/{$controller}.php");
-        if (!file_exists($fileName)) return $this->setErrorController();
+        if (!file_exists($fileName)) return false;
 
-        $this->currentController = new ("App\\Controllers\\{$namespace}\\{$controller}");
+        // controllerにmethodが存在しなければ 404 error
+        $tmpController = new ("App\\Controllers\\{$namespace}\\{$controller}");
+        if (!method_exists($tmpController, $method)) return false;
+
+        $this->currentController = $tmpController;
         $this->currentMethod = $method;
-
-        // methodが存在しなければ 404 error
-        if (!method_exists($this->currentController, $this->currentMethod)) return $this->setErrorController();
-
-        // 残った配列をparameterとしてセット
         $this->params = $params;
 
-        return;
-    }
-
-    /**
-     * 呼び出されたらerrorコントローラと404メソッドをセット
-     *
-     * @return void
-     */
-    public function setErrorController() {
-        $this->currentController = new ("App\\Controllers\\User\\ErrorController");
-        $this->currentMethod = 'response404';
-
-        return;
+        return true;
     }
 
     /**
@@ -156,21 +157,5 @@ class Core {
 
         $csrfToken = bin2hex(random_bytes(32));
         $this->setSession('_csrf_token', $csrfToken);
-    }
-
-    /**
-     * 1.URL末尾の/を削除
-     * 2.値をサニタイズ（例えば日本語など、無効な文字を取り除く）
-     * 3.配列に分割（[0] => controller名, [1] => method名, [2] => parameter）
-     *
-     * @return array
-     */
-    public function formatAndSanitizeUrl($url)
-    {
-        $url = rtrim($url, '/');
-        $url = filter_var($url, FILTER_SANITIZE_URL);
-        $url = explode('/', $url);
-
-        return $url;
     }
 }

@@ -151,6 +151,6 @@ class LoginService {
 
         $this->setFlashErrorSession(key:'status', param:'ログインしてください');
 
-        return redirect('login/loginForm');
+        return redirect('/login/loginForm');
     }
 }

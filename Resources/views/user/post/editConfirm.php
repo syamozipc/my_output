@@ -1,6 +1,6 @@
 <p>確認</p>
 <div>
-    <form action="<?=  route('post/update', $post->id); ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?=  route('/post/update', $post->id); ?>" method="POST" enctype="multipart/form-data">
         <?= csrf() ?>
         <p><?= $post->country_name ?></p>
         <img
@@ -20,7 +20,7 @@
 </div>
 
 <div>
-    <form action="<?=  route('post/edit', $post->id); ?>" method="POST">
+    <form action="<?=  route('/post/edit', $post->id); ?>" method="POST">
         <?= csrf() ?>
         <input type="hidden" name="country_id" value="<?= $post->country_id ?>">
         <input type="hidden" name="description" value="<?= e($post->description) ?>">

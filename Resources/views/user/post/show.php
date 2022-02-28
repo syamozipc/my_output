@@ -32,15 +32,15 @@
     </div>
 
     <div>
-        <a href="<?= route('post/edit', $post->id); ?>">編集</a>
+        <a href="<?= route('/post/edit', $post->id); ?>">編集</a>
         &nbsp;
-        <form action="<?= route('post/delete', $post->id); ?>" method="POST" class="js-delete-form">
+        <form action="<?= route('/post/delete', $post->id); ?>" method="POST" class="js-delete-form">
             <?= csrf() ?>
             <input type="submit" value="削除" class="btn-open-modal js-btn-open-modal">
         </form>
     </div>
 
-    <p><a href="<?= route('post/index'); ?>">一覧へ戻る</a></p>
+    <p><a href="<?= route('/post/index'); ?>">一覧へ戻る</a></p>
 
     <!-- モーダル -->
     <div class="modal js-modal is-hidden">

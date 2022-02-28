@@ -10,7 +10,7 @@ class LoginController extends Controller {
     {
         parent::__construct();
 
-        if (isLogedIn()) return redirect('mypage/index');
+        if (isLogedIn()) return redirect('/mypage/index');
     }
 
     public function loginForm()
@@ -30,7 +30,7 @@ class LoginController extends Controller {
         $validator = new LoginValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect('login/loginForm');
+        if (!$isValidated) return redirect('/login/loginForm');
 
         $shouldRememberMe = isset($request['remember_me']);
         
@@ -39,9 +39,9 @@ class LoginController extends Controller {
         if (!$isLogedIn) {
             $this->setFlashErrorSession(key:'status', param:'ログインに失敗しました。');
             
-            return redirect('login/loginForm');
+            return redirect('/login/loginForm');
         }
 
-        return redirect('mypage/index');
+        return redirect('/mypage/index');
     }
 }

@@ -1,6 +1,6 @@
 <section>
     <p>本会員登録</p>
-    <form action="<?= route('register/register') ?>" method="POST">
+    <form action="<?= route('/register/register') ?>" method="POST">
         <?= csrf() ?>
         <input type="hidden" name="register_token" value="<?= $registerToken ?>">
         <?php if (error('register_token')) : ?>

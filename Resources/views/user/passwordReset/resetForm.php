@@ -1,6 +1,6 @@
 <section>
     <p>パスワードリセット</p>
-    <form action="<?= route('passwordReset/reset') ?>" method="POST">
+    <form action="<?= route('/passwordReset/reset') ?>" method="POST">
         <?= csrf() ?>
         <input type="hidden" name="password_reset_token" value="<?= $passwordResetToken ?>">
         <?php if (error('password_reset_token')) : ?>

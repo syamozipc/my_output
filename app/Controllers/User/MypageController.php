@@ -13,7 +13,7 @@ class MypageController extends Controller {
     {
         parent::__construct();
         
-        if (!isLogedIn()) return redirect('login/loginForm');
+        if (!isLogedIn()) return redirect('/login/loginForm');
 
         $this->userService = new UserService();
     }

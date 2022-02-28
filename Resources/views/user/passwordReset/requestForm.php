@@ -1,6 +1,6 @@
 <section>
     <p>パスワードリセット</p>
-    <form action="<?= route('passwordReset/sendEmail') ?>" method="POST">
+    <form action="<?= route('/passwordReset/sendEmail') ?>" method="POST">
         <?= csrf() ?>
         <label for="email">メールアドレスを入力してください</label>
         <br>

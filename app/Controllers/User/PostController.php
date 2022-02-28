@@ -66,7 +66,7 @@ class PostController extends Controller {
         $validator = new PostCreateValidator();
         $isValidated = $validator->validate(request:$request, files:$_FILES);
 
-        if (!$isValidated) return redirect('post/create');
+        if (!$isValidated) return redirect('/post/create');
 
         $post = new Post(old() ?: $request);
 
@@ -94,19 +94,19 @@ class PostController extends Controller {
         $validator = new PostCreateValidator();
         $isValidated = $validator->validate(request:$request);
 
-        if (!$isValidated) return redirect('post/create');
+        if (!$isValidated) return redirect('/post/create');
 
         // path含めpost・post_detailsテーブルに保存
         $this->postService->savePost(request:$request, userId:$this->userId);
 
-        return redirect('post/index');
+        return redirect('/post/index');
     }
 
     public function show(int $id)
     {
         $post = $this->postService->fetchPostById($id);
         
-        if (!$post) return redirect('error/response404');
+        if (!$post) return redirect('/error/response404');
 
         $data = [
             'css' => 'css/user/post/show.css',
@@ -123,10 +123,10 @@ class PostController extends Controller {
 
         $post = $this->postService->fetchPostById($id);
 
-        if (!$post) return redirect('error/response404');
+        if (!$post) return redirect('/error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
-        if ((int)$post->user_id !== $this->userId) return redirect('post/index');
+        if ((int)$post->user_id !== $this->userId) return redirect('/post/index');
 
         $request = filter_input_array(INPUT_POST);
 
@@ -160,7 +160,7 @@ class PostController extends Controller {
 
         $post = $this->postService->fetchPostById($id);
 
-        if (!$post) return redirect('error/response404');
+        if (!$post) return redirect('/error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
         if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
@@ -192,7 +192,7 @@ class PostController extends Controller {
 
         $post = $this->postService->fetchPostById($id);
 
-        if (!$post) return redirect('error/response404');
+        if (!$post) return redirect('/error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
         if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
@@ -216,13 +216,13 @@ class PostController extends Controller {
 
         $post = $this->postService->fetchPostById($id);
 
-        if (!$post) return redirect('error/response404');
+        if (!$post) return redirect('/error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
         if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
 
         $this->postService->deletePost(post:$post);
 
-        return redirect('post/index');
+        return redirect('/post/index');
     }
 }

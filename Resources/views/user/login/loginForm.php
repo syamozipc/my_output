@@ -1,6 +1,6 @@
 <section>
     <p>ログイン</p>
-    <form action="<?= route('login/login') ?>" method="POST">
+    <form action="<?= route('/login/login') ?>" method="POST">
         <?= csrf() ?>
         <hr>
         <label>メールアドレス
@@ -35,5 +35,5 @@
         
         <button type="submit">送信する</button>
     </form>
-    <a href="<?= route('passwordReset/resetRequest') ?>">パスワードを忘れた方はコチラ</a>
+    <a href="<?= route('/passwordReset/resetRequest') ?>">パスワードを忘れた方はコチラ</a>
 </section>

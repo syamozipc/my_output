@@ -12,14 +12,10 @@
  */
 function redirect($route, $replace = true, $status = 302)
 {
-    $url = BASE_URL . $route;
+    $url = route($route);
 
     return header("Location: {$url}", $replace, $status);
 }
-
-// function url($route) {
-//     return BASE_URL . $route;
-// }
 
 /**
  * ページ遷移用url生成処理
@@ -32,6 +28,8 @@ function redirect($route, $replace = true, $status = 302)
  */
 function route(string $route, string|array $params = null):string
 {
+    if ($route === '/home/index') return BASE_URL . '/';
+
     if (is_null($params)) return BASE_URL . $route;
 
     $paramStr = is_array($params) 
@@ -50,6 +48,5 @@ function route(string $route, string|array $params = null):string
  */
 function public_url(string $route):string
 {
-    
-    return BASE_URL . 'public/' . $route;
+    return BASE_URL . '/public/' . $route;
 }

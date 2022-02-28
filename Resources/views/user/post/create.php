@@ -1,6 +1,6 @@
 <p>新規投稿フォーム</p>
 <div>
-    <form action="<?= route('post/confirm'); ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?= route('/post/confirm'); ?>" method="POST" enctype="multipart/form-data">
         <?= csrf() ?>
         <select name="country_id" class="js-countriesSelect">
             <option value="">選択してください</option>
@@ -28,7 +28,7 @@
         </datalist>
 
         <!-- apiリクエスト形式 -->
-        <label class="js-apiSuggest" data-suggest-url="<?= route('api/suggest/getMatchedCountries') ?>">
+        <label class="js-apiSuggest" data-suggest-url="<?= route('/api/suggest/getMatchedCountries') ?>">
             <input type="text">
         </label>
 

@@ -6,7 +6,7 @@ const DB_PASS = 'root';
 const DB_NAME = 'my_output';
 
 // URL root
-const BASE_URL = 'http://localhost:8888/my_output/';
+const BASE_URL = 'http://localhost:8888/my_output';
 
 // application root
 define('BASE_PATH', dirname(dirname(__FILE__)) . '/');

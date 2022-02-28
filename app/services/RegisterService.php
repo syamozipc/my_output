@@ -70,7 +70,7 @@ class RegisterService {
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $url = route('register/verifyToken', "?token={$registerToken}");
+        $url = route('/register/verifyToken', "?token={$registerToken}");
         $hour = Email_Token_Valid_Period_Hour;
 
         $subject =  '【' . SITENAME . '】' . '仮登録が完了しました';
@@ -146,8 +146,8 @@ class RegisterService {
     
             $subject =  '【' . SITENAME . '】' .  '本登録が完了しました';
 
-            $loginUrl = route('login/loginForm');
-            $topUrl = route('user/home/index');
+            $loginUrl = route('/login/loginForm');
+            $topUrl = route('/user/home/index');
     
             $body = <<<EOD
                 会員登録ありがとうございます！

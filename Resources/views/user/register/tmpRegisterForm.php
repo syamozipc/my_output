@@ -1,6 +1,6 @@
 <section>
     <p>仮会員登録</p>
-    <form action="<?= route('register/sendEmail') ?>" method="POST">
+    <form action="<?= route('/register/sendEmail') ?>" method="POST">
         <?= csrf() ?>
         <label for="email">メールアドレスを入力してください</label>
         <br>
