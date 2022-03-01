@@ -2,19 +2,26 @@
 namespace App\Controllers\Api;
 
 use App\Libraries\Controller;
+use App\Services\CountryService;
 
 class SuggestController extends Controller {
 
+    private CountryService $countryService;
+
+    public function __construct()
+    {
+        $this->countryService = new CountryService();
+    }
+
     public function getMatchedCountries()
     {
-        $description = '';
+        $request = filter_input(INPUT_GET, 'search');
 
-        $data = [
-            // 'css' => 'css/user/home/index.css',
-            // 'js' => 'js/user/home/index.js',
-            'description' => $description
-        ];
+        $countries = $this->countryService->fetchCountriesByWord($request);
 
-        $this->view(view:'user/error/404', data:$data);
+        header('Content-Type: application/json');
+        echo json_encode($countries, JSON_UNESCAPED_UNICODE);
+
+        return;
     }
 }

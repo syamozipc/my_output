@@ -3,7 +3,7 @@
  * 2. その入力値に部分一致する国が、countryクラスのオブジェクトの配列として返ってくる
  * 3. inputタグ直下にその国一覧を表示し、クリックされた国名をinputタグ内に反映
  */
-export const getMatchedCountries = () => {
+export const displayMatchedCountries = () => {
     const inputEl = document.querySelector('.js-suggestionInput');
     const ul = document.querySelector('.js-suggestionList');
     const apiUrl = inputEl.dataset.suggestUrl;
@@ -11,6 +11,8 @@ export const getMatchedCountries = () => {
     // 値が入力されたらそれを取得し、部分一致する国の取得をapiリクエスト
     inputEl.addEventListener('input', async (e) => {
         ul.innerHTML = '';
+
+        if (e.target.value === '') return;
 
         const params = new URLSearchParams({
             search: e.target.value,

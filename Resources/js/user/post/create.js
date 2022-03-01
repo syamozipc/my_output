@@ -6,5 +6,5 @@ import { async } from 'regenerator-runtime';
 // jsのimport
 import * as $form from '@js/_share/form';
 
-$form.getMatchedCountries();
+$form.displayMatchedCountries();
 $form.displayInputImg();
