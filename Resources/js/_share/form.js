@@ -1,4 +1,47 @@
 /**
+ * 1. 入力値をパラメータとし、apiでgetリクエスト
+ * 2. その入力値に部分一致する国が、countryクラスのオブジェクトの配列として返ってくる
+ * 3. inputタグ直下にその国一覧を表示し、クリックされた国名をinputタグ内に反映
+ */
+export const getMatchedCountries = () => {
+    const inputEl = document.querySelector('.js-suggestionInput');
+    const ul = document.querySelector('.js-suggestionList');
+    const apiUrl = inputEl.dataset.suggestUrl;
+
+    // 値が入力されたらそれを取得し、部分一致する国の取得をapiリクエスト
+    inputEl.addEventListener('input', async (e) => {
+        ul.innerHTML = '';
+
+        const params = new URLSearchParams({
+            search: e.target.value,
+        });
+
+        const response = await fetch(`${apiUrl}?${params}`);
+        const data = await response.json();
+
+        // 返ってきたcountryクラスの配列それぞれに対し、国名をliタグの中に表示する処理
+        data.forEach((el) => {
+            const li = document.createElement('li');
+            li.classList.add('js-suggestLi');
+            li.textContent = el.name;
+
+            ul.appendChild(li);
+        });
+    });
+
+    // ulタグ以内がクリックされた時、対象がliタグであればその国名を取得し、inputタグに反映
+    ul.addEventListener('click', (e) => {
+        const clicked = e.target.closest('.js-suggestLi');
+
+        if (!clicked) return;
+
+        inputEl.value = clicked.textContent;
+
+        ul.innerHTML = '';
+    });
+};
+
+/**
  * 1.inputに文字を入力すると発火
  * 2.入力した文字をvalueに持つoptionがdatalist内にあるかcheck
  * 3.あった場合、そのdata-place-idを取得
