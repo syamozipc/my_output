@@ -16,8 +16,7 @@ class Log {
         $data[] = $_SERVER['HTTP_USER_AGENT'];
         $data[] = $_SERVER['HTTP_REFERER'];
         $data[] = $message;
-        
-        $path = base_path('logs/' . date('Y-m-d') . '.log');
+        $path = base_path('logs/' . date('Y') . '/' . date('m') . '/' . date('d') . '.log');
         $file = @fopen($path, 'a') or die('ファイルを開けませんでした！');
 
         flock($file, LOCK_EX);
