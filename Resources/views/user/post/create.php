@@ -2,38 +2,22 @@
 <div>
     <form action="<?= route('/post/confirm'); ?>" method="POST" enctype="multipart/form-data">
         <?= csrf() ?>
-        <select name="country_id" class="js-countriesSelect">
-            <option value="">選択してください</option>
-            <?php foreach ($countries as $country) : ?>
-                <option
-                    value="<?= $country->id ?>"
-                    <?php if (($post->country_id ?? null) === $country->id) echo 'selected'; ?>
-                >
-                    <?= $country->name ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-
-        <input
-            type="search"
-            list="countriesSuggest"
-            class="js-suggestionInput"
-            placeholder="国名を検索"
-        />
-
-        <datalist id="countriesSuggest">
-            <?php foreach ($countries as $country) : ?>
-                <option value="<?= $country->name ?>" data-country-id="<?= $country->id ?>"></option>
-            <?php endforeach; ?>
-        </datalist>
 
         <!-- apiリクエスト形式 -->
-        <label class="js-apiSuggest" data-suggest-url="<?= route('/api/suggest/getMatchedCountries') ?>">
-            <input type="text">
+        <label>
+            <input
+                type="text"
+                placeholder="国名を検索"
+                class="js-suggestionInput"
+                data-suggest-url="<?= route('/api/suggest/getMatchedCountries') ?>"
+                value="<?= $post->country_name ?? '' ?>"
+                name="country_name"
+            >
         </label>
+        <ul class="js-suggestionList"></ul>
 
-        <?php if (error('country_id')) : ?>
-            <p class="error__message">※<?= error('country_id') ?></p>
+        <?php if (error('country_name')) : ?>
+            <p class="error__message">※<?= error('country_name') ?></p>
         <?php endif; ?>
 
         <br>

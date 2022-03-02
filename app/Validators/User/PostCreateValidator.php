@@ -13,25 +13,25 @@ class PostCreateValidator extends Validator{
 
     public function validate($request, $files = null)
     {
-        $this->validateCountryId(countryId:$request['country_id']);
+        $this->validateCountryName(countryName:$request['country_name']);
         $this->validateDescription(description:$request['description']);
         if ($files) $this->validateFiles(file:$files);
 
         if ($this->hasError) {
-            $this->setFlashSession(key:'country_id', param:$request['country_id']);
+            $this->setFlashSession(key:'country_name', param:$request['country_name']);
             $this->setFlashSession(key:'description', param:$request['description']);
         }
 
         return !$this->hasError;
     }
 
-    private function validateCountryId($countryId)
+    private function validateCountryName($countryName)
     {
-        if (!$this->isfilled(key:'country_id', param:$countryId)) return $this->hasError = true;
+        if (!$this->isfilled(key:'country_name', param:$countryName)) return $this->hasError = true;
 
-        if (!$this->isNumeric(key:'country_id', param:$countryId)) return $this->hasError = true;
+        if (!$this->isString(key:'country_name', param:$countryName)) return $this->hasError = true;
 
-        if (!$this->isValidRangeCountryId(key:'country_id', param:$countryId)) return $this->hasError = true;
+        if (!$this->isExistCountryName(key:'country_name', countryName:$countryName)) return $this->hasError = true;
 
         return;
     }

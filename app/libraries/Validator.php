@@ -6,11 +6,13 @@ use App\Models\User;
 class Validator {
     use \App\Traits\SessionTrait;
 
-    public object $userModel;
+    public User $userModel;
+    public Database $db;
 
     public function __construct()
     {
         $this->userModel = new User();
+        $this->db = Database::getSingleton();
     }
 
     // 基本的なバリデーション
@@ -22,7 +24,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isfilled($key, $param):bool
+    public function isfilled(string $key, mixed $param):bool
     {
         if (!($param === "" || is_null($param))) return true;
 
@@ -38,7 +40,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isString($key, $param):bool
+    public function isString(string $key, mixed $param):bool
     {
         if (is_string($param)) return true;
 
@@ -54,7 +56,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isNumeric($key, $param):bool
+    public function isNumeric(string $key, mixed $param):bool
     {
         if (is_numeric($param)) return true;
 
@@ -70,7 +72,7 @@ class Validator {
      * @param mixed $param
      * @return boolean
      */
-    public function isValidRangeCountryId($key, $param):bool
+    public function isValidRangeCountryId(string $key, int $param):bool
     {
         if (Counrty['min_id'] <= $param && $param <= Counrty['max_id']) return true;
 
@@ -80,16 +82,39 @@ class Validator {
     }
 
     /**
+     * 入力された国と完全一致する国があるかどうか
+     *
+     * @param string $key
+     * @param string $countryName
+     * @return boolean
+     */
+    public function isExistCountryName(string $key, string $countryName):bool
+    {
+        $sql = 'SELECT * FROM countries WHERE name = :name';
+
+        $this->db
+            ->prepare(sql:$sql)
+            ->bindValue(param:':name', value:$countryName)
+            ->execute();
+
+        if ($this->db->rowCount()) return true;
+
+        $this->setFlashErrorSession(key:$key, param:'国名は正しく入力してください。');
+
+        return false;
+    }
+
+    /**
      * 値の長さが指定文字数以内か
      *
      * @param string $key error時、sessionのkeyの1部を構成する
-     * @param mixed $param
+     * @param string $param
      * @param integer $minLength
      * @param integer $maxLength
      * @param boolean $isMb trueならマルチバイトに対応、falseなら非対応
      * @return boolean
      */
-    public function isValidLength($key, $param, $minLength, $maxLength, $isMb = false):bool
+    public function isValidLength(string $key, string $param, int $minLength, int $maxLength, bool $isMb = false):bool
     {
         $charLength = $isMb ? mb_strlen($param) : strlen($param);
 
@@ -104,11 +129,12 @@ class Validator {
      * 2つの値が一致するか
      *
      * @param string $key error時、sessionのkeyの1部を構成する
-     * @param string $param1
-     * @param string $param2
+     * @param string $compareKey
+     * @param mixed $param1
+     * @param mixed $param2
      * @return boolean
      */
-    public function isMatch($key, $compareKey, $param1, $param2)
+    public function isMatch(string $key, string $compareKey, mixed $param1, mixed $param2)
     {
         if ($param1 === $param2) return true;
 
@@ -127,7 +153,7 @@ class Validator {
      * @return integer
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
      */
-    public function hasUploadError($key, $file):int
+    public function hasUploadError(string $key, array $file):int
     {
         $errorNumber = $file['upload']['error'];
 
@@ -158,7 +184,7 @@ class Validator {
      * @return boolean
      * ref：https://www.php.net/manual/ja/features.file-upload.errors.php
      */
-    public function isValidExt($key, $file):bool
+    public function isValidExt(string $key, array $file):bool
     {
         $isValidExt = in_array(
             strtolower(pathinfo($file['upload']['name'])['extension']),
@@ -180,7 +206,7 @@ class Validator {
      * @param array $file アップロードしたファイルの情報
      * @return boolean
      */
-    public function isImgContent($key, $file):bool
+    public function isImgContent(string $key, array $file):bool
     {
         $isImgContent = in_array(
             finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['upload']['tmp_name']),
@@ -204,7 +230,7 @@ class Validator {
      * @param string $email
      * @return string|boolean 有効なメールアドレスならそれを、無効ならfalseを返す
      */
-    public function isValidEmailFormat($key, $email):string|bool
+    public function isValidEmailFormat(string $key, string $email):string|bool
     {
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) return true;
 
@@ -222,7 +248,7 @@ class Validator {
      * @param string $password
      * @return boolean
      */
-    public function isValidPasswordFormat($key, $password)
+    public function isValidPasswordFormat(string $key, string $password)
     {
         if (preg_match('/\A(?=.*?[a-z])(?=.*?\d)[a-z\d]{8,12}+\z/i', $password)) return true;
 

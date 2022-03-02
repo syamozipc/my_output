@@ -105,7 +105,8 @@ class PostService {
     {
         $sql = 'SELECT * FROM post_details WHERE post_id = :post_id';
 
-        $postDetailsOrFalse = $this->postDetailModel->db->prepare(sql:$sql)
+        $postDetailsOrFalse = $this->postDetailModel->db
+            ->prepare(sql:$sql)
             ->bindValue(param:':post_id', value:$postId)
             ->executeAndFetchAll(className:get_class($this->postDetailModel));
 
@@ -118,21 +119,20 @@ class PostService {
      * @param array $post 投稿内容
      * @return void
      */
-    public function savePost(array $request, int $userId): void
+    public function savePost(array $params): void
     {
         try {
             $this->db->beginTransaction();
 
             // postsへinsert
-            $request['user_id'] = $userId;
-            $post = new Post($request);
+            $post = new Post($params);
             $post->save();
 
             // post_detailsへinsert
             $postDetailParams = [
                 'post_id' => $post->db->lastInsertId(),
                 'type' => 1,
-                'path' => $request['file_path'],
+                'path' => $params['file_path'],
                 'sort_number' => 1
             ];
             $postDetail = new PostDetail($postDetailParams);

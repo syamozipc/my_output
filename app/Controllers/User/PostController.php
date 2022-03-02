@@ -41,16 +41,12 @@ class PostController extends Controller {
     public function create()
     {
         $this->loginService->redirectToLoginFormIfNotLogedIn();
-        
-        // 国一覧を取得
-        $countries = $this->countryService->fetchCountriesList();
 
         $post = new Post(old() ?: filter_input_array(INPUT_POST) ?? []);
 
         $data = [
             'css' => 'css/user/post/create.css',
             'js' => 'js/user/post/create.js',
-            'countries' => $countries,
             'post' => $post
         ];
 
@@ -72,13 +68,10 @@ class PostController extends Controller {
 
         $filePath = $this->postService->uploadFileToPublic($_FILES);
 
-        $country = $this->countryService->fetchCountryByID($request['country_id']);
-
         $data = [
             'css' => 'css/user/post/confirm.css',
             'js' => 'js/user/post/confirm.js',
             'post' => $post,
-            'country' => $country,
             'filePath' => $filePath
         ];
 
@@ -91,13 +84,17 @@ class PostController extends Controller {
 
         $request = filter_input_array(INPUT_POST);
 
+        // validation 
         $validator = new PostCreateValidator();
         $isValidated = $validator->validate(request:$request);
 
         if (!$isValidated) return redirect('/post/create');
 
         // path含めpost・post_detailsテーブルに保存
-        $this->postService->savePost(request:$request, userId:$this->userId);
+        $request['user_id'] = $this->userId;
+        $request['country_id'] = $this->countryService->fetchCountryByName($request['country_name'])->id;
+
+        $this->postService->savePost(params:$request);
 
         return redirect('/post/index');
     }
