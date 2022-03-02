@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers\User;
 
-use App\Libraries\{Controller, Database};
+use App\Libraries\{Controller, Database, Log};
 use App\Services\{RegisterService, UserService};
 use App\Models\User;
 use App\Validators\User\{TemporaryRegisterValidator, RegisterValidator};
@@ -81,7 +81,9 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         } catch (\Exception $e) {
             $this->db->rollBack();
 
-            exit($e->getMessage());
+            $this->setFlashErrorSession(key:'status', param:$e->getMessage());
+
+            return redirect('/register/tmpRegisterForm');
         }
 
         $data = [
@@ -165,7 +167,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
 
         // @todo log出力のみにする
-        if (!$isSent) die('メール送信に失敗しましたが、登録は完了しています。');
+        if (!$isSent) Log::info('メール送信に失敗しましたが、登録は完了しています。');
                     
         // ログイン失敗は無い想定なので、失敗時の処理は書いていない
         $this->loginService->baseLogin(email:$user->email, password:$request['password']);
