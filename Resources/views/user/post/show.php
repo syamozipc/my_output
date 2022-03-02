@@ -25,7 +25,7 @@
                     </td>
                     <td class="js-description"><?= bre($post->description) ?></td>
                     <td><?= $post->country_name ?></td>
-                    <td><?= $post->user_name ?></td>
+                    <td><?= e($post->user_name ?? $post->email) ?></td>
                 </tr>
             </tbody>
         </table>

@@ -48,7 +48,8 @@ class PostService {
                 posts.description,
                 countries.name AS country_name,
                 post_details.path,
-                users.name AS user_name
+                users.name AS user_name,
+                users.email
             FROM posts
             JOIN post_details ON posts.id = post_details.post_id
             JOIN countries ON posts.country_id = countries.id
@@ -79,7 +80,8 @@ class PostService {
                 posts.description,
                 countries.name AS country_name,
                 post_details.path,
-                users.name AS user_name
+                users.name AS user_name,
+                users.email
             FROM posts
             JOIN post_details ON posts.id = post_details.post_id
             JOIN countries ON posts.country_id = countries.id
