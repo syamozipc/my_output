@@ -1,4 +1,4 @@
-<p>編集フォーム</p>
+<p>編集フォーム（※datalistを使用して検索）</p>
 <div>
     <form action="<?= route('/post/editConfirm', $post->id); ?>" method="POST" enctype="multipart/form-data">
         <?= csrf() ?>

@@ -1,4 +1,4 @@
-<p>新規投稿フォーム</p>
+<p>新規投稿フォーム（※JSでAPI検索）</p>
 <div>
     <form action="<?= route('/post/confirm'); ?>" method="POST" enctype="multipart/form-data">
         <?= csrf() ?>
