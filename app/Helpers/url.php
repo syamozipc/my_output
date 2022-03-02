@@ -20,8 +20,6 @@ function redirect($route, $replace = true, $status = 302)
 /**
  * ページ遷移用url生成処理
  * 
- * @todo /が来たらtopページへのURLになるようにする
- *
  * @param string $route 遷移先パス
  * @param string|array|null $params 任意のパラメータ
  * @return string ページ遷移用url
