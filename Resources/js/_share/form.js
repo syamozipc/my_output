@@ -1,3 +1,6 @@
+// async/await用
+import { async } from 'regenerator-runtime';
+
 /**
  * 1. 入力値をパラメータとし、apiでgetリクエスト
  * 2. その入力値に部分一致する国が、countryクラスのオブジェクトの配列として返ってくる
