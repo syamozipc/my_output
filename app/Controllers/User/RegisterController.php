@@ -166,7 +166,6 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         // 本登録完了メール送信
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
 
-        // @todo log出力のみにする
         if (!$isSent) Log::info('メール送信に失敗しましたが、登録は完了しています。');
                     
         // ログイン失敗は無い想定なので、失敗時の処理は書いていない
