@@ -90,14 +90,14 @@ class Validator {
      */
     public function isExistCountryName(string $key, string $countryName):bool
     {
-        $sql = 'SELECT * FROM countries WHERE name = :name';
+        $sql = 'SELECT count(*) as count FROM countries WHERE name = :name';
 
-        $this->db
+        $stdClass = $this->db
             ->prepare(sql:$sql)
             ->bindValue(param:':name', value:$countryName)
-            ->execute();
+            ->executeAndFetch();
 
-        if ($this->db->rowCount()) return true;
+        if ($stdClass->count > 0) return true;
 
         $this->setFlashErrorSession(key:$key, param:'国名は正しく入力してください。');
 

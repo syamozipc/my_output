@@ -97,6 +97,12 @@ class Database {
         return $this->pdoStatement->fetch();
     }
 
+    /**
+     * rowCount()は影響を与えたレコード数を返さないDBMSもあるので、確実に件数を取得したければ count(*) を使用する
+     * ref：独習PHP p442
+     *
+     * @return void
+     */
     public function rowCount()
     {
         return $this->pdoStatement->rowCount();

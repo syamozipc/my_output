@@ -78,16 +78,15 @@ class UserService {
      */
     public function isPublicUser(string $email): bool
     {
-        $sql = 'SELECT * FROM users WHERE `email` = :email AND `status_id` = :status_id';
+        $sql = 'SELECT count(*) as count FROM users WHERE `email` = :email AND `status_id` = :status_id';
 
-        $this->userModel->db
+        $stdClass = $this->userModel->db
             ->prepare($sql)
             ->bindValue(':email', $email)
             ->bindValue(':status_id', 'public')
-            ->execute();
+            ->executeAndFetch();
 
-        // 本登録済みなら1（当てはまる桁数）、そうでなければ0が返る
-        $isExist = $this->userModel->db->rowCount();
+        $isExist = $stdClass->count > 0 ? true : false;
 
         return $isExist;
     }
