@@ -14,8 +14,10 @@ class Database {
     private static self $dababase;
     private $pdo;
     private $pdoStatement;
-    private $error;
 
+    /**
+     * 外部からnewされないよう、privateアクセス修飾子にする
+     */
     private function __construct()
     {
         $dsn = "mysql:host={$this->host};dbname={$this->dbname};charset=utf8mb4";
@@ -27,24 +29,38 @@ class Database {
         try {
             $this->pdo = new \PDO($dsn, $this->user, $this->pass, $options);
         } catch (\PDOException $e) {
-            $this->error = $e->getMessage();
-            echo $this->error;
+            exit($e->getMessage());
         }
     }
 
+    /**
+     * singletonパターンの実装
+     *
+     * @return self
+     */
     public static function getSingleton(): self
     {
-        return self::$dababase ?? self::$dababase = new self();
+        if (!isset(self::$dababase)) self::$dababase = new self();
+
+        return self::$dababase;
     }
 
-    public function prepare($sql)
+    public function prepare(string $sql): self
     {
         $this->pdoStatement = $this->pdo->prepare($sql);
 
         return $this;
     }
 
-    public function bindValue($param, $value, $type = null)
+    /**
+     * prepared statementにbindValueする（typeは動的に生成）
+     *
+     * @param string $param
+     * @param integer|boolean|null|string $value
+     * @param integer|null $type
+     * @return self
+     */
+    public function bindValue(string $param, int|bool|null|string $value, int $type = null): self
     {
         if (is_null($type)) {
             $type = match(true) {
@@ -60,7 +76,7 @@ class Database {
         return $this;
     }
 
-    public function execute()
+    public function execute(): bool
     {
         return $this->pdoStatement->execute();
     }
@@ -71,7 +87,7 @@ class Database {
      * @param string $className fetch結果をinstance化classの名前
      * @return array $className の配列（無ければ[]の配列）
      */
-    public function executeAndFetchAll($className = 'stdClass', ...$args): array
+    public function executeAndFetchAll(string $className = 'stdClass', array ...$args): array
     {
         $this->execute();
 
@@ -86,7 +102,7 @@ class Database {
      * @param string $className fetch結果をinstance化classの名前
      * @return object|false $classNameに指定したクラスのinstance（失敗したらfalse）
      */
-    public function executeAndFetch($className = 'stdClass', ...$args): object|false
+    public function executeAndFetch(string $className = 'stdClass', array ...$args): object|false
     {
         $this->execute();
 
@@ -103,32 +119,32 @@ class Database {
      *
      * @return void
      */
-    public function rowCount()
+    public function rowCount(): int
     {
         return $this->pdoStatement->rowCount();
     }
 
-    public function lastInsertId()
+    public function lastInsertId(): string|false
     {
         return $this->pdo->lastInsertId();
     }
 
-    public function beginTransaction()
+    public function beginTransaction(): bool
     {
         return $this->pdo->beginTransaction();
     }
 
-    public function commit()
+    public function commit(): bool
     {
         return $this->pdo->commit();
     }
 
-    public function rollBack()
+    public function rollBack(): bool
     {
         return $this->pdo->rollBack();
     }
 
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->pdo->inTransaction();
     }
