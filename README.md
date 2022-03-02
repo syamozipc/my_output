@@ -29,7 +29,6 @@ https://github.com/syamozipc/my_output
 
 -   [ ] ORM & OOP
     -   [ ] 独習PHPの10章確認して何か導入したい
--   [ ] fileアップロードにtmpディレクトリを実装
 -   [ ] AWS 実装
     -   [ ] 画像・動画を S3 に cludfront 経由でアップロード
     -   [ ] EC2 動かす

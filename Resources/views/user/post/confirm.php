@@ -6,7 +6,7 @@
         <p><?= $post->country_name ?></p>
 
         <img
-            src="<?=  public_url("upload/{$filePath}"); ?>"
+            src="<?=  public_url("upload/tmp/{$fileName}"); ?>"
             alt="アップロードファイル"
             width="400"
             height="400"
@@ -16,7 +16,7 @@
 
         <input type="hidden" name="country_name" value="<?= $post->country_name ?>">
         <input type="hidden" name="description" value="<?= e($post->description) ?>">
-        <input type="hidden" name="file_path" value="<?= $filePath ?>">
+        <input type="hidden" name="file_name" value="<?= $fileName ?>">
 
         <button type="submit">送信</button>
     </form>

@@ -17,20 +17,38 @@ class PostService {
     }
 
     /**
-     * tmpフォルダにアップロードされたファイルをpublic/uploadへ移動
+     * phpのtmpフォルダにアップロードされたファイルをpublic/upload/tmpへ移動（仮アップロード）
      *
      * @param array $files file情報
-     * @return void
+     * @return string
      */
-    public function uploadFileToPublic(array $files)
+    public function uploadFileToTmpDirectory(array $files): string
     {
         $tempPath = $files['upload']['tmp_name'];
         $randomFileName = md5(uniqid());
-        $filePath = public_path('upload/' . $randomFileName . '.' . basename($files['upload']['type']));
+        $filePath = public_path('upload/tmp/' . $randomFileName . '.' . basename($files['upload']['type']));
 
+        // PHPのアップロードメカニズムを介してアップロードされたfileに対してのみ有効
         move_uploaded_file($tempPath, $filePath);
 
         return basename($filePath);
+    }
+
+    /**
+     * public/upload/tmpフォルダにアップロードされたファイルをpublic/uploadへ移動（本アップロード）
+     *
+     * @param string $fileName
+     * @return void
+     */
+    public function moveTmpFileToPublic(string $fileName): void
+    {
+        $tempPath = public_path("upload/tmp/{$fileName}");
+        $uploadPath = public_path("upload/{$fileName}");
+
+        // move_uploaded_fileは使えないので、こちらの方法
+        rename($tempPath, $uploadPath);
+
+        return;
     }
 
     /**
@@ -134,7 +152,7 @@ class PostService {
             $postDetailParams = [
                 'post_id' => $post->db->lastInsertId(),
                 'type' => 1,
-                'path' => $params['file_path'],
+                'path' => $params['file_name'],
                 'sort_number' => 1
             ];
             $postDetail = new PostDetail($postDetailParams);

@@ -66,13 +66,13 @@ class PostController extends Controller {
 
         $post = new Post(old() ?: $request);
 
-        $filePath = $this->postService->uploadFileToPublic($_FILES);
+        $fileName = $this->postService->uploadFileToTmpDirectory($_FILES);
 
         $data = [
             'css' => 'css/user/post/confirm.css',
             'js' => 'js/user/post/confirm.js',
             'post' => $post,
-            'filePath' => $filePath
+            'fileName' => $fileName
         ];
 
         return $this->view(view:'user/post/confirm', data:$data);
@@ -89,6 +89,8 @@ class PostController extends Controller {
         $isValidated = $validator->validate(request:$request);
 
         if (!$isValidated) return redirect('/post/create');
+
+        $this->postService->moveTmpFileToPublic(fileName:$request['file_name']);
 
         // path含めpost・post_detailsテーブルに保存
         $request['user_id'] = $this->userId;
