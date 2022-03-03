@@ -15,7 +15,7 @@ class Post extends Model {
         'status_id',
     ];
 
-    public function __construct(array $params= [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
     }
