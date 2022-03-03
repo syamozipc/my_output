@@ -186,7 +186,8 @@ class PostService {
 
             foreach ($postDetails as $postDetail) {
                 // postDetailのfileを削除
-                if (!unlink(public_path('upload/' . $postDetail->path))) throw new \Exception(('ファイルがありません'));
+                $filePath = public_path('upload/' . $postDetail->path);
+                if (!unlink($filePath)) throw new \Exception(('ファイルがありません'));
                 
                 // post_detailを物理削除
                 $postDetail->delete();

@@ -77,7 +77,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
 
             if (!$isSent) throw new \Exception('メール送信に失敗しました。');
 
-        $this->db->commit();
+            $this->db->commit();
 
         } catch (\Exception $e) {
             $this->db->rollBack();
