@@ -27,6 +27,7 @@ https://github.com/syamozipc/my_output
 
 ## 実装したい機能
 
+- [ ] Docker 構築
 - [ ] SNS ログイン
 - [ ] TypeScript 実装
 - [ ] 自己結合の多対多（フォロー機能）
