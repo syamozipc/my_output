@@ -25,7 +25,7 @@ class Core {
         if ($url) $url = $this->formatAndSanitizeUrl($url);
 
         // URLによって呼び出すコントローラを特定
-        if (!$this->brunchCallback($url)) $this->currentController = new $this->currentController;
+        if (!$this->branchCallback($url)) $this->currentController = new $this->currentController;
 
         if (!$this->isApi) {
             $this->initFlashSession();
@@ -59,7 +59,7 @@ class Core {
      * ・$urlが空なら、homeページへ
      * ・存在しないurlなら、404を表示
      */
-    public function brunchCallback($url)
+    public function branchCallback($url)
     {
         // $urlがなければTOPページをリターン
         if (!$url) {
