@@ -69,7 +69,7 @@ class Core {
             return true;
         }
 
-        // amespaceがあるかをチェック
+        // namespaceがあるかをチェック
         if (in_array($url[0], ['api'], true)) {
             // namespaceだけなら 404 error
             if (count($url) === 1) return false;
