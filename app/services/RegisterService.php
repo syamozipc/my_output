@@ -120,8 +120,6 @@ class RegisterService {
      */
     public function regsterUser(User $user, string $password):void
     {
-        $sql = 'UPDATE users SET `register_token_verified_at` = :register_token_verified_at, `password` = :password, `status_id` = :status_id, `status_updated_at` = :status_updated_at WHERE `register_token` = :register_token';
-
         $currentDateTime = (new \DateTime())->format(DateTime_Default_Format);
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
