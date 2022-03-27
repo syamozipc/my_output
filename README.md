@@ -29,9 +29,11 @@
 
 フロントエンド
 - JavaScript (ES6)
-- Webpack
-- eslint
 
 バックエンド
 - PHP8.0
 - MySQL5.7
+
+その他ライブラリ等
+- Webpack
+- eslint
