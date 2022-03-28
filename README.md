@@ -35,3 +35,12 @@
 バックエンド
 - PHP8.0
 - MySQL5.7
+
+## 処理の流れ
+
+MVCモデルで設計しています
+
+1. URLを叩いたら、public/index.phpを呼び出す
+2. bootstrap/app.phpを読み込み、設定・ヘルパーファイルの読み込みとspl_autoload_registerの定義をする
+3. app\libraries\Coreを読み込み、リクエストURLに対応するコントローラ・メソッドを読み込む
+4. 必要に応じてmodelを通して対応するテーブルのレコードを取得し、viewファイルに埋め込んで表示
