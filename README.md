@@ -32,7 +32,7 @@ MVCモデルで設計しています
 1. URLを叩いたら、public/index.php を呼び出す
 2. bootstrap/app.php を読み込み、設定・ヘルパーファイルの読み込みと spl_autoload_register の定義をする
 3. app\libraries\Coreを読み込み、リクエストURLに対応するコントローラ・メソッドを呼び出す
-    - 例：リクエストURLが `post/show/1` であれば、user namespace 配下の PostController の Show メソッド
+    - 例：リクエストURLが `post/show/1` であれば、user namespace 配下 PostController の Show メソッドを呼び出す
 4. 必要に応じて model を通して対応するテーブルのレコードを取得し、view ファイルに埋め込んで表示
 
 ## 使用技術
