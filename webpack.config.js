@@ -16,7 +16,7 @@ const srcDir = './resources/js';
 const entries = {};
 
 glob.sync('**/*.js', {
-    ignore: '**/_share/*.js',
+    ignore: '**/_*/*.js',
     cwd: srcDir,
 }).forEach((jsFileName) => {
     const fileNameExceptExt = jsFileName.replace(/\.js$/, '');
