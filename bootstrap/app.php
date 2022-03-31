@@ -1,11 +1,19 @@
 <?php
-// 使い回す定数のfile
-require_once '../config/app.php';
-// helperを読み込み
-require_once '../app/helpers/app.php';
-require_once '../app/helpers/path.php';
-require_once '../app/helpers/url.php';
-require_once '../app/helpers/string.php';
+
+$files = [
+    // アプリ内で使い回す定数のファイル
+    '../config/app.php',
+
+    // 各種helper
+    '../app/helpers/app.php',
+    '../app/helpers/path.php',
+    '../app/helpers/url.php',
+    '../app/helpers/string.php',
+];
+
+foreach ($files as $file) {
+    require_once $file;
+}
 
 // autoloader
 // 未定義のclassが呼ばれた時に引数のcallbackが実行される。callbackの引数にはclass名が入る
