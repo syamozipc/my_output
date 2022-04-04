@@ -36,9 +36,7 @@ class LoginService {
         // 未ログインかつremember_tokenがある場合、ログイン処理
         } else if (isset($_COOKIE['remember_token'])) {
             $rememberToken = $_COOKIE['remember_token'];
-            $this->loginByRememberToken(rememberToken:$rememberToken);
-
-            $isAuthenticated = true;
+            $isAuthenticated = $this->loginByRememberToken(rememberToken:$rememberToken);
         }
 
         return $isAuthenticated;
