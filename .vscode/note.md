@@ -1,8 +1,9 @@
-# リファクタ
-propertyの値が未定義でも、カラムにはnullを挿入しようとする
-例：status_idとかはnullは許容しないのでerrorになる
-解決策：
-・最初から全プロパティを定義せず、pdoや新規作成時に任せる
-    →特に記述しなくていいので楽。ただ、dbから取ってくるときはデフォルトでpublicになってしまう
-・デフォルト値を設ける（statusはtentative、みたいな）
-    →dbテーブルと処理が被る
+# typescriptを導入する手順
+
+- tscコマンド + tsconfig.jsonでjsに変換できるようにする
+- webpack + tsloaderでtsconfig.jsonを元にjsに変換されるようにする
+- multi entryやimport/exportがある場合でも対応できるようにする
+- cssのbundleにも対応する
+- eslintにも対応
+- tsconfig試す
+- resources/jsをresources/tsにする

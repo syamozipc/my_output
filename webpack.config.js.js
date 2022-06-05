@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // eslint-loaderが非推奨になる & failOnErrorが機能しないので、こちらを使用
 // https://github.com/webpack-contrib/eslint-loader/issues/334
-// const EslintWebpackPlugin = require('eslint-webpack-plugin');
+const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 // glob
 const glob = require('glob');
@@ -15,12 +15,12 @@ const glob = require('glob');
 const srcDir = './resources/js';
 const entries = {};
 
-glob.sync('**/*.ts', {
-    ignore: '**/_*/*.ts',
+glob.sync('**/*.js', {
+    ignore: '**/_*/*.js',
     cwd: srcDir,
-}).forEach((tsFileName) => {
-    const fileNameExceptExt = tsFileName.replace(/\.ts$/, '');
-    entries[fileNameExceptExt] = path.resolve(srcDir, tsFileName);
+}).forEach((jsFileName) => {
+    const fileNameExceptExt = jsFileName.replace(/\.js$/, '');
+    entries[fileNameExceptExt] = path.resolve(srcDir, jsFileName);
 });
 
 module.exports = {
@@ -36,14 +36,13 @@ module.exports = {
             '@scss': path.resolve(__dirname, 'resources/scss'),
             '@js': path.resolve(__dirname, 'resources/js'),
         },
-        extensions: ['.ts', '.js'],
     },
     module: {
         rules: [
             {
-                test: /\.ts$/,
-                use: ['ts-loader'],
-                exclude: /node_modules/,
+                test: /\.js$/,
+                include: path.resolve(__dirname, 'resources/js'),
+                use: ['babel-loader'],
             },
             {
                 test: /\.scss$/,
@@ -56,9 +55,9 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'css/[name].css',
         }),
-        // new EslintWebpackPlugin({
-        //     fix: false,
-        //     failOnError: false, // 必要に応じて切り替え
-        // }),
+        new EslintWebpackPlugin({
+            fix: false,
+            failOnError: false, // 必要に応じて切り替え
+        }),
     ],
 };
