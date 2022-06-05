@@ -8,57 +8,79 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // https://github.com/webpack-contrib/eslint-loader/issues/334
 // const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
-// glob
-const glob = require('glob');
+/**
+ * globを使用し、compile対象のfileを{ ext無しfilePath: ext有りfilePath }のobjectでreturn
+ * fileの指定があった場合は、そのfileのみcompile対象とする
+ *
+ * @param {string} filePath
+ * @returns {object} entries
+ */
+function getEntries(filePath) {
+    const glob = require('glob');
+    // TODO: tsに修正
+    const srcDir = './resources/js';
+    const entries = {};
+    let files = [filePath];
 
-// globを使用して任意のJS fileを取得し、multi entry point用のobjectを生成
-const srcDir = './resources/js';
-const entries = {};
+    if (!filePath) {
+        files = glob.sync('**/*.ts', {
+            // TODO: tsに修正
+            ignore: '**/_*/*.js',
+            cwd: srcDir,
+        });
+    }
 
-glob.sync('**/*.ts', {
-    ignore: '**/_*/*.ts',
-    cwd: srcDir,
-}).forEach((tsFileName) => {
-    const fileNameExceptExt = tsFileName.replace(/\.ts$/, '');
-    entries[fileNameExceptExt] = path.resolve(srcDir, tsFileName);
-});
+    files.forEach((filePath) => {
+        const fileNameExceptExt = filePath.replace(/\.ts$/, '');
+        entries[fileNameExceptExt] = path.resolve(srcDir, filePath);
+    });
 
-module.exports = {
-    mode: 'development',
-    devtool: 'eval-cheap-module-source-map',
-    entry: entries,
-    output: {
-        path: path.resolve(__dirname, 'public'),
-        filename: 'js/[name].js',
-    },
-    resolve: {
-        alias: {
-            '@scss': path.resolve(__dirname, 'resources/scss'),
-            '@js': path.resolve(__dirname, 'resources/js'),
+    return entries;
+}
+
+module.exports = (env) => {
+    return {
+        mode: 'development',
+        devtool: 'eval-cheap-module-source-map',
+        entry: getEntries(env.file),
+        output: {
+            path: path.resolve(__dirname, 'public'),
+            filename: 'js/[name].js',
         },
-        extensions: ['.ts', '.js'],
-    },
-    module: {
-        rules: [
-            {
-                test: /\.ts$/,
-                use: ['ts-loader'],
-                exclude: /node_modules/,
+        resolve: {
+            alias: {
+                '@scss': path.resolve(__dirname, 'resources/scss'),
+                // TODO: tsに修正
+                '@js': path.resolve(__dirname, 'resources/js'),
             },
-            {
-                test: /\.scss$/,
-                include: path.resolve(__dirname, 'resources/scss'),
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-            },
+            extensions: ['.ts', '.js'],
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.ts$/,
+                    use: ['ts-loader'],
+                    exclude: /node_modules/,
+                },
+                {
+                    test: /\.scss$/,
+                    include: path.resolve(__dirname, 'resources/scss'),
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        'sass-loader',
+                    ],
+                },
+            ],
+        },
+        plugins: [
+            new MiniCssExtractPlugin({
+                filename: 'css/[name].css',
+            }),
+            // new EslintWebpackPlugin({
+            //     fix: false,
+            //     failOnError: false, // 必要に応じて切り替え
+            // }),
         ],
-    },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].css',
-        }),
-        // new EslintWebpackPlugin({
-        //     fix: false,
-        //     failOnError: false, // 必要に応じて切り替え
-        // }),
-    ],
+    };
 };
