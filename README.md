@@ -47,3 +47,6 @@ MVCモデルで設計しています
 その他ライブラリ等
 - Webpack
 - eslint
+
+## その他
+- webpackを使用したコンパイルは、`npm run {watch/dev/prodのいずれか} -file={fileのパス}`

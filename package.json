@@ -4,9 +4,9 @@
     "description": "https://github.com/syamozipc/my_output",
     "main": "index.js",
     "scripts": {
-        "watch": "webpack --watch",
-        "dev": "webpack",
-        "prod": "webpack --mode production --no-devtool"
+        "watch": "webpack --watch --env file=${npm_config_file}",
+        "dev": "webpack --env file=${npm_config_file}",
+        "prod": "webpack --mode production --no-devtool --env file=${npm_config_file}"
     },
     "repository": {
         "type": "git",
