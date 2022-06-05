@@ -38,11 +38,11 @@ MVCモデルで設計しています
 ## 使用技術
 
 フロントエンド
-- JavaScript (ES6)
+- TypeScript 4.7
 
 バックエンド
-- PHP8.0
-- MySQL5.7
+- PHP 8.0
+- MySQL 5.7
 
 その他ライブラリ等
 - Webpack
