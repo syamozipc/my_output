@@ -49,4 +49,4 @@ MVCモデルで設計しています
 - eslint
 
 ## その他
-- webpackを使用したコンパイルは、`npm run {watch/dev/prodのいずれか} -file={fileのパス}`
+- webpackを使用したコンパイルは、`npm run {watch/dev/prodのいずれか} -file={jsディレクトリ以降のfileパス}`
