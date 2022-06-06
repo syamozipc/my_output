@@ -1,5 +1,3 @@
-// async/await用
-
 // 非同期でDBから取得するcountry class objectの型を定義
 type CountryObject = {
     id: string;
@@ -37,8 +35,8 @@ export const displayMatchedCountries = (): void => {
             search: e.target.value,
         });
 
-        const response = await fetch(`${apiUrl}?${params}`);
-        const data = await response.json();
+        const response: Response = await fetch(`${apiUrl}?${params}`);
+        const data: CountryObject[] = await response.json();
 
         // 返ってきたcountryクラスの配列それぞれに対し、国名をliタグの中に表示する処理
         data.forEach((el: CountryObject) => {

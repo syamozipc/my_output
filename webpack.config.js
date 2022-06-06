@@ -48,7 +48,8 @@ module.exports = (env) => {
         resolve: {
             alias: {
                 '@scss': path.resolve(__dirname, 'resources/scss'),
-                '@js': path.resolve(__dirname, 'resources/ts'),
+                // tsconfig.jsonと一致させる必要がある
+                '@ts': path.resolve(__dirname, 'resources/ts'),
             },
             extensions: ['.ts', '.js'],
         },

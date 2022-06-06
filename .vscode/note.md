@@ -6,8 +6,8 @@
 <!-- - cssのbundleにも対応する -->
 <!-- - 1ファイルのコンパイルに対応 -->
 <!-- - resources/jsをresources/tsにする -->
+<!-- - import構文がうまくいかない -->
 - lite-server
 - tsconfig試す
 - eslintにも対応
-- import構文がうまくいかない
 - autobindを入れたい
