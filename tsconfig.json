@@ -34,8 +34,8 @@
 
         /* Modules */
         "module": "es2015" /* Specify what module code is generated. */,
-        // ⭐️コンパイル元（これ以上の階層にあるtsはoutDirに出力されない）
-        "rootDir": "./resource" /* Specify the root folder within your source files. */,
+        // ⭐️コンパイル元（これ以上の階層にあるtsはoutDirに出力されない/webpack使用時も反映される）
+        "rootDir": "./resources" /* Specify the root folder within your source files. */,
         // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
         // baseUrlを指定した上で、pathsがwebpackのaliasと一致する必要がある
         "baseUrl": "./" /* Specify the base directory to resolve non-relative module names. */,
@@ -63,7 +63,7 @@
         // ⭐️trueにすると、ブラウザでもtsファイルが見れ、デバッグされる
         "sourceMap": true /* Create source map files for emitted JavaScript files. */,
         // "outFile": "./dist/bundle.js" /* Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output. */,
-        // ⭐️コンパイル後の出力先（サブフォルダ階層も反映してくれる）
+        // ⭐️コンパイル後の出力先（サブフォルダ階層も反映してくれる/webpack使用している場合は無視される？）
         "outDir": "./public" /* Specify an output folder for all emitted files. */,
         // ⭐️コメントを削除
         // "removeComments": true /* Disable emitting comments. */,
