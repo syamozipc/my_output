@@ -23,13 +23,14 @@ export const displayMatchedCountries = (): void => {
 
     // 値が入力されたらそれを取得し、部分一致する国の取得をapiリクエスト
     // inputはInputEvent/Eventどちらかになるため、最初からInputEventを指定できないっぽい
-    inputEl.addEventListener('input', async (e: Event) => {
+    inputEl.addEventListener('input', async (e: Event): Promise<void> => {
+        // (async (): Promise<void> => {
         ul.innerHTML = '';
 
         // e.targetのDOMは確定しないので、type guardでHTMLInputElementであることを保証した上でvalue propertyを呼び出す
         if (!(e.target instanceof HTMLInputElement)) return;
 
-        if (e.target.value === '') return;
+        if (!e.target.value) return;
 
         const queryString = new URLSearchParams({
             search: e.target.value,
@@ -48,6 +49,7 @@ export const displayMatchedCountries = (): void => {
 
             ul.appendChild(li);
         });
+        // })().catch((): undefined => undefined);
     });
 
     // ulタグ以内がクリックされた時、対象がliタグであればその国名を取得し、inputタグに反映
