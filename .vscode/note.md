@@ -5,7 +5,7 @@
 <!-- - multi entryやimport/exportがある場合でも対応できるようにする -->
 <!-- - cssのbundleにも対応する -->
 <!-- - 1ファイルのコンパイルに対応 -->
-- resources/jsをresources/tsにする
+<!-- - resources/jsをresources/tsにする -->
 - lite-server
 - tsconfig試す
 - eslintにも対応

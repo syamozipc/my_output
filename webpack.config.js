@@ -17,8 +17,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
  */
 function getEntries(filePath) {
     const glob = require('glob');
-    // TODO: tsに修正
-    const srcDir = './resources/js';
+    const srcDir = './resources/ts';
     const entries = {};
     let files = [filePath];
 
@@ -49,8 +48,7 @@ module.exports = (env) => {
         resolve: {
             alias: {
                 '@scss': path.resolve(__dirname, 'resources/scss'),
-                // TODO: tsに修正
-                '@js': path.resolve(__dirname, 'resources/js'),
+                '@js': path.resolve(__dirname, 'resources/ts'),
             },
             extensions: ['.ts', '.js'],
         },
