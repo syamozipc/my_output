@@ -8,5 +8,5 @@
 <!-- - resources/jsをresources/tsにする -->
 <!-- - import構文がうまくいかない -->
 <!-- - eslintにも対応 -->
-- eslintエラー解消
+<!-- - eslintエラー解消 -->
 - tsconfig試す

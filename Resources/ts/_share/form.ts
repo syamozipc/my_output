@@ -40,6 +40,8 @@ export const displayMatchedCountries = (): void => {
             const apiUrl = `${baseApiUrl}?${String(queryString)}`;
 
             const response: Response = await fetch(apiUrl);
+            // TODO:ここのeslintエラー解消できない
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const data: CountryObject[] = await response.json();
 
             // 返ってきたcountryクラスの配列それぞれに対し、国名をliタグの中に表示する処理
