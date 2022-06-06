@@ -23,33 +23,36 @@ export const displayMatchedCountries = (): void => {
 
     // 値が入力されたらそれを取得し、部分一致する国の取得をapiリクエスト
     // inputはInputEvent/Eventどちらかになるため、最初からInputEventを指定できないっぽい
-    inputEl.addEventListener('input', async (e: Event): Promise<void> => {
-        // (async (): Promise<void> => {
-        ul.innerHTML = '';
+    inputEl.addEventListener('input', (e: Event): void => {
+        // callbackに直接書くとcatchが使用できずerror handling出来ないため、IIFEで定義
+        (async (): Promise<void> => {
+            ul.innerHTML = '';
 
-        // e.targetのDOMは確定しないので、type guardでHTMLInputElementであることを保証した上でvalue propertyを呼び出す
-        if (!(e.target instanceof HTMLInputElement)) return;
+            // e.targetのDOMは確定しないので、type guardでHTMLInputElementであることを保証した上でvalue propertyを呼び出す
+            if (!(e.target instanceof HTMLInputElement)) return;
 
-        if (!e.target.value) return;
+            if (!e.target.value) return;
 
-        const queryString = new URLSearchParams({
-            search: e.target.value,
+            const queryString = new URLSearchParams({
+                search: e.target.value,
+            });
+
+            const apiUrl = `${baseApiUrl}?${String(queryString)}`;
+
+            const response: Response = await fetch(apiUrl);
+            const data: CountryObject[] = await response.json();
+
+            // 返ってきたcountryクラスの配列それぞれに対し、国名をliタグの中に表示する処理
+            data.forEach((el: CountryObject): void => {
+                const li = document.createElement('li');
+                li.classList.add('js-suggestLi');
+                li.textContent = el.name;
+
+                ul.appendChild(li);
+            });
+        })().catch((error: string): void => {
+            window.alert(error);
         });
-
-        const apiUrl = `${baseApiUrl}?${String(queryString)}`;
-
-        const response: Response = await fetch(apiUrl);
-        const data: CountryObject[] = await response.json();
-
-        // 返ってきたcountryクラスの配列それぞれに対し、国名をliタグの中に表示する処理
-        data.forEach((el: CountryObject) => {
-            const li = document.createElement('li');
-            li.classList.add('js-suggestLi');
-            li.textContent = el.name;
-
-            ul.appendChild(li);
-        });
-        // })().catch((): undefined => undefined);
     });
 
     // ulタグ以内がクリックされた時、対象がliタグであればその国名を取得し、inputタグに反映
