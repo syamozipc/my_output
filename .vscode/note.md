@@ -7,7 +7,5 @@
 <!-- - 1ファイルのコンパイルに対応 -->
 <!-- - resources/jsをresources/tsにする -->
 <!-- - import構文がうまくいかない -->
-- lite-server
 - tsconfig試す
 - eslintにも対応
-- autobindを入れたい
