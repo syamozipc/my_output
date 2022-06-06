@@ -7,5 +7,5 @@
 <!-- - 1ファイルのコンパイルに対応 -->
 <!-- - resources/jsをresources/tsにする -->
 <!-- - import構文がうまくいかない -->
+<!-- - eslintにも対応 -->
 - tsconfig試す
-- eslintにも対応

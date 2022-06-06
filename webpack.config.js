@@ -4,9 +4,11 @@ const path = require('path');
 // scssのcompileに使用。個別のcssファイルへの出力を可能にする。
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-// eslint-loaderが非推奨になる & failOnErrorが機能しないので、こちらを使用
+// eslint-loaderは非推奨になる & failOnErrorが機能しない：
 // https://github.com/webpack-contrib/eslint-loader/issues/334
-// const EslintWebpackPlugin = require('eslint-webpack-plugin');
+// eslintをtypescriptに対応させる方法：
+// https://designsupply-web.com/media/programming/6739/
+const EslintWebpackPlugin = require('eslint-webpack-plugin');
 
 /**
  * globを使用し、compile対象のfileを{ ext無しfilePath: ext有りfilePath }のobjectでreturn
@@ -75,10 +77,11 @@ module.exports = (env) => {
             new MiniCssExtractPlugin({
                 filename: 'css/[name].css',
             }),
-            // new EslintWebpackPlugin({
-            //     fix: false,
-            //     failOnError: false, // 必要に応じて切り替え
-            // }),
+            new EslintWebpackPlugin({
+                extensions: ['.ts', '.js'],
+                fix: false,
+                failOnError: false, // 必要に応じて切り替え
+            }),
         ],
     };
 };
