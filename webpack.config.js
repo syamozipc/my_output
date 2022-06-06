@@ -24,8 +24,7 @@ function getEntries(filePath) {
 
     if (!filePath) {
         files = glob.sync('**/*.ts', {
-            // TODO: tsに修正
-            ignore: '**/_*/*.js',
+            ignore: '**/_*/*.ts',
             cwd: srcDir,
         });
     }

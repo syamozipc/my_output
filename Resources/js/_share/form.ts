@@ -1,19 +1,35 @@
 // async/await用
-import { async } from 'regenerator-runtime';
+
+// 非同期でDBから取得するcountry class objectの型を定義
+type CountryObject = {
+    id: string;
+    name: string;
+    name_alpha: string;
+    region_id: string;
+    updated_at: string;
+};
 
 /**
  * 1. 入力値をパラメータとし、apiでgetリクエスト
  * 2. その入力値に部分一致する国が、countryクラスのオブジェクトの配列として返ってくる
  * 3. inputタグ直下にその国一覧を表示し、クリックされた国名をinputタグ内に反映
  */
-export const displayMatchedCountries = () => {
-    const inputEl = document.querySelector('.js-suggestionInput');
-    const ul = document.querySelector('.js-suggestionList');
-    const apiUrl = inputEl.dataset.suggestUrl;
+export const displayMatchedCountries = (): void => {
+    const inputEl = document.querySelector(
+        '.js-suggestionInput'
+    )! as HTMLInputElement;
+    const ul = document.querySelector(
+        '.js-suggestionList'
+    )! as HTMLUListElement;
+    const apiUrl: string = inputEl.dataset.suggestUrl!;
 
     // 値が入力されたらそれを取得し、部分一致する国の取得をapiリクエスト
-    inputEl.addEventListener('input', async (e) => {
+    // inputはInputEvent/Eventどちらかになるため、最初からInputEventを指定できないっぽい
+    inputEl.addEventListener('input', async (e: Event) => {
         ul.innerHTML = '';
+
+        // e.targetのDOMは確定しないので、type guardでHTMLInputElementであることを保証した上でvalue propertyを呼び出す
+        if (!(e.target instanceof HTMLInputElement)) return;
 
         if (e.target.value === '') return;
 
@@ -25,7 +41,7 @@ export const displayMatchedCountries = () => {
         const data = await response.json();
 
         // 返ってきたcountryクラスの配列それぞれに対し、国名をliタグの中に表示する処理
-        data.forEach((el) => {
+        data.forEach((el: CountryObject) => {
             const li = document.createElement('li');
             li.classList.add('js-suggestLi');
             li.textContent = el.name;
@@ -35,12 +51,12 @@ export const displayMatchedCountries = () => {
     });
 
     // ulタグ以内がクリックされた時、対象がliタグであればその国名を取得し、inputタグに反映
-    ul.addEventListener('click', (e) => {
-        const clicked = e.target.closest('.js-suggestLi');
+    ul.addEventListener('click', (e: MouseEvent): void => {
+        const clicked = (e.target as HTMLElement).closest('.js-suggestLi');
 
         if (!clicked) return;
 
-        inputEl.value = clicked.textContent;
+        inputEl.value = clicked.textContent!;
 
         ul.innerHTML = '';
     });
@@ -52,15 +68,23 @@ export const displayMatchedCountries = () => {
  * 3.あった場合、そのdata-place-idを取得
  * 4.select tag内からdata-place-idと同じ値をvalueに持つoptionにselectedを付与
  */
-export const reflectInput = () => {
-    const suggestionInput = document.querySelector('.js-suggestionInput');
-    const placeSelect = document.querySelector('.js-countriesSelect');
+export const reflectInput = (): void => {
+    const suggestionInput = document.querySelector(
+        '.js-suggestionInput'
+    )! as HTMLInputElement;
+    const placeSelect = document.querySelector(
+        '.js-countriesSelect'
+    )! as HTMLSelectElement;
 
-    suggestionInput.addEventListener('change', (ev) => {
+    suggestionInput.addEventListener('change', (ev: Event) => {
+        const targetValue = (ev.target as HTMLInputElement).value;
+
+        const targetOptionElement = suggestionInput.list!.querySelector(
+            `[value=${targetValue}]`
+        ) as HTMLOptionElement;
+
         // inputに紐づくdatalist tagは、.listでアクセスできる
-        const placeId = suggestionInput.list.querySelector(
-            `[value=${ev.target.value}]`
-        )?.dataset.countryId;
+        const placeId = targetOptionElement?.dataset.countryId;
 
         // 入力と一致する値が無ければ、undefinedになる
         if (placeId === undefined) return;
@@ -74,7 +98,7 @@ export const reflectInput = () => {
         const matchedOption = Array.from(placeSelect.options).find(
             (option) => option.value === placeId
         );
-        matchedOption.selected = true;
+        matchedOption!.selected = true;
     });
 };
 
@@ -83,15 +107,21 @@ export const reflectInput = () => {
  * 2.input[file]から該当のfile情報を取得してblobUrlを生成
  * それをimgタグのsrcに設定し、is-hiddenクラスを取り除いて画面に表示する
  */
-export const displayInputImg = () => {
-    document.querySelector('.js-inputImg').addEventListener('change', (e) => {
-        const file = e.target.files[0];
+export const displayInputImg = (): void => {
+    const inputImgElement = document.querySelector(
+        '.js-inputImg'
+    )! as HTMLInputElement;
 
-        if (!file) return;
+    inputImgElement.addEventListener('change', (e: Event) => {
+        const files = (e.target! as HTMLInputElement).files;
 
-        const blobUrl = window.URL.createObjectURL(file);
+        if (!files) return;
 
-        const img = document.querySelector('.js-displayImg');
+        const blobUrl = window.URL.createObjectURL(files[0]);
+
+        const img = document.querySelector(
+            '.js-displayImg'
+        ) as HTMLImageElement;
         img.src = blobUrl;
 
         img.addEventListener('load', () => img.classList.remove('is-hidden'));
