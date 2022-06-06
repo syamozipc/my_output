@@ -10,3 +10,4 @@
 - tsconfig試す
 - eslintにも対応
 - import構文がうまくいかない
+- autobindを入れたい
