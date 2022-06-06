@@ -11,36 +11,36 @@ const toggleModal = (modal: HTMLDivElement, overlay: HTMLDivElement): void => {
  */
 const deleteConfirm = () => {
     // 投稿内容のDOM
-    const imgContent = document.querySelector(
-        '.js-imgContent'
-    )! as HTMLImageElement;
-    const description = document.querySelector(
-        '.js-description'
-    )! as HTMLTableCellElement;
+    const imgContent = <HTMLImageElement>(
+        document.querySelector('.js-imgContent')!
+    );
+    const description = <HTMLTableCellElement>(
+        document.querySelector('.js-description')!
+    );
 
     // モーダル内に投稿内容反映用DOM
-    const modalImgContent = document.querySelector(
-        '.js-modalImgContent'
-    )! as HTMLImageElement;
-    const modalDescription = document.querySelector(
-        '.js-modalDescription'
-    )! as HTMLParagraphElement;
+    const modalImgContent = <HTMLImageElement>(
+        document.querySelector('.js-modalImgContent')!
+    );
+    const modalDescription = <HTMLParagraphElement>(
+        document.querySelector('.js-modalDescription')!
+    );
 
     // モーダル操作用DOM
-    const btnOpenModal = document.querySelector(
-        '.js-btn-open-modal'
-    )! as HTMLInputElement;
-    const btnCloseModal = document.querySelector(
-        '.js-btn-close-modal'
-    )! as HTMLButtonElement;
-    const btnCancel = document.querySelector(
-        '.js-btn-cancel'
-    )! as HTMLButtonElement;
-    const btnDelete = document.querySelector(
-        '.js-btn-delete'
-    )! as HTMLButtonElement;
-    const modal = document.querySelector('.js-modal')! as HTMLDivElement;
-    const overlay = document.querySelector('.js-overlay')! as HTMLDivElement;
+    const btnOpenModal = <HTMLInputElement>(
+        document.querySelector('.js-btn-open-modal')!
+    );
+    const btnCloseModal = <HTMLButtonElement>(
+        document.querySelector('.js-btn-close-modal')!
+    );
+    const btnCancel = <HTMLButtonElement>(
+        document.querySelector('.js-btn-cancel')!
+    );
+    const btnDelete = <HTMLButtonElement>(
+        document.querySelector('.js-btn-delete')!
+    );
+    const modal = <HTMLDivElement>document.querySelector('.js-modal')!;
+    const overlay = <HTMLDivElement>document.querySelector('.js-overlay')!;
 
     // 削除ボタン押下時、投稿内容を含むモーダルを表示
     btnOpenModal.addEventListener('click', (e: MouseEvent): void => {
@@ -77,9 +77,9 @@ const deleteConfirm = () => {
 
     // モーダル内削除ボタン押下時、削除formをsubmit
     btnDelete.addEventListener('click', (): void => {
-        const deleteForm = document.querySelector(
-            '.js-delete-form'
-        )! as HTMLFormElement;
+        const deleteForm = <HTMLFormElement>(
+            document.querySelector('.js-delete-form')!
+        );
 
         deleteForm.submit();
     });

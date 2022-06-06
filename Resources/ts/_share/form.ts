@@ -13,13 +13,13 @@ type CountryObject = {
  * 3. inputタグ直下にその国一覧を表示し、クリックされた国名をinputタグ内に反映
  */
 export const displayMatchedCountries = (): void => {
-    const inputEl = document.querySelector(
-        '.js-suggestionInput'
-    )! as HTMLInputElement;
-    const ul = document.querySelector(
-        '.js-suggestionList'
-    )! as HTMLUListElement;
-    const apiUrl: string = inputEl.dataset.suggestUrl!;
+    const inputEl = <HTMLInputElement>(
+        document.querySelector('.js-suggestionInput')!
+    );
+
+    const ul = <HTMLUListElement>document.querySelector('.js-suggestionList')!;
+
+    const baseApiUrl: string = inputEl.dataset.suggestUrl!;
 
     // 値が入力されたらそれを取得し、部分一致する国の取得をapiリクエスト
     // inputはInputEvent/Eventどちらかになるため、最初からInputEventを指定できないっぽい
@@ -31,11 +31,13 @@ export const displayMatchedCountries = (): void => {
 
         if (e.target.value === '') return;
 
-        const params = new URLSearchParams({
+        const queryString = new URLSearchParams({
             search: e.target.value,
         });
 
-        const response: Response = await fetch(`${apiUrl}?${params}`);
+        const apiUrl = `${baseApiUrl}?${String(queryString)}`;
+
+        const response: Response = await fetch(apiUrl);
         const data: CountryObject[] = await response.json();
 
         // 返ってきたcountryクラスの配列それぞれに対し、国名をliタグの中に表示する処理
@@ -50,7 +52,7 @@ export const displayMatchedCountries = (): void => {
 
     // ulタグ以内がクリックされた時、対象がliタグであればその国名を取得し、inputタグに反映
     ul.addEventListener('click', (e: MouseEvent): void => {
-        const clicked = (e.target as HTMLElement).closest('.js-suggestLi');
+        const clicked = (<HTMLElement>e.target).closest('.js-suggestLi');
 
         if (!clicked) return;
 
@@ -67,19 +69,19 @@ export const displayMatchedCountries = (): void => {
  * 4.select tag内からdata-place-idと同じ値をvalueに持つoptionにselectedを付与
  */
 export const reflectInput = (): void => {
-    const suggestionInput = document.querySelector(
-        '.js-suggestionInput'
-    )! as HTMLInputElement;
-    const placeSelect = document.querySelector(
-        '.js-countriesSelect'
-    )! as HTMLSelectElement;
+    const suggestionInput = <HTMLInputElement>(
+        document.querySelector('.js-suggestionInput')!
+    );
+    const placeSelect = <HTMLSelectElement>(
+        document.querySelector('.js-countriesSelect')!
+    );
 
     suggestionInput.addEventListener('change', (ev: Event) => {
-        const targetValue = (ev.target as HTMLInputElement).value;
+        const targetValue = (<HTMLInputElement>ev.target).value;
 
-        const targetOptionElement = suggestionInput.list!.querySelector(
-            `[value=${targetValue}]`
-        ) as HTMLOptionElement;
+        const targetOptionElement = <HTMLOptionElement>(
+            suggestionInput.list!.querySelector(`[value=${targetValue}]`)
+        );
 
         // inputに紐づくdatalist tagは、.listでアクセスできる
         const placeId = targetOptionElement?.dataset.countryId;
@@ -106,20 +108,18 @@ export const reflectInput = (): void => {
  * それをimgタグのsrcに設定し、is-hiddenクラスを取り除いて画面に表示する
  */
 export const displayInputImg = (): void => {
-    const inputImgElement = document.querySelector(
-        '.js-inputImg'
-    )! as HTMLInputElement;
+    const inputImgElement = <HTMLInputElement>(
+        document.querySelector('.js-inputImg')!
+    );
 
     inputImgElement.addEventListener('change', (e: Event) => {
-        const files = (e.target! as HTMLInputElement).files;
+        const files = (<HTMLInputElement>e.target!).files;
 
         if (!files) return;
 
         const blobUrl = window.URL.createObjectURL(files[0]);
 
-        const img = document.querySelector(
-            '.js-displayImg'
-        ) as HTMLImageElement;
+        const img = <HTMLImageElement>document.querySelector('.js-displayImg');
         img.src = blobUrl;
 
         img.addEventListener('load', () => img.classList.remove('is-hidden'));
