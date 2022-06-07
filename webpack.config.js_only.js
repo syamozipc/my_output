@@ -1,3 +1,5 @@
+// このファイルはTypeScript導入以前のvanilla JS環境用の設定ファイルです
+
 // Node.jsに組み込まれているモジュール。出力先などの指定をするために利用する。
 const path = require('path');
 
