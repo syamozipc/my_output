@@ -12,6 +12,7 @@ module.exports = {
         sourceType: 'module',
         ecmaVersion: 2019,
         tsconfigRootDir: __dirname,
+        // 直接tsconfig.json指定しても良さそう（tsconfig.eslint.jsonでは大したことしていないので）
         project: ['./tsconfig.eslint.json'],
     },
     plugins: ['@typescript-eslint'],
