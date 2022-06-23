@@ -92,7 +92,7 @@ class Database {
         $this->execute();
 
         $this->pdoStatement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $className, $args);
-        
+
         return $this->pdoStatement->fetchAll();
     }
 

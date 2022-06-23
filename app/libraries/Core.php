@@ -54,7 +54,7 @@ class Core {
 
      /**
      * URLを取得し、対応するclassのmethodを呼び出す基幹処理
-     * 
+     *
      * ・namespace（現状apiのみ）にも対応
      * ・$urlが空なら、homeページへ
      * ・存在しないurlなら、404を表示
@@ -127,10 +127,10 @@ class Core {
      * @return void
      */
     public function checkCSRF()
-    {   
+    {
         // post以外はcheck不要
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
-        
+
         $csrfToken = filter_input(INPUT_POST, '_csrf_token');
 
         // csrf tokenが正しければOK
@@ -143,16 +143,16 @@ class Core {
 
         $prevUrl = $matches[1] ?? 'home/index';
 
-        return redirect($prevUrl);    
+        return redirect($prevUrl);
     }
-    
+
     /**
      * csrfがsessionに保存されていなければ、新たに作成
      *
      * @return void
      */
     public function initCSRF()
-    {   
+    {
         if ($this->getSession('_csrf_token')) return;
 
         $csrfToken = bin2hex(random_bytes(32));
