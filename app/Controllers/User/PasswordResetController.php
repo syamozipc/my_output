@@ -16,7 +16,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->passwordResetService = new PasswordResetService();
         $this->userService = new UserService();
         $this->db = Database::getSingleton();
@@ -61,14 +61,14 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
         // 未登録のメールアドレスでも、その旨のエラーを出すと未登録とバレる（情報を与える）ので良くない
         // 未登録の場合は即座にメール送信完了画面にする
         $isExist = $this->userService->isPublicUser(email:$request['email']);
-        if (!$isExist) return $this->view(view:'user/passwordReset/acceptRequest', data:['email' => $request['email']]); 
+        if (!$isExist) return $this->view(view:'user/passwordReset/acceptRequest', data:['email' => $request['email']]);
 
         try {
             $this->db->beginTransaction();
-            
+
             // 業務で使っているlaravelのtokenも60字だった（ただし生成メソッドはLaravelの方が複雑）
             $passwordResetToken = str_random(60);
-            
+
             // password_resetsテーブルに保存
             $this->passwordResetService->saveRequest(email:$request['email'], passwordResetToken:$passwordResetToken);
 
@@ -95,7 +95,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
     }
 
     /**
-     * 送信されたメールに記載のURLにアクセスされると、
+     * 送信されたメールに記載のURLにアクセスすると、
      * ・query stringのtokenがテーブルのレコードと合致するか
      * ・token発行から指定時間以内のアクセスか
      * をチェックし、

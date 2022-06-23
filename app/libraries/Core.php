@@ -9,10 +9,7 @@ namespace App\Libraries;
 class Core {
     use \App\Traits\SessionTrait;
 
-    protected $currentController = "App\\Controllers\\User\\ErrorController";
-    protected $currentMethod = 'response404';
-    protected $params = [];
-    protected $isApi = false;
+    protected $routes;
 
     public function __construct()
     {
@@ -22,18 +19,32 @@ class Core {
 
         // POSTリクエストであっても、リクエストURLはGETで取れる
         $url = filter_input(INPUT_GET, 'url');
-        if ($url) $url = $this->formatAndSanitizeUrl($url);
+
+        // topページの場合は$urlがnullなので、その場合は空配列にする
+        if ($url) $url = $this->formatAndSanitizeUrl(url:$url);
+        else $url = [];
+
+        // 定義済みルートを取得
+        $this->routes = $this->getRoutes();
 
         // URLによって呼び出すコントローラを特定
-        if (!$this->branchCallback($url)) $this->currentController = new $this->currentController;
+        $funcWithParams = $this->getControllerFromUrl(url:$url);
 
-        if (!$this->isApi) {
+        // apiでなければ、sessionとcsrfを設定
+        if (!$url || $url[0] !== 'api') {
             $this->initFlashSession();
             $this->checkCSRF();
             $this->initCSRF();
         }
 
-        call_user_func_array([$this->currentController, $this->currentMethod], $this->params);
+        // controllerをインスタンス化し、methodにparamsを渡して呼び出す
+        call_user_func_array(
+            [
+                new($funcWithParams['controller']),
+                $funcWithParams['method']
+            ],
+            $funcWithParams['params']
+        );
     }
 
     /**
@@ -43,7 +54,7 @@ class Core {
      *
      * @return array
      */
-    public function formatAndSanitizeUrl($url)
+    private function formatAndSanitizeUrl(string $url): array
     {
         $url = rtrim($url, '/');
         $url = filter_var($url, FILTER_SANITIZE_URL);
@@ -57,49 +68,125 @@ class Core {
      *
      * ・namespace（現状apiのみ）にも対応
      * ・$urlが空なら、homeページへ
-     * ・存在しないurlなら、404を表示
+     * ・$urlが定義済みルートにが存在しないurlなら、404を表示
      */
-    public function branchCallback($url)
+    private function getControllerFromUrl(array $url)
     {
-        // $urlがなければTOPページをリターン
-        if (!$url) {
-            $this->currentController = new ("App\\Controllers\\User\\homeController");
-            $this->currentMethod = 'index';
-
-            return true;
+        // $urlが空ならrootなので、TOPページをリターン
+        if (count($url) === 0) {
+            return [
+                'controller' => "App\\Controllers\\User\\homeController",
+                'method' => 'index',
+                'params' => [],
+            ];
         }
 
-        // namespaceがあるかをチェック
-        if (in_array($url[0], ['api'], true)) {
-            // namespaceだけなら 404 error
-            if (count($url) === 1) return false;
+        // namespaceがurlにない場合は、配列の要素数を合わせるため、user namespaceを挿入
+        if (!in_array($url[0], ['api'], true)) array_unshift($url, 'user');
 
-            if ($url[0] === 'api') $this->isApi = true;
+        // get or post（大文字で入っているので、小文字へ変換）
+        $method = strtolower($_SERVER["REQUEST_METHOD"]);
 
+        // 定義済みルートと照合
+        $route = $this->routes[$url[0]][$url[1]][$method][$url[2]] ?? null;
+
+        // 合致したルートに紐づくコントローラ・メソッドを取得
+        if ($route) {
             $namespace = ucwords($url[0]);
             $controller = ucwords($url[1]) . 'Controller';
-            $method = $url[2] ?? 'index';;
-            $params = array_slice($url, 3);
+
+            return [
+                'controller' => "App\\Controllers\\{$namespace}\\{$controller}",
+                'method' => $url[2],
+                'params' => array_slice($url, 3),
+            ];
         } else {
-            $namespace = 'User';
-            $controller = ucwords($url[0]) . 'Controller';
-            $method = $url[1] ?? 'index';
-            $params = array_slice($url, 2);
+            // 合致するルートがない場合は404
+
+            return [
+                'controller' => "App\\Controllers\\User\\ErrorController",
+                'method' => 'response404',
+                'params' => [],
+            ];
         }
+    }
 
-        // fileが存在しなければ 404 error
-        $fileName = base_path("App/Controllers/{$namespace}/{$controller}.php");
-        if (!file_exists($fileName)) return false;
-
-        // controllerにmethodが存在しなければ 404 error
-        $tmpController = new ("App\\Controllers\\{$namespace}\\{$controller}");
-        if (!method_exists($tmpController, $method)) return false;
-
-        $this->currentController = $tmpController;
-        $this->currentMethod = $method;
-        $this->params = $params;
-
-        return true;
+    /**
+     * 定義済みルート一覧を取得
+     *
+     * @return array
+     */
+    private function getRoutes(): array
+    {
+        return [
+            'user' => [
+                'home' => [
+                    'get' => [
+                        'index' => 'index',
+                    ],
+                ],
+                'register' => [
+                    'get' => [
+                        'tmpRegisterForm' => 'tmpRegisterForm',
+                        'verifyToken' => 'verifyToken',
+                    ],
+                    'post' => [
+                        'sendEmail' => 'sendEmail',
+                        'register' => 'register',
+                    ],
+                ],
+                'login' => [
+                    'get' => [
+                        'loginForm' => 'loginForm',
+                    ],
+                    'post' => [
+                        'login' => 'login',
+                    ],
+                ],
+                'logout' => [
+                    'get' => [
+                        'logout' => 'logout',
+                    ],
+                ],
+                'passwordReset' => [
+                    'get' => [
+                        'resetRequest' => 'resetRequest',
+                        'verifyToken' => 'verifyToken',
+                    ],
+                    'post' => [
+                        'sendEmail' => 'sendEmail',
+                        'reset' => 'reset',
+                    ],
+                ],
+                'mypage' => [
+                    'get' => [
+                        'index' => 'index',
+                    ],
+                ],
+                'post' => [
+                    'get' => [
+                        'index' => 'index',
+                        'create' => 'create',
+                        'show' => 'show',
+                        'edit' => 'edit',
+                    ],
+                    'post' => [
+                        'confirm' => 'confirm',
+                        'save' => 'save',
+                        'editConfirm' => 'editConfirm',
+                        'update' => 'update',
+                        'delete' => 'delete',
+                    ],
+                ],
+            ],
+            'api' => [
+                'suggest' => [
+                    'get' => [
+                        'getMatchedCountries' => 'getMatchedCountries',
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -107,7 +194,7 @@ class Core {
      *
      * @return void
      */
-    public function initFlashSession()
+    private function initFlashSession()
     {
         // フラッシュセッションがあれば_oldへ移動し、フラッシュセッションは削除
         if ($this->getSession('_flash') || $this->getSession('_flash_error')) {
@@ -126,7 +213,7 @@ class Core {
      *
      * @return void
      */
-    public function checkCSRF()
+    private function checkCSRF()
     {
         // post以外はcheck不要
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') return;
@@ -151,7 +238,7 @@ class Core {
      *
      * @return void
      */
-    public function initCSRF()
+    private function initCSRF()
     {
         if ($this->getSession('_csrf_token')) return;
 

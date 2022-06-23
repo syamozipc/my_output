@@ -18,7 +18,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->registerService = new RegisterService();
         $this->userService = new UserService();
         $this->userModel = new User();
@@ -94,7 +94,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
     }
 
     /**
-     * 仮登録完了メールにて記載URLにアクセスされると、
+     * 仮登録完了メールにて記載URLにアクセスすると、
      * ・emailとquery stringのtokenがテーブルのレコードと合致するか
      * ・token発行から指定時間以内のアクセスか
      * をチェックし、
@@ -167,7 +167,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         $isSent = $this->registerService->sendRegisteredEmail(to:$user->email);
 
         if (!$isSent) Log::info('メール送信に失敗しましたが、登録は完了しています。');
-                    
+
         // ログイン失敗は無い想定なので、失敗時の処理は書いていない
         $this->loginService->baseLogin(email:$user->email, password:$request['password']);
 
