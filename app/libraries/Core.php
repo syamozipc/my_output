@@ -171,8 +171,12 @@ class Core {
                         'edit' => 'edit',
                     ],
                     'post' => [
+                        // confirmから修正ボタンでcreateに行く際はpost
+                        'create' => 'create',
                         'confirm' => 'confirm',
                         'save' => 'save',
+                        // editConfirmから修正ボタンでeditに行く際はpost
+                        'edit' => 'edit',
                         'editConfirm' => 'editConfirm',
                         'update' => 'update',
                         'delete' => 'delete',

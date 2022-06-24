@@ -31,15 +31,15 @@ class CountryService {
      * @param int $id
      * @return array
      */
-    public function fetchCountryByID($id):array
+    public function fetchCountryByID($id): Country
     {
         $sql = 'SELECT * FROM countries WHERE id = :id';
 
-        $countries = $this->countryModel->db->prepare($sql)
+        $country = $this->countryModel->db->prepare($sql)
             ->bindValue(':id', $id)
             ->executeAndFetch(get_class($this->countryModel));
 
-        return $countries;
+        return $country;
     }
 
     /**

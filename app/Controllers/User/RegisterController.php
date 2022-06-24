@@ -146,7 +146,7 @@ class RegisterController extends Controller  implements EmailTokenInterface{
         $validator = new RegisterValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect("register/verifyToken?token={$request['register_token']}");
+        if (!$isValidated) return redirect("/register/verifyToken?token={$request['register_token']}");
 
         // sendEMail()と異なり、こちらではtransaction張らなくてOK（mail送信必須では無いので）
 

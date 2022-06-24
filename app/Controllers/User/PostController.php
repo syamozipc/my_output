@@ -16,7 +16,7 @@ class PostController extends Controller {
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->countryService = new CountryService();
         $this->postService = new PostService();
         $this->loginService = new LoginService();
@@ -84,7 +84,7 @@ class PostController extends Controller {
 
         $request = filter_input_array(INPUT_POST);
 
-        // validation 
+        // validation
         $validator = new PostCreateValidator();
         $isValidated = $validator->validate(request:$request);
 
@@ -104,7 +104,7 @@ class PostController extends Controller {
     public function show(int $id)
     {
         $post = $this->postService->fetchPostById($id);
-        
+
         if (!$post) return redirect('/error/response404');
 
         $data = [
@@ -155,14 +155,14 @@ class PostController extends Controller {
         $validator = new PostEditValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect("post/edit/{$id}");
+        if (!$isValidated) return redirect("/post/edit/{$id}");
 
         $post = $this->postService->fetchPostById($id);
 
         if (!$post) return redirect('/error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
-        if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
+        if ((int)$post->user_id !== $this->userId) return redirect("/post/show/{$id}");
 
         $post->fill($request);
 
@@ -187,21 +187,21 @@ class PostController extends Controller {
         $validator = new PostEditValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect("post/edit/{$id}");
+        if (!$isValidated) return redirect("/post/edit/{$id}");
 
         $post = $this->postService->fetchPostById($id);
 
         if (!$post) return redirect('/error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
-        if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
+        if ((int)$post->user_id !== $this->userId) return redirect("/post/show/{$id}");
 
         $post->country_id = $request['country_id'];
         $post->description = $request['description'];
 
         $post->save();
 
-        return redirect("post/show/{$id}");
+        return redirect("/post/show/{$id}");
     }
 
     public function delete(int $id)
@@ -211,14 +211,14 @@ class PostController extends Controller {
         $validator = new PostDeleteValidator();
         $isValidated = $validator->validate($id);
 
-        if (!$isValidated) return redirect("post/show/{$id}");
+        if (!$isValidated) return redirect("/post/show/{$id}");
 
         $post = $this->postService->fetchPostById($id);
 
         if (!$post) return redirect('/error/response404');
 
         // 投稿者とログインユーザーが別であれば、処理実行不可
-        if ((int)$post->user_id !== $this->userId) return redirect("post/show/{$id}");
+        if ((int)$post->user_id !== $this->userId) return redirect("/post/show/{$id}");
 
         $this->postService->deletePost(post:$post);
 

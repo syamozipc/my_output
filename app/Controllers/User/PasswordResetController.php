@@ -155,7 +155,7 @@ class PasswordResetController extends Controller implements EmailTokenInterface 
         $validator = new PasswordResetStoreValidator();
         $isValidated = $validator->validate($request);
 
-        if (!$isValidated) return redirect("passwordReset/verifyToken?token={$request['password_reset_token']}");
+        if (!$isValidated) return redirect("/passwordReset/verifyToken?token={$request['password_reset_token']}");
 
         // tokenからpassword_resetsテーブルのレコードを取得
         $passwordReset = $this->passwordResetService->getValidRequestByToken(passwordResetToken:$request['password_reset_token']);
