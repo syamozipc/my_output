@@ -28,7 +28,7 @@ class Core {
         $this->routes = $this->getRoutes();
 
         // URLによって呼び出すコントローラを特定
-        $funcWithParams = $this->getControllerFromUrl(url:$url);
+        $funcInfo = $this->getControllerFromUrl(url:$url);
 
         // apiでなければ、sessionとcsrfを設定
         if (!$url || $url[0] !== 'api') {
@@ -40,10 +40,10 @@ class Core {
         // controllerをインスタンス化し、methodにparamsを渡して呼び出す
         call_user_func_array(
             [
-                new($funcWithParams['controller']),
-                $funcWithParams['method']
+                new($funcInfo['controller']),
+                $funcInfo['method']
             ],
-            $funcWithParams['params']
+            $funcInfo['params']
         );
     }
 
