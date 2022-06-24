@@ -88,7 +88,7 @@ class Core {
         $method = strtolower($_SERVER["REQUEST_METHOD"]);
 
         // 定義済みルートと照合
-        $route = $this->routes[$url[0]][$url[1]][$method][$url[2]] ?? null;
+        $route = $this->routes[$url[0] ?? null][$url[1] ?? null][$method][$url[2] ?? null] ?? null;
 
         // 合致したルートに紐づくコントローラ・メソッドを取得
         if ($route) {
