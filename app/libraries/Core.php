@@ -92,12 +92,11 @@ class Core {
 
         // 合致したルートに紐づくコントローラ・メソッドを取得
         if ($route) {
-            $namespace = ucwords($url[0]);
-            $controller = ucwords($url[1]) . 'Controller';
+            [$namespace, $controller, $method] = explode('/', $route);
 
             return [
                 'controller' => "App\\Controllers\\{$namespace}\\{$controller}",
-                'method' => $url[2],
+                'method' => $method,
                 'params' => array_slice($url, 3),
             ];
         } else {
@@ -122,71 +121,71 @@ class Core {
             'user' => [
                 'home' => [
                     'get' => [
-                        'index' => 'index',
+                        'index' => 'User/HomeController/index',
                     ],
                 ],
                 'register' => [
                     'get' => [
-                        'tmpRegisterForm' => 'tmpRegisterForm',
-                        'verifyToken' => 'verifyToken',
+                        'tmpRegisterForm' => 'User/RegisterController/tmpRegisterForm',
+                        'verifyToken' => 'User/RegisterController/verifyToken',
                     ],
                     'post' => [
-                        'sendEmail' => 'sendEmail',
-                        'register' => 'register',
+                        'sendEmail' => 'User/RegisterController/sendEmail',
+                        'register' => 'User/RegisterController/register',
                     ],
                 ],
                 'login' => [
                     'get' => [
-                        'loginForm' => 'loginForm',
+                        'loginForm' => 'User/LoginController/loginForm',
                     ],
                     'post' => [
-                        'login' => 'login',
+                        'login' => 'User/LoginController/login',
                     ],
                 ],
                 'logout' => [
                     'get' => [
-                        'logout' => 'logout',
+                        'logout' => 'User/LogoutController/logout',
                     ],
                 ],
                 'passwordReset' => [
                     'get' => [
-                        'resetRequest' => 'resetRequest',
-                        'verifyToken' => 'verifyToken',
+                        'resetRequest' => 'User/PasswordResetController/resetRequest',
+                        'verifyToken' => 'User/PasswordResetController/verifyToken',
                     ],
                     'post' => [
-                        'sendEmail' => 'sendEmail',
-                        'reset' => 'reset',
+                        'sendEmail' => 'User/PasswordResetController/sendEmail',
+                        'reset' => 'User/PasswordResetController/reset',
                     ],
                 ],
                 'mypage' => [
                     'get' => [
-                        'index' => 'index',
+                        'index' => 'User/MypageController/index',
                     ],
                 ],
                 'post' => [
                     'get' => [
-                        'index' => 'index',
-                        'create' => 'create',
-                        'show' => 'show',
-                        'edit' => 'edit',
+                        'index' => 'User/PostController/index',
+                        'create' => 'User/PostController/create',
+                        'show' => 'User/PostController/show',
+                        'edit' => 'User/PostController/edit',
                     ],
                     'post' => [
                         // confirmから修正ボタンでcreateに行く際はpost
-                        'create' => 'create',
-                        'confirm' => 'confirm',
-                        'save' => 'save',
+                        'create' => 'User/PostController/create',
+                        'confirm' => 'User/PostController/confirm',
+                        'save' => 'User/PostController/save',
                         // editConfirmから修正ボタンでeditに行く際はpost
-                        'edit' => 'edit',
-                        'editConfirm' => 'editConfirm',
-                        'update' => 'update',
-                        'delete' => 'delete',
+                        'edit' => 'User/PostController/edit',
+                        'editConfirm' => 'User/PostController/editConfirm',
+                        'update' => 'User/PostController/update',
+                        'delete' => 'User/PostController/delete',
                     ],
                 ],
             ],
             'api' => [
                 'suggest' => [
                     'get' => [
-                        'getMatchedCountries' => 'getMatchedCountries',
+                        'getMatchedCountries' => 'Api/Suggest/getMatchedCountries',
                     ],
                 ],
             ],
