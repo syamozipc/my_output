@@ -185,7 +185,7 @@ class Core {
             'api' => [
                 'suggest' => [
                     'get' => [
-                        'getMatchedCountries' => 'Api/Suggest/getMatchedCountries',
+                        'getMatchedCountries' => 'Api/SuggestController/getMatchedCountries',
                     ],
                 ],
             ],
